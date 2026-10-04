@@ -1,0 +1,20 @@
+# Virtual environment & Python cache
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.cache/
+.env
+build/
+
+# Raw and processed historical market data (reproducible via fetch commands)
+data/
+
+# Intermediate bulky experiment outputs (checkpoints, trade event logs, duplicate source snapshots)
+artifacts/experiments/**/*.csv
+artifacts/experiments/**/*.jsonl
+artifacts/experiments/**/*.parquet
+artifacts/experiments/**/*.zip
+artifacts/experiments/**/source_snapshot/
+

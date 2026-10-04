@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-10-04T09:04:34.144359+00:00",
+  "samples_reloaded_once": {
+    "BTCUSDT": 6387,
+    "ETHUSDT": 6387,
+    "SOLUSDT": 6387
+  },
+  "total_samples": 19161,
+  "sample_checks": [
+    "file SHA",
+    "finite nine features",
+    "available before decision",
+    "four calendar hours",
+    "strict training cutoff",
+    "label counts"
+  ],
+  "documents_checked": 17,
+  "local_links_checked": 146,
+  "unchanged_execution_modules": [
+    "src/cryptoquant/trading/ledger.py",
+    "src/cryptoquant/trading/orders.py",
+    "src/cryptoquant/trading/risk.py",
+    "src/cryptoquant/baselines/engine.py",
+    "src/cryptoquant/baselines/io.py",
+    "src/cryptoquant/baselines/reporting.py"
+  ],
+  "targeted_behavior_tests": "6 passed",
+  "full_suite_or_existing_real_baselines_rerun": false,
+  "model_fitted": false,
+  "validation_or_test_read": false
+}

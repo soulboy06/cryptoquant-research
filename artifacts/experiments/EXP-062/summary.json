@@ -1,0 +1,151 @@
+{
+  "source_experiment_id": "EXP-049",
+  "cycles": 33,
+  "fills": 66,
+  "net_account_gain": "1.53886172893175000000",
+  "realized_net": "1.50958979514125855647713721",
+  "residual_unrealized": "0.02927193379049144352286279",
+  "reference_price_pnl": "4.46211197656991409087522246",
+  "recognized_fees": "1.968675073916940491443522864",
+  "fees_paid": "1.96942878421015000000",
+  "adverse_impact": "0.9838471075117150429545623889",
+  "buy_fees_remaining_in_residual_cost": "0.000753710293209508556477136",
+  "mean_hourly_open_exposure": "0.01515628039245981370410412859",
+  "duration_hours": {
+    "count": 33.0,
+    "mean": 4.0,
+    "std": 0.0,
+    "min": 4.0,
+    "25%": 4.0,
+    "50%": 4.0,
+    "75%": 4.0,
+    "max": 4.0
+  },
+  "duration_counts": {
+    "4.0": 33
+  },
+  "winning_cycles": 17,
+  "losing_cycles": 16,
+  "win_fraction": 0.5151515151515151,
+  "mean_realized_net": "0.04574514530731086534779203667",
+  "median_realized_net": 0.011081931547829865,
+  "profit_factor": "1.242812364233254761754894519",
+  "largest_win": {
+    "symbol": "ETHUSDT",
+    "entry_time": "2025-02-03 12:00:00+00:00",
+    "exit_time": "2025-02-03 16:00:00+00:00",
+    "entry_probability": 0.6991942598164843,
+    "gross_4h": 0.0462228007174373,
+    "net_4h": 0.043087791742262516,
+    "carried_tail_quantity": "0.0000708",
+    "buy_notional": "29.4427880370000000",
+    "cycle_fees_paid": "0.0602157158760000000",
+    "realized_net": "1.27337209872847001538464327",
+    "reference_price_pnl": "1.36372027124428040516667527",
+    "recognized_fee": "0.06024171065143252998461535673",
+    "adverse_impact": "0.03010646186437785979741666236",
+    "sold_cost_basis": "29.46878281243252998461535673",
+    "buy_count": 1,
+    "sell_count": 1,
+    "duration_hours": 4.0,
+    "residual_quantity": "0.0000594",
+    "realized_return_on_sold_cost": "0.04321088206572445973034373034",
+    "exit_reason": "strategy_exit"
+  },
+  "largest_loss": {
+    "symbol": "ETHUSDT",
+    "entry_time": "2025-04-06 20:00:00+00:00",
+    "exit_time": "2025-04-07 00:00:00+00:00",
+    "entry_probability": 0.6672532314087547,
+    "gross_4h": -0.0279602026761117,
+    "net_4h": -0.030872922114789314,
+    "carried_tail_quantity": "0.0000756",
+    "buy_notional": "30.1004827200000000",
+    "cycle_fees_paid": "0.0593301055975000000",
+    "realized_net": "-0.94309075312503985209928783",
+    "reference_price_pnl": "-0.85404637805076692878279715",
+    "recognized_fee": "0.05937310688524753985209928783",
+    "adverse_impact": "0.02967126818902538346439139857",
+    "sold_cost_basis": "30.14348400774753985209928783",
+    "buy_count": 1,
+    "sell_count": 1,
+    "duration_hours": 4.0,
+    "residual_quantity": "0.0000571",
+    "realized_return_on_sold_cost": "-0.03128672030355365490286464434",
+    "exit_reason": "strategy_exit"
+  },
+  "realized_net_excluding_largest_win": "0.23621769641278854109249394",
+  "base_breakeven_gross_4h": "0.003005508261139079551288659",
+  "selected_signals": {
+    "count": 33,
+    "mean_probability": 0.6700949159502683,
+    "up_fraction": 0.6363636363636364,
+    "profitable_after_cost_fraction": 0.5454545454545454,
+    "mean_gross_4h": 0.0048263333383348084,
+    "median_gross_4h": 0.0051101115802064,
+    "mean_net_4h": 0.001815368970757036,
+    "median_net_4h": 0.0020982968704885696,
+    "positive_but_unprofitable": 3
+  },
+  "all_signals": {
+    "count": 6567,
+    "mean_probability": 0.5070092045963327,
+    "up_fraction": 0.5028171158824425,
+    "profitable_after_cost_fraction": 0.3666818943200853,
+    "mean_gross_4h": 1.6506377498252243e-05,
+    "median_gross_4h": 7.206687806284232e-05,
+    "mean_net_4h": -0.002980045332774641,
+    "median_net_4h": -0.0029246513193748047,
+    "positive_but_unprofitable": 894
+  },
+  "per_symbol": {
+    "BTCUSDT": {
+      "cycles": 5,
+      "realized_net": "-1.24413357950658012376575403",
+      "selected_signal_stats": {
+        "count": 5,
+        "mean_probability": 0.6611117641252605,
+        "up_fraction": 0.4,
+        "profitable_after_cost_fraction": 0.4,
+        "mean_gross_4h": -0.0048319228689821195,
+        "median_gross_4h": -0.0094938626803072,
+        "mean_net_4h": -0.00781394625011449,
+        "median_net_4h": -0.012461916548310747,
+        "positive_but_unprofitable": 0
+      }
+    },
+    "ETHUSDT": {
+      "cycles": 24,
+      "realized_net": "3.11312593652334807207860095",
+      "selected_signal_stats": {
+        "count": 24,
+        "mean_probability": 0.6723686509126373,
+        "up_fraction": 0.7083333333333334,
+        "profitable_after_cost_fraction": 0.625,
+        "mean_gross_4h": 0.007514616787337704,
+        "median_gross_4h": 0.0088699654720217,
+        "mean_net_4h": 0.004495596972359388,
+        "median_net_4h": 0.005846884351661807,
+        "positive_but_unprofitable": 2
+      }
+    },
+    "SOLUSDT": {
+      "cycles": 4,
+      "realized_net": "-0.35940256187550939183570971",
+      "selected_signal_stats": {
+        "count": 4,
+        "mean_probability": 0.6676814459573142,
+        "up_fraction": 0.5,
+        "profitable_after_cost_fraction": 0.25,
+        "mean_gross_4h": 0.0007694529034636003,
+        "median_gross_4h": -0.00033434197693705007,
+        "mean_net_4h": -0.0022293550127676642,
+        "median_net_4h": -0.003329842369326874,
+        "positive_but_unprofitable": 1
+      }
+    }
+  },
+  "exit_reasons": {
+    "strategy_exit": 33
+  }
+}

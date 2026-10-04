@@ -1,0 +1,106 @@
+{
+  "experiment_id": "EXP-045",
+  "type": "validation_comparison",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T10:34:21.483125+00:00",
+  "config_hash": "d9550b999562db13a24892e0cc50e21591ae8f638ecdcbbc22e55386d261ff04",
+  "feature_policy": "kline_and_funding",
+  "model_family": "lightgbm",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "period": "validation",
+  "cost": "base",
+  "test_opened": false,
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2025-12-31 20:00:00+00:00",
+  "previous_comparison": "EXP-034",
+  "command": [
+    ".venv/Scripts/python.exe",
+    "artifacts/experiments/EXP-045/compare_validation.py"
+  ],
+  "child_manifests": {
+    "EXP-023": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-023\\run_manifest.json",
+      "sha256": "e72c2ec7406483eaa37bf7ffb41f5a4ec54cb3ab20aa04399c49a20256de5f9b",
+      "summary_sha256": "75fa2dbc6b1d87b8ecee1bb7e276442f29552a49a22d01bc3bf1b23e937bbc76"
+    },
+    "EXP-024": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-024\\run_manifest.json",
+      "sha256": "158ae5e6d7f510d84415cb471e9857bce83c9af9cd17853dd273c2a5fd732d99",
+      "summary_sha256": "b7f0ffa95e648f0ac8779c64d6e0dd6e002a42210daa3c36f14688c8bed9855a"
+    },
+    "EXP-036": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-036\\run_manifest.json",
+      "sha256": "2ea6e564baf465ca991bf8272f602c881621a59cfce034eb7bda6e1574c5d909",
+      "summary_sha256": "cdd970209ae612a23cc017839e2da168e76ec87475a9a9ebb9fb4e7670ea2e37"
+    },
+    "EXP-037": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-037\\run_manifest.json",
+      "sha256": "1cd3e83779c44c9effc47c46255a451bb5818c345a0d620c33de1fd7eaee0f33",
+      "summary_sha256": "1a526f56de05cbed85b2aedf68d9a4a18d926755623fd469682dc838522099c8"
+    },
+    "EXP-038": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-038\\run_manifest.json",
+      "sha256": "4dadb0858dbc583805e8b9d5e48904953be2247b598f6e9f28967f24ec95a39e",
+      "summary_sha256": "6b07a6c945db2c9504c7a1b899ce3b2e69ab4b702a942e9c269ca7b08466027d"
+    },
+    "EXP-039": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-039\\run_manifest.json",
+      "sha256": "cc7290d04c544d72664dbed4246eb33d3b6d6d3a1da449b1a9a32aea0e4b8e99",
+      "summary_sha256": "54dde03bd51ea97e0767c86d4e9a721ad5b522166b8afc50865da2313d6f5498"
+    },
+    "EXP-040": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-040\\run_manifest.json",
+      "sha256": "8cd9a2fdf48cde9c714906ac127fe0031278dcf37d5f24484a242b94aa706070",
+      "summary_sha256": "e8e6d5e9d81100658bbd22695d4574655a56bb552e59f0f5bb7c1dfb37733ad5"
+    },
+    "EXP-041": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-041\\run_manifest.json",
+      "sha256": "802fe525ca4267f05e1173a4d5a52f59b78e3d4712b160ff39f61f3b6dd49ad7",
+      "summary_sha256": "91ceeefb0985dfb9c1977e7934aa625e9ac70257650fce3ffac20b17460f9740"
+    },
+    "EXP-042": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-042\\run_manifest.json",
+      "sha256": "b87ebf8e5e22da077513b33b5d5177c8270e242101f288196428bdee7488bd53",
+      "summary_sha256": "bb6d985e6f274d0e7d289c4d6c7be02bda0fa486fbc2cab6ef0afb3f664e304b"
+    },
+    "EXP-043": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-043\\run_manifest.json",
+      "sha256": "2a3a84b24225ffa0aa2a44f665eaa0fdc05a14d5f7d2a587639367eb3183e8ab",
+      "summary_sha256": "f58755d276a4190ccbf4897c94e8beca34df41e0791a6212b8222f9e229080b6"
+    },
+    "EXP-044": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-044\\run_manifest.json",
+      "sha256": "40d72ba688f01cb3bb3a887887bc8cd876c6d3b4e997cc953c5ce5aaa91fbbff",
+      "summary_sha256": "57c95a60c893f78f70d585c6a0c93185d1e320f1bd7d0d7cb1a71c77b3795cbd"
+    }
+  },
+  "source_hash": "9b8c6d901579850b815de828e516843a26ca323a20e083f37d0095e733881e1c",
+  "ended_at_utc": "2026-10-04T10:34:21.718649+00:00",
+  "conclusion": "validation_failed_do_not_open_test",
+  "selected": null,
+  "artifacts": {
+    "compare_validation.py": "f01ef90c13c33907a903d340ac2bf6a3249b1cf40c814560044d53600400c92d",
+    "comparison.csv": "45de60b4f9e9f60c4d9b53a9de86e56951010cfe65cf57788350951a6a30d703",
+    "config.toml": "d9550b999562db13a24892e0cc50e21591ae8f638ecdcbbc22e55386d261ff04",
+    "report.md": "1db3fc68b31052ddfacd9433bd0376bfb109b5554d5a0dff828fd9f8105888e8",
+    "selection.json": "dadc2b1d6f4e2e7393b0c04ee50e6058348cc75f9df85a4a900c15c80cfed4ce",
+    "source_manifest.json": "c83dbb7fb070d7317a9899e81ed3ea955fb5cdc0908ccd7446854b0b9c6ef6bb"
+  }
+}

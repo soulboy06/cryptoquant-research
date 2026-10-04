@@ -1,0 +1,124 @@
+{
+  "symbol": "SOLUSDT",
+  "C": 1.0,
+  "feature_names": [
+    "return_1h",
+    "return_4h",
+    "return_24h",
+    "return_72h",
+    "volatility_24h",
+    "range_fraction",
+    "quote_volume_change",
+    "ema24_distance",
+    "ema72_distance"
+  ],
+  "classifier_parameters": {
+    "C": 1.0,
+    "class_weight": null,
+    "dual": false,
+    "fit_intercept": true,
+    "intercept_scaling": 1,
+    "l1_ratio": 0.0,
+    "max_iter": 1000,
+    "n_jobs": null,
+    "penalty": "deprecated",
+    "random_state": 42,
+    "solver": "lbfgs",
+    "tol": 0.0001,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "regularization": "L2",
+  "classes": [
+    0,
+    1
+  ],
+  "coefficients": [
+    [
+      -0.05236506882650041,
+      -0.05881118090018195,
+      -0.04828179425077067,
+      0.04129682094217168,
+      0.05209476615147701,
+      -0.030875258644338367,
+      -0.0014650761578744796,
+      -0.10219957446841234,
+      0.06596274648061617
+    ]
+  ],
+  "intercept": [
+    0.010459501605120335
+  ],
+  "iterations": [
+    15
+  ],
+  "scaler": {
+    "parameters": {
+      "copy": true,
+      "with_mean": true,
+      "with_std": true
+    },
+    "mean": [
+      5.9079060418003765e-05,
+      0.0002728490174194978,
+      0.0015943813065810038,
+      0.0048895396115902255,
+      0.009828131998461213,
+      0.015067485352196437,
+      0.023670967928100854,
+      8.127223291175518e-05,
+      0.0001568808342019481
+    ],
+    "variance": [
+      0.00012394977675022833,
+      0.0004893732503692752,
+      0.0029111482645587544,
+      0.008904220054529316,
+      3.232367676835813e-05,
+      0.0001594634115830996,
+      0.8829380237961865,
+      0.000660295353873453,
+      0.0021860785563494914
+    ],
+    "scale": [
+      0.011133273406785101,
+      0.022121782260235617,
+      0.053955057821846085,
+      0.09436217491415358,
+      0.005685391522873172,
+      0.012627882307936655,
+      0.9396478190238013,
+      0.025696212831338647,
+      0.0467555189934781
+    ],
+    "n_samples_seen": 6387
+  },
+  "sample_provenance": {
+    "path": "D:\\量化\\artifacts\\experiments\\EXP-006\\training_samples\\SOLUSDT.parquet",
+    "sha256": "30ec00cd797bf06790465d7752b54f070517b4799d017d31add596a4dc741db3",
+    "samples": 6387,
+    "label_1": 3210,
+    "label_0": 3177,
+    "first_decision_utc": "2022-01-01 00:00:00+00:00",
+    "last_decision_utc": "2024-12-31 16:00:00+00:00",
+    "last_label_end_utc": "2024-12-31 20:00:00+00:00"
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  }
+}

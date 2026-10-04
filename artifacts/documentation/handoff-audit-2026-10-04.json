@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-10-04T08:43:19.559291+00:00",
+  "documents_checked": 16,
+  "local_links_checked": 129,
+  "new_dialogue_reading_order": [
+    "AGENTS.md",
+    "STATUS.md",
+    "PLAN.md",
+    "DECISIONS.md",
+    "EXPERIMENTS.md",
+    "WORKLOG.md latest entry",
+    "task-specific specs and README.md"
+  ],
+  "documentation_hashes": {
+    "AGENTS.md": "35bc34b52e8c4524b9df78e820cedb8a000a0a8293814361cd41468e35e1a0b7",
+    "DECISIONS.md": "521c420240eb78de69da513a6585b570db0026ffdce4e59a828630fcbfc346fe",
+    "EXPERIMENTS.md": "e84c3b055e5fb9132102cec8ceedf982f9a473b56dbe5d4672fae473e4054f6d",
+    "PLAN.md": "69eca1938ea8911b4defab6b78e1cecf828ee89ea304ae2b6a793c036661778f",
+    "README.md": "4e8cde9898c5a3ff17aa1c7ecdd3e37a86dec5b648f141d82ff1f58c2a4a3c2a",
+    "STATUS.md": "fb17c169e83e8dcdb85a69c5c1e407730732755fa4bd911908d37c632237637a",
+    "WORKLOG.md": "836af5a66f6a8f777d5ba1e7bbc48d03dd4f4469199fae8882aa0e9ebaee4989",
+    "docs/code-review-2026-10-04-baselines.md": "8b597ff032398d04300ae482b2d4ce1ece3357da4e03101c5c0dad5b1ed215c6",
+    "docs/code-review-2026-10-04-data.md": "80ff8eddc6a1a78fee695f8e52ea173fc3e464ef82aa831c9f8f84be2f97f358",
+    "docs/code-review-2026-10-04-halt-data.md": "98cd7a1a669d8298865bce9c512d3cf75e634edb58028d63a34290bbdba72714",
+    "docs/data-source-check-2026-10-04.md": "cc70b0936d5d9430697bcc36f678bcf1f94bc340ced6e01a977f7fd23ea4ffe0",
+    "docs/development-baseline-results-2026-10-04.md": "2cd6bbc4623580a66e9c7096673dd0428e9a6257b1fa83beb9daa9a8444cf1c7",
+    "docs/superpowers/plans/2026-10-04-data-and-baseline-implementation.md": "329e69418da41d14a7d8aa335ef0a832cd41239070633a3c2bcc6e1b13d305ce",
+    "docs/superpowers/plans/2026-10-04-halt-aware-data-implementation.md": "0f10394c3f4898a75d80087aa4eac6dee4fbe8195b88f1fc5cbe57da786d5c6d",
+    "docs/superpowers/specs/2026-10-04-first-experiment-design.md": "948c104c4ab0e49bf2b4e97cd7d39f41814d1630b641d61d624582aeb8700691",
+    "docs/superpowers/specs/2026-10-04-halt-aware-data.md": "6616eab339bb5b98595598ea75f49db9c671680e321a977e3c90e4e15e1082c1"
+  },
+  "handoff_checks": [
+    "required context pointers",
+    "concrete next step and not-yet-written plan",
+    "effective and historical facts separated",
+    "stale ledger description corrected",
+    "historical cache script caveat",
+    "failed and completed experiments preserved"
+  ],
+  "frozen_experiments_and_current_source_unchanged": {
+    "EXP-004": {
+      "artifacts_checked": 11,
+      "source_files_checked": 38,
+      "source_hash": "0bdb59da1866e9568c35c3b77a93fa70f6d786a77c772af9ac4d8a55eab08336"
+    },
+    "EXP-005": {
+      "artifacts_checked": 11,
+      "source_files_checked": 38,
+      "source_hash": "0bdb59da1866e9568c35c3b77a93fa70f6d786a77c772af9ac4d8a55eab08336"
+    }
+  },
+  "new_training_or_strategy_experiments_run": false,
+  "python_behavior_tests_run_this_turn": false,
+  "last_behavior_test_record": "129 passed from baseline turn; current source hashes unchanged"
+}

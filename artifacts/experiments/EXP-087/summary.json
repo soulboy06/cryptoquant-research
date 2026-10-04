@@ -1,0 +1,83 @@
+{
+  "strategy": "logistic_regression",
+  "period": "development",
+  "cost": "higher_execution",
+  "initial_equity": "100",
+  "start_utc": "2024-01-01 00:00:00+00:00",
+  "end_utc": "2025-01-01 00:00:00+00:00",
+  "final_equity": "129.7773092084164000000",
+  "final_cash": "128.8943923084164000000",
+  "residual_value": "0.8829169000000000000",
+  "net_return": "0.2977730920841640000",
+  "max_drawdown": "0.06108891491062966303867232390",
+  "longest_drawdown_hours": 3168.0,
+  "drawdown_unrecovered": true,
+  "fills": 132,
+  "rejected_orders": 6363,
+  "rejection_reasons": {
+    "zero_quantity": 6347,
+    "minimum_notional": 16
+  },
+  "fees_usdt": "4.3453284431383000000",
+  "turnover_usdt": "4345.3284431383000000",
+  "turnover_multiple": "43.4532844313830000",
+  "mean_hourly_open_exposure": "0.01725809048447780405132991726",
+  "closed_cycles": 66,
+  "floor_triggers": 0,
+  "stop_triggers": 0,
+  "permanent_buy_lock": false,
+  "stale_checkpoints": 0,
+  "realized_pnl": "29.76587346111410622484449861",
+  "per_symbol": {
+    "BTCUSDT": {
+      "realized_pnl": "0.89244671097215505848233430",
+      "buy_fills": 23,
+      "sell_fills": 23,
+      "fees_usdt": "1.5062742042383000000",
+      "residual_quantity": "0.00000838",
+      "residual_value": "0.7841668800000000",
+      "residual_unrealized_pnl": "0.004734897247244941517665709581"
+    },
+    "ETHUSDT": {
+      "realized_pnl": "6.76644602932621744388937305",
+      "buy_fills": 19,
+      "sell_fills": 19,
+      "fees_usdt": "1.266884216630000000",
+      "residual_quantity": "0.0000010",
+      "residual_value": "0.003337780000000",
+      "residual_unrealized_pnl": "0.0002265198007825561106268978460"
+    },
+    "SOLUSDT": {
+      "realized_pnl": "22.10698072081573372247279126",
+      "buy_fills": 24,
+      "sell_fills": 24,
+      "fees_usdt": "1.57217002227000000",
+      "residual_quantity": "0.000504",
+      "residual_value": "0.09541224000000",
+      "residual_unrealized_pnl": "0.006474330254266277527208740370"
+    }
+  },
+  "limitations": [
+    "本次只评价development/W2，没有打开保留测试，不是实时或真实收益。",
+    "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+    "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+    "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+    "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+    "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+    "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+    "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+  ],
+  "window": "W2",
+  "g_week": 0.004997551574478454,
+  "total_window_hours": 8784.0,
+  "full_weeks_count": 52,
+  "losing_full_weeks_count": 18,
+  "losing_full_weeks_ratio": 0.34615384615384615,
+  "worst_full_week_return": -0.02011333294026263,
+  "experiment_id": "EXP-087",
+  "label_policy": "net_positive_base_v1",
+  "threshold": 0.5,
+  "training_experiment_id": "EXP-067",
+  "prepared_experiment_id": "EXP-063",
+  "status": "complete"
+}

@@ -1,0 +1,4 @@
+{
+  "error_type": "SameFileError",
+  "error": "'D:\\\\量化\\\\artifacts\\\\experiments\\\\EXP-034\\\\compare_validation.py' and WindowsPath('D:/量化/artifacts/experiments/EXP-034/compare_validation.py') are the same file"
+}

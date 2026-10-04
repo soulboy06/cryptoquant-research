@@ -1,0 +1,88 @@
+{
+  "symbol": "SOLUSDT",
+  "C": 1.0,
+  "model_family": "lightgbm",
+  "feature_names": [
+    "return_1h",
+    "return_4h",
+    "return_24h",
+    "return_72h",
+    "volatility_24h",
+    "range_fraction",
+    "quote_volume_change",
+    "ema24_distance",
+    "ema72_distance",
+    "funding_rate_latest",
+    "funding_rate_ma3",
+    "funding_rate_zscore"
+  ],
+  "classifier_parameters": {
+    "boosting_type": "gbdt",
+    "class_weight": null,
+    "colsample_bytree": 0.8,
+    "importance_type": "split",
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "min_child_samples": 80,
+    "min_child_weight": 0.001,
+    "min_split_gain": 0.0,
+    "n_estimators": 80,
+    "n_jobs": 1,
+    "num_leaves": 7,
+    "objective": null,
+    "random_state": 42,
+    "reg_alpha": 0.0,
+    "reg_lambda": 0.0,
+    "subsample": 0.8,
+    "subsample_for_bin": 200000,
+    "subsample_freq": 0,
+    "verbosity": -1
+  },
+  "regularization": "LightGBM tree constraints",
+  "classes": [
+    0,
+    1
+  ],
+  "feature_importances": {
+    "return_1h": 32,
+    "return_4h": 38,
+    "return_24h": 46,
+    "return_72h": 37,
+    "volatility_24h": 18,
+    "range_fraction": 35,
+    "quote_volume_change": 76,
+    "ema24_distance": 42,
+    "ema72_distance": 15,
+    "funding_rate_latest": 28,
+    "funding_rate_ma3": 47,
+    "funding_rate_zscore": 11
+  },
+  "sample_provenance": {
+    "path": "D:\\量化\\artifacts\\experiments\\EXP-021\\training_samples\\SOLUSDT.parquet",
+    "sha256": "f6ee43c3ea56eb212088c70bc2fa3ec4b6938899f2ed7606aa89fba2bf4bbda6",
+    "samples": 6387,
+    "label_1": 3210,
+    "label_0": 3177,
+    "first_decision_utc": "2022-01-01 00:00:00+00:00",
+    "last_decision_utc": "2024-12-31 16:00:00+00:00",
+    "last_label_end_utc": "2024-12-31 20:00:00+00:00"
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  }
+}

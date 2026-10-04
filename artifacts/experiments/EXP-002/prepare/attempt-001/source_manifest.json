@@ -1,0 +1,28 @@
+{
+  "source_hash": "c1454cd752dbae5c90d193a88514ce2d15f4e50b53886f1b568e9b13c7b8d017",
+  "files": {
+    "src/cryptoquant/__init__.py": "54862cb833e572a8fe68c3003517ec6e050002b14edfef546074214ce6894e7f",
+    "src/cryptoquant/__main__.py": "d459a40a7b75f0a99b42ed4dc77c66a96010b575206a91715ddfecd64b544520",
+    "src/cryptoquant/cli.py": "fbd3d098d47783cd7bbd57b3d2112a22664efd51420913a946dc4d0fe077ade6",
+    "src/cryptoquant/config.py": "722366bbe5d1d21039a5bfd68d655001b66f63f3fe1cc231a7246657f05c8f39",
+    "src/cryptoquant/data/__init__.py": "d707a33ae66e82699472a760d36f611ae252851a393bcdb2e73605b39fea9102",
+    "src/cryptoquant/data/archive.py": "a1bbb988e1f34741466d9a4b37267e175aec38af8abdbf1617497fd52fd1562e",
+    "src/cryptoquant/data/calendar.py": "705f9002383d80dec80026dcc2d320019533d26f4fc5c05ac237d0fe83898f80",
+    "src/cryptoquant/data/normalize.py": "044b394ec3f8fb564b52199cd072cb606a76daae2bcd5f0ed9df517334a8b3ee",
+    "src/cryptoquant/data/quality.py": "20d0330af86b14de07816fe221489deb08ece99864a7f97b19a6fe66bf34a202",
+    "src/cryptoquant/data/rules.py": "125ce99da1d1ce69c2cf8aa6554c8a1f70eca66c64554db39d31621f1b55059e",
+    "src/cryptoquant/data/workflow.py": "4c4db2cf12644a46dfd3dd158abb05458262917d8aea6c400248762617f3efc3",
+    "src/cryptoquant/data/market_calendar.json": "8476774a71ac5a9df23f36b8af6cb4458b6899f08bc5173ba907c25b1fd57d22",
+    "tests/test_archive.py": "d011b36239ead2960218fdf8fdba5a539866d24867d8119a879f95b00b4be305",
+    "tests/test_calendar.py": "bcaf866380c27fa27ec75cd982b9760772d7cf59fc28931924ffa1e6c686cfc2",
+    "tests/test_cli.py": "17a78ed97e4b2ee78ad383d8e231762a10f87ca8d775f3cb4c84fdc4514c155d",
+    "tests/test_config.py": "443a514bfb031879426895917683d861182a52ac4efd5adab6ff232702907cc5",
+    "tests/test_data_integration.py": "8dcefb9dbfe47e1d35a4acb8160fa8407edc39c7ac99bfb81334f3b60857df06",
+    "tests/test_normalize.py": "03246c8cecf960e7f7c49e78d3e33246a5d72da1505bc265c6b44ccde0dd8023",
+    "tests/test_quality.py": "3f9209f4bb525dbb71374dc96b3fc261b3ddc9542312b06726b9331b272d0c0f",
+    "tests/test_rules.py": "e89d37fec10a8a989e29cbe67bb5aa6ce640beadbc93205b777e052978ac9cfe",
+    "pyproject.toml": "8ee3aae6a66f828fcbb4fede2b4c122fdc2f721d06c0affb9eeee37655009068",
+    "requirements-lock.txt": "ae79ec0c403b98fa95d440dbed5f8e54043aabe98fc0310a263aa703d2ccd034"
+  },
+  "git_commit": null
+}

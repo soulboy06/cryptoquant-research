@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-10-04T07:53:44.194865+00:00",
+  "experiment_id": "EXP-003",
+  "archive_counts": {
+    "BTCUSDT": 88,
+    "ETHUSDT": 88,
+    "SOLUSDT": 118
+  },
+  "partitions_checked": 9,
+  "snapshot_files_checked": 69,
+  "source_hash": "44844a0f57929b34110537f74935bdd18e3e090c21800a2532158830d99a9a5b",
+  "markdown_files": 17,
+  "local_links_checked": 80,
+  "total_archive_rows": 127149,
+  "total_observed_rows": 127146,
+  "total_calendar_rows": 127152,
+  "previous_failures_preserved": true
+}

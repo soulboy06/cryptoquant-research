@@ -1,0 +1,188 @@
+{
+  "experiment_id": "EXP-063",
+  "type": "research_samples",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T13:38:47.899920+00:00",
+  "ended_at_utc": "2026-10-04T13:38:51.543858+00:00",
+  "data_experiment_id": "EXP-003",
+  "source_sample_experiment_id": "EXP-021",
+  "execution_config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "research_config_hash": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+  "feature_names": [
+    "return_1h",
+    "return_4h",
+    "return_24h",
+    "return_72h",
+    "volatility_24h",
+    "range_fraction",
+    "quote_volume_change",
+    "ema24_distance",
+    "ema72_distance",
+    "funding_rate_latest",
+    "funding_rate_ma3",
+    "funding_rate_zscore"
+  ],
+  "label_policies": {
+    "gross_direction_v1": {
+      "label_policy": "gross_direction_v1",
+      "label_cost_name": null,
+      "label_fee": null,
+      "label_adverse_price": null,
+      "label_horizon_hours": 4
+    },
+    "net_positive_base_v1": {
+      "label_policy": "net_positive_base_v1",
+      "label_cost_name": "base",
+      "label_fee": "0.001",
+      "label_adverse_price": "0.0005",
+      "label_horizon_hours": 4
+    }
+  },
+  "funding_snapshot": {
+    "BTCUSDT": {
+      "source_path": "D:\\量化\\data\\processed\\funding_rate\\BTCUSDT.parquet",
+      "source_sha256": "f7f206d44a1fd255710d45468418ac094cc0f27c613d111303d97b8bef945142",
+      "snapshot_path": "D:\\量化\\artifacts\\experiments\\EXP-063\\funding_snapshot\\BTCUSDT.parquet",
+      "snapshot_sha256": "3ac96ea77f70be0fc1b3927ca11701224af8ab3115d132275192e051ab9eba89",
+      "rows": 4476,
+      "min_funding_time_utc": "2021-12-01T00:00:00+00:00",
+      "max_funding_time_utc": "2025-12-31T16:00:00+00:00",
+      "note": "read_archive_and_truncated_at_2025_12_31_20_00_utc"
+    },
+    "ETHUSDT": {
+      "source_path": "D:\\量化\\data\\processed\\funding_rate\\ETHUSDT.parquet",
+      "source_sha256": "5ed201c5eacaf1495893631503f0aac30932ca92ca54c72d87c26382f5058705",
+      "snapshot_path": "D:\\量化\\artifacts\\experiments\\EXP-063\\funding_snapshot\\ETHUSDT.parquet",
+      "snapshot_sha256": "a4794e7999bb34c8b91207833dd8468866fa99bf7af5b97b428d988faaf37de0",
+      "rows": 4476,
+      "min_funding_time_utc": "2021-12-01T00:00:00+00:00",
+      "max_funding_time_utc": "2025-12-31T16:00:00+00:00",
+      "note": "read_archive_and_truncated_at_2025_12_31_20_00_utc"
+    },
+    "SOLUSDT": {
+      "source_path": "D:\\量化\\data\\processed\\funding_rate\\SOLUSDT.parquet",
+      "source_sha256": "be8ec7a388bf8f95578888ec1c513b1b336f8a778fb39e81fd12aef1869b4cb3",
+      "snapshot_path": "D:\\量化\\artifacts\\experiments\\EXP-063\\funding_snapshot\\SOLUSDT.parquet",
+      "snapshot_sha256": "614ab4a0753a46bbc67d00020a545b9fddb52c0e165a98dd02537b30742fac6f",
+      "rows": 4551,
+      "min_funding_time_utc": "2021-12-01T00:00:00+00:00",
+      "max_funding_time_utc": "2025-12-31T16:00:00+00:00",
+      "note": "read_archive_and_truncated_at_2025_12_31_20_00_utc"
+    }
+  },
+  "features": {
+    "BTCUSDT": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\features\\BTCUSDT.parquet",
+      "sha256": "10b69ea57d4af2b9a67107a6d9bb9bcf06567c7a30561aac4b0f3cb4e6291225",
+      "rows": 27049,
+      "feature_valid_count": 25560,
+      "min_decision_utc": "2021-12-01T01:00:00+00:00",
+      "max_decision_utc": "2025-01-01T01:00:00+00:00"
+    },
+    "ETHUSDT": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\features\\ETHUSDT.parquet",
+      "sha256": "bfe57186694a2554fb77abd6fb38a02174336d3ac885575bbe176da72e0a1dcb",
+      "rows": 27049,
+      "feature_valid_count": 25560,
+      "min_decision_utc": "2021-12-01T01:00:00+00:00",
+      "max_decision_utc": "2025-01-01T01:00:00+00:00"
+    },
+    "SOLUSDT": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\features\\SOLUSDT.parquet",
+      "sha256": "ca0b40b7840591ac7c713c30b24bf27c853df375896786b1cec0c225d45e2ddc",
+      "rows": 27049,
+      "feature_valid_count": 25560,
+      "min_decision_utc": "2021-12-01T01:00:00+00:00",
+      "max_decision_utc": "2025-01-01T01:00:00+00:00"
+    }
+  },
+  "samples": {
+    "gross_direction_v1": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\samples\\gross_direction_v1\\BTCUSDT.parquet",
+        "sha256": "c330d87a39ad3e5d9edd4928f6d8bda079a0da2856e7b5958b67ff0ae1fa9a2c",
+        "total_samples": 6387,
+        "label_1": 3278,
+        "label_0": 3109,
+        "w1_samples": 2189,
+        "w1_label_1": 1071,
+        "w2_samples": 4191,
+        "w2_label_1": 2128
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\samples\\gross_direction_v1\\ETHUSDT.parquet",
+        "sha256": "9df29937745dae11f2ced49f86f2ae72b53d0a28cbb9463661908bb07de5e7ff",
+        "total_samples": 6387,
+        "label_1": 3229,
+        "label_0": 3158,
+        "w1_samples": 2189,
+        "w1_label_1": 1100,
+        "w2_samples": 4191,
+        "w2_label_1": 2115
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\samples\\gross_direction_v1\\SOLUSDT.parquet",
+        "sha256": "7349f138991e570f245257d4ac0ddd5efa2e67caeb144f80503b17846ed12a23",
+        "total_samples": 6387,
+        "label_1": 3210,
+        "label_0": 3177,
+        "w1_samples": 2189,
+        "w1_label_1": 1054,
+        "w2_samples": 4191,
+        "w2_label_1": 2081
+      }
+    },
+    "net_positive_base_v1": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\samples\\net_positive_base_v1\\BTCUSDT.parquet",
+        "sha256": "a4a411accacb1444347b5c1f9e7760b46f8265078c057c223e3651a6be3b1c6a",
+        "total_samples": 6387,
+        "label_1": 2037,
+        "label_0": 4350,
+        "w1_samples": 2189,
+        "w1_label_1": 704,
+        "w2_samples": 4191,
+        "w2_label_1": 1261
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\samples\\net_positive_base_v1\\ETHUSDT.parquet",
+        "sha256": "0becb68dab0fa6d09712aca2b880ed3d1f97ebdf0d7f4fcdd2938d9923ce469b",
+        "total_samples": 6387,
+        "label_1": 2208,
+        "label_0": 4179,
+        "w1_samples": 2189,
+        "w1_label_1": 818,
+        "w2_samples": 4191,
+        "w2_label_1": 1390
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\artifacts\\experiments\\EXP-063\\samples\\net_positive_base_v1\\SOLUSDT.parquet",
+        "sha256": "281ed33f105d300889a09aedf21cc94397ad5860acf21d1dd8d8883d4774f497",
+        "total_samples": 6387,
+        "label_1": 2699,
+        "label_0": 3688,
+        "w1_samples": 2189,
+        "w1_label_1": 909,
+        "w2_samples": 4191,
+        "w2_label_1": 1741
+      }
+    }
+  },
+  "artifacts": {
+    "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "research_config.toml": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+    "funding_snapshot/BTCUSDT.parquet": "3ac96ea77f70be0fc1b3927ca11701224af8ab3115d132275192e051ab9eba89",
+    "features/BTCUSDT.parquet": "10b69ea57d4af2b9a67107a6d9bb9bcf06567c7a30561aac4b0f3cb4e6291225",
+    "samples/gross_direction_v1/BTCUSDT.parquet": "c330d87a39ad3e5d9edd4928f6d8bda079a0da2856e7b5958b67ff0ae1fa9a2c",
+    "samples/net_positive_base_v1/BTCUSDT.parquet": "a4a411accacb1444347b5c1f9e7760b46f8265078c057c223e3651a6be3b1c6a",
+    "funding_snapshot/ETHUSDT.parquet": "a4794e7999bb34c8b91207833dd8468866fa99bf7af5b97b428d988faaf37de0",
+    "features/ETHUSDT.parquet": "bfe57186694a2554fb77abd6fb38a02174336d3ac885575bbe176da72e0a1dcb",
+    "samples/gross_direction_v1/ETHUSDT.parquet": "9df29937745dae11f2ced49f86f2ae72b53d0a28cbb9463661908bb07de5e7ff",
+    "samples/net_positive_base_v1/ETHUSDT.parquet": "0becb68dab0fa6d09712aca2b880ed3d1f97ebdf0d7f4fcdd2938d9923ce469b",
+    "funding_snapshot/SOLUSDT.parquet": "614ab4a0753a46bbc67d00020a545b9fddb52c0e165a98dd02537b30742fac6f",
+    "features/SOLUSDT.parquet": "ca0b40b7840591ac7c713c30b24bf27c853df375896786b1cec0c225d45e2ddc",
+    "samples/gross_direction_v1/SOLUSDT.parquet": "7349f138991e570f245257d4ac0ddd5efa2e67caeb144f80503b17846ed12a23",
+    "samples/net_positive_base_v1/SOLUSDT.parquet": "281ed33f105d300889a09aedf21cc94397ad5860acf21d1dd8d8883d4774f497",
+    "report.md": "60477f7e32e3ba8f656fb8698a57ec7ca2529181ec7f35cc20bf2b787ac5b423"
+  }
+}

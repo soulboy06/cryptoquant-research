@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cryptoquant-research"
+version = "0.1.0"
+description = "Reproducible offline cryptocurrency research"
+requires-python = ">=3.12,<3.13"
+dependencies = ["numpy>=2,<3", "pandas>=2.2,<3", "pyarrow>=18", "requests>=2.32,<3", "matplotlib>=3.9,<4", "scikit-learn>=1.8,<1.10", "joblib>=1.4,<2", "threadpoolctl>=3.5,<4", "lightgbm>=4.0,<5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"cryptoquant.data" = ["*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--strict-markers --basetemp=.cache/tmp -p no:cacheprovider"

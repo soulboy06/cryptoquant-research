@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "error_type": "ValueError",
+  "error": "invalid hourly close timestamp",
+  "at_utc": "2026-10-04T07:28:30.445918+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "experiment_id": "EXP-121",
+  "type": "comprehensive_synthesis_report",
+  "status": "complete",
+  "evaluated_experiments": [
+    "EXP-102",
+    "EXP-103",
+    "EXP-104",
+    "EXP-105",
+    "EXP-106",
+    "EXP-107",
+    "EXP-108",
+    "EXP-109",
+    "EXP-110",
+    "EXP-111",
+    "EXP-112",
+    "EXP-113",
+    "EXP-115",
+    "EXP-116",
+    "EXP-117",
+    "EXP-118",
+    "EXP-119",
+    "EXP-120"
+  ],
+  "selection_experiment": "EXP-114",
+  "best_variant": "C2",
+  "artifacts": {
+    "report.md": "b65e552952941ef13bca1810f864f0ae0abbec31a3ab7bcb2289eae6253a7c51",
+    "comparison.json": "d84a1f8d3925ae07c86baa7b2c76fa7673c56e458cd18a3eec8fb52387c063e6"
+  }
+}

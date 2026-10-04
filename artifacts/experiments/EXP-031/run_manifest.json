@@ -1,0 +1,178 @@
+{
+  "experiment_id": "EXP-031",
+  "type": "model_validation",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T10:21:25.226341+00:00",
+  "config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "strategy": "logistic_regression",
+  "period": "validation",
+  "C": 10.0,
+  "threshold": 0.55,
+  "cost": "base",
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2025-12-31 20:00:00+00:00",
+  "data_experiment_id": "EXP-003",
+  "training_experiment_id": "EXP-022",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "refitted": false,
+  "command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "cryptoquant",
+    "validate",
+    "--config",
+    "D:\\量化\\configs\\second_experiment.toml",
+    "--data-experiment-id",
+    "EXP-003",
+    "--training-experiment-id",
+    "EXP-022",
+    "--C",
+    "10.0",
+    "--threshold",
+    "0.55",
+    "--cost",
+    "base",
+    "--experiment-id",
+    "EXP-031"
+  ],
+  "source_hash": "671e6bb319362955a86e3e7d919e2eaebd7d337ece76e0e72d4db14ac23217d0",
+  "data": {
+    "data_experiment_id": "EXP-003",
+    "period": "validation",
+    "data_manifest_sha256": "2412dadf0b06b2ac4b4997fdb547a72f9047023674e63829e7453ee0c0ac6740",
+    "quality_report_sha256": "2e591ffa5667d73928dc9fd313960da8e7ecd79c6dab43de2ba5ad5bfb11eb93",
+    "rules_sha256": "7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3",
+    "data_policy_sha256": "c6bfe76b46c15d3233b2c8a7c1de1cb885bf8c41553f38ee1ec01f6e20a47fdf",
+    "rule_report_sha256": "214532b597f37fa165d5ec577f313cd672c66c57d21a83d0b1a0ac824aed4d93",
+    "partitions": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\validation\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "b1d134aa9e49f4d6dc894d74831a1ce4ceda41cc93c510136b545583de30365b",
+        "evaluation_rows": 8756,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\validation\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "06ec2ddbff60f2d10f74eaef4ca3aff50022c2c7def5f077450472809682de1a",
+        "evaluation_rows": 8756,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\validation\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "8bb345bc617361dadc7b4bc4109bc4edb56783d0a68902be7945544f95805d5e",
+        "evaluation_rows": 8756,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    }
+  },
+  "training": {
+    "training_experiment_id": "EXP-022",
+    "training_manifest_sha256": "9b6f247e6bbdd001478d8ba2a493f77bc08bb23487f903916b15f9042e7b4e4d",
+    "training_source_hash": "671e6bb319362955a86e3e7d919e2eaebd7d337ece76e0e72d4db14ac23217d0",
+    "label_end_before_utc": "2025-01-01 00:00:00+00:00",
+    "models": {
+      "0.1": [
+        {
+          "symbol": "BTCUSDT",
+          "C": 0.1,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\BTCUSDT_C-0.1.joblib",
+          "sha256": "d4b8834138a68fb5fd6b4f49249e2dee84abe88949fd0ab8d228b998f279fdc6"
+        },
+        {
+          "symbol": "ETHUSDT",
+          "C": 0.1,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\ETHUSDT_C-0.1.joblib",
+          "sha256": "0e6d1df37c357f419bdb54d5374966b9bc00ebe8b273096dfaf1c309a2f02299"
+        },
+        {
+          "symbol": "SOLUSDT",
+          "C": 0.1,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\SOLUSDT_C-0.1.joblib",
+          "sha256": "271f92a1e2108b5f86f45d022f7e08a3bee2f00b9c5fa472ef27e44269dec205"
+        }
+      ],
+      "1.0": [
+        {
+          "symbol": "BTCUSDT",
+          "C": 1.0,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\BTCUSDT_C-1.joblib",
+          "sha256": "2579fe845dc44997755010a6c0d481d204e2de408aede43709b258bbdff0772b"
+        },
+        {
+          "symbol": "ETHUSDT",
+          "C": 1.0,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\ETHUSDT_C-1.joblib",
+          "sha256": "751c692ce9ddc8752ca2b72ab6caad0ddf2733280b1f020d05a2c48f7294f421"
+        },
+        {
+          "symbol": "SOLUSDT",
+          "C": 1.0,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\SOLUSDT_C-1.joblib",
+          "sha256": "c47c61534467c92fcd0e379754641d2c4b85d52d2d8c8cb698fc72a66bd9850d"
+        }
+      ],
+      "10.0": [
+        {
+          "symbol": "BTCUSDT",
+          "C": 10.0,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\BTCUSDT_C-10.joblib",
+          "sha256": "187fce7f3fe03592c75220b46d9c130e5c862d1dcaddeaa1e2daa07baa9e8308"
+        },
+        {
+          "symbol": "ETHUSDT",
+          "C": 10.0,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\ETHUSDT_C-10.joblib",
+          "sha256": "ea4e50321220b93300ba5b427e493d508074c856c9ba63e08c93d5e721e6e05f"
+        },
+        {
+          "symbol": "SOLUSDT",
+          "C": 10.0,
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-022\\models\\SOLUSDT_C-10.joblib",
+          "sha256": "5c11bde5b60e4124f41824ff29d5233575f4869ad4d99dca3d71f91a1fd75b9b"
+        }
+      ]
+    }
+  },
+  "shared_prediction_C": 10.0,
+  "probability_rows": 6567,
+  "invalid_probability_rows": 0,
+  "ended_at_utc": "2026-10-04T10:21:29.445980+00:00",
+  "artifacts": {
+    "annual.csv": "fbbfb2d0e70cbe75ba6455bce329a1768b8132c676e8d76c4ff85fe98e24289e",
+    "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "decision_targets.csv": "0e4f6ca719a49d8989d6f6d3d1cfb528ef47fda5e13e0ae4c8c64ef9871bf2cd",
+    "equity.csv": "e9c44e7b54577e91f964b61db39b2ddafe403f61bc1024885b3974621095435e",
+    "equity.png": "3ea937938832d887e0946ce0a4fcb8d9bda00bb29ef464a62d2b738f90187f8e",
+    "events.jsonl": "0b5812effc41129bdc7d8bd42e854b2e5c3a6c71d4d1468974afb0915053445a",
+    "fills.csv": "da154fe28fbb953ab399db094f533231397a2bff9affd9ee3f5b63b3ca7a3d85",
+    "orders.csv": "9e602d0c9ef91ebaad5b5b73aae83f3cbffae7c49444422868ff011dc0034113",
+    "prediction_diagnostics.json": "d3e7fe229fad2f87443539e706b15b07d8a19332a676b25e8e8e1279f8c23891",
+    "probabilities.csv": "1fd6c5af738c56cde3fe9df804e528b26d021c2031cc12f8a2a1debe1f2d9b6f",
+    "quarterly.csv": "56dc2a11351d1d43728eb69780e6f05930639aadaad2f132e91df5156e53bf56",
+    "report.md": "7075916bb830dc0fa5ae83ce63973d32b645dc7d1ca7efc6df7e421aefee335f",
+    "signals.csv": "f32a0d47bdcf654ef1e6d5093518a34338c6530f1dab9c49b6fba8650641a50b",
+    "source_manifest.json": "f459573eb4c285a679040b6ddf5537d426443a741d200f37ce94462da51d4c00",
+    "summary.json": "1fbaf8735c1dd2b79aa13c5b2430fb7bf5dd5efffd0a33c212fefe19fcba75bb",
+    "validation_labels.csv": "f286edf10ac58326db79079891ceec29c1b91fb6413e87379782d73bfcea650a"
+  }
+}

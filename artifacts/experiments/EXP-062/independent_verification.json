@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "method": "replay recorded fills with existing Portfolio.apply_fill; no trading decisions",
+  "reconciled_fills": 66,
+  "matched_cycles": 33,
+  "actual_profitable_cycles": 17,
+  "ideal_fixed_size_profitable_signals": 18,
+  "tail_and_rounding_sign_difference": [
+    {
+      "symbol": "BTCUSDT",
+      "entry_time": "2025-03-03 20:00:00+00:00",
+      "ideal_net_4h": "0.004167792660343839",
+      "actual_realized_net": "-0.05024012513290553604000872",
+      "carried_tail_quantity": "0.00000915"
+    }
+  ],
+  "source_and_diagnostic_frozen_hashes": "matched",
+  "fees_cash_quantity_realized_final_equity": "matched",
+  "realized_cost_share_of_reference_pnl": "0.6616871555290504661039762593",
+  "largest_win_share_of_realized_net": "0.8435219308098961579702714832",
+  "diagnostic_manifest_sha256": "1eda2b5e09e17d535506e4fca9527ef5d46ecd38c7fa6499c205304e2b0addbb",
+  "verification_script_sha256": "c355262ebddefe88d21a2f0c2c3dfe2b090add7c10ff57582134f16c1865708b",
+  "no_fit_or_new_strategy": true,
+  "no_market_partitions_or_test_read": true
+}

@@ -1,0 +1,25 @@
+{
+  "source_hash": "fee7ddd63bf5a98f4ea16415938b43915652d636c0281e2824e41b612346691a",
+  "files": {
+    "src/cryptoquant/__init__.py": "54862cb833e572a8fe68c3003517ec6e050002b14edfef546074214ce6894e7f",
+    "src/cryptoquant/__main__.py": "d459a40a7b75f0a99b42ed4dc77c66a96010b575206a91715ddfecd64b544520",
+    "src/cryptoquant/cli.py": "fbd3d098d47783cd7bbd57b3d2112a22664efd51420913a946dc4d0fe077ade6",
+    "src/cryptoquant/config.py": "8002e1911063f8ce03a4a87b4ffe7f465e18f6823297dfb6ed24d992c81becf1",
+    "src/cryptoquant/data/__init__.py": "d707a33ae66e82699472a760d36f611ae252851a393bcdb2e73605b39fea9102",
+    "src/cryptoquant/data/archive.py": "a1bbb988e1f34741466d9a4b37267e175aec38af8abdbf1617497fd52fd1562e",
+    "src/cryptoquant/data/normalize.py": "91b4bab82c5e0d7e4587719bbde25bac2d9c99bff99a7fb16132cc73d166c5c8",
+    "src/cryptoquant/data/quality.py": "f6c972a04d44a279b0055d0cda7039aec1b44bebaa88047dd81c2b0fb015fd39",
+    "src/cryptoquant/data/rules.py": "125ce99da1d1ce69c2cf8aa6554c8a1f70eca66c64554db39d31621f1b55059e",
+    "src/cryptoquant/data/workflow.py": "978129b03ab1687a2751a0ca1df02d0f98ce6b8bd5a957794a7a03fe4b11ce4d",
+    "tests/test_archive.py": "d011b36239ead2960218fdf8fdba5a539866d24867d8119a879f95b00b4be305",
+    "tests/test_cli.py": "17a78ed97e4b2ee78ad383d8e231762a10f87ca8d775f3cb4c84fdc4514c155d",
+    "tests/test_config.py": "0bf7b30d82d58172612a2729687d909a242fcd169ed027608584b82316a53ef4",
+    "tests/test_data_integration.py": "041b92a249bd1498202b684f8bc52428759ebacb53855716d9e9c213790955fa",
+    "tests/test_normalize.py": "9458557f635d06688179c6d79c6a2199687b837b165078923806032314652c9a",
+    "tests/test_quality.py": "3f9209f4bb525dbb71374dc96b3fc261b3ddc9542312b06726b9331b272d0c0f",
+    "tests/test_rules.py": "e89d37fec10a8a989e29cbe67bb5aa6ce640beadbc93205b777e052978ac9cfe",
+    "pyproject.toml": "7c3900e4d0c7912ec38f9143b4dbabf86758319fcbbf12d263e7bf35e665d1a9",
+    "requirements-lock.txt": "ae79ec0c403b98fa95d440dbed5f8e54043aabe98fc0310a263aa703d2ccd034"
+  },
+  "git_commit": null
+}

@@ -1,0 +1,26 @@
+{
+  "experiment_id": "EXP-001",
+  "config_hash": "e4c862f6791a59988e883faa5d93013b15f656f58c57bb1e0abc4095ca1cc6f8",
+  "type": "data_check",
+  "steps": {
+    "prepare": {
+      "status": "failed",
+      "attempts": [
+        {
+          "path": "D:\\量化\\artifacts\\experiments\\EXP-001\\prepare\\attempt-001",
+          "status": "failed",
+          "started_at": "2026-10-04T06:46:59.626608+00:00",
+          "ended_at": "2026-10-04T06:51:07.962969+00:00",
+          "result": {
+            "error": "invalid hourly close timestamp",
+            "failure_report": "D:\\量化\\artifacts\\experiments\\EXP-001\\prepare\\attempt-001\\failure.json"
+          }
+        }
+      ],
+      "result": {
+        "error": "invalid hourly close timestamp",
+        "failure_report": "D:\\量化\\artifacts\\experiments\\EXP-001\\prepare\\attempt-001\\failure.json"
+      }
+    }
+  }
+}

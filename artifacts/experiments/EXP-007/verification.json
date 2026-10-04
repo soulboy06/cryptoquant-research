@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "at_utc": "2026-10-04T09:19:53.463674+00:00",
+  "experiment_id": "EXP-007",
+  "models": 9,
+  "samples_per_symbol": 6387,
+  "unique_training_samples": 19161,
+  "source_hash": "a18b4240dc4867597d6939fc8f9d2111cf03aa20008dbd9af9d77aab3c704b61",
+  "artifact_hashes_checked": 31,
+  "source_files_checked": 46,
+  "scaler_count_and_features_verified": true,
+  "convergence_verified": true,
+  "reload_verification": "all nine performed during formal workflow; exact probabilities unchanged",
+  "selected_candidate": null,
+  "validation_test_parquet_read": false,
+  "untouched_evaluation_evidence": "train loader reads only training_samples; offline CLI behavioral check guarded every Parquet read",
+  "started_at_utc": "2026-10-04T09:19:05.550066+00:00",
+  "ended_at_utc": "2026-10-04T09:19:06.468740+00:00"
+}

@@ -1,0 +1,83 @@
+{
+  "strategy": "logistic_regression",
+  "period": "development",
+  "cost": "base",
+  "initial_equity": "100",
+  "start_utc": "2023-01-01 00:00:00+00:00",
+  "end_utc": "2024-01-01 00:00:00+00:00",
+  "final_equity": "101.15716657901850000000",
+  "final_cash": "100.82693181921850000000",
+  "residual_value": "0.33023475980000000000",
+  "net_return": "0.01157166579018500000",
+  "max_drawdown": "0.004033658752498691077892242292",
+  "longest_drawdown_hours": 5978.0,
+  "drawdown_unrecovered": true,
+  "fills": 4,
+  "rejected_orders": 1518,
+  "rejection_reasons": {
+    "zero_quantity": 1515,
+    "no_quote": 3
+  },
+  "fees_usdt": "0.12035766663325000000",
+  "turnover_usdt": "120.35766663325000000",
+  "turnover_multiple": "1.20357666633250000",
+  "mean_hourly_open_exposure": "0.002149004284103547905558807498",
+  "closed_cycles": 2,
+  "floor_triggers": 0,
+  "stop_triggers": 0,
+  "permanent_buy_lock": false,
+  "stale_checkpoints": 4,
+  "realized_pnl": "1.04495647587845630027555878",
+  "per_symbol": {
+    "BTCUSDT": {
+      "realized_pnl": "1.04495647587845630027555878",
+      "buy_fills": 2,
+      "sell_fills": 2,
+      "fees_usdt": "0.12035766663325000000",
+      "residual_quantity": "0.00000781",
+      "residual_value": "0.3302347598000000",
+      "residual_unrealized_pnl": "0.1122101031400436997244412281"
+    },
+    "ETHUSDT": {
+      "realized_pnl": "0",
+      "buy_fills": 0,
+      "sell_fills": 0,
+      "fees_usdt": "0",
+      "residual_quantity": "0",
+      "residual_value": "0E-8",
+      "residual_unrealized_pnl": "0E-8"
+    },
+    "SOLUSDT": {
+      "realized_pnl": "0",
+      "buy_fills": 0,
+      "sell_fills": 0,
+      "fees_usdt": "0",
+      "residual_quantity": "0",
+      "residual_value": "0E-8",
+      "residual_unrealized_pnl": "0E-8"
+    }
+  },
+  "limitations": [
+    "本次只评价development/W1，没有打开保留测试，不是实时或真实收益。",
+    "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+    "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+    "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+    "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+    "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+    "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+    "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+  ],
+  "window": "W1",
+  "g_week": 0.0002206725167530621,
+  "total_window_hours": 8760.0,
+  "full_weeks_count": 52,
+  "losing_full_weeks_count": 17,
+  "losing_full_weeks_ratio": 0.3269230769230769,
+  "worst_full_week_return": -0.00025736570300005646,
+  "experiment_id": "EXP-074",
+  "label_policy": "net_positive_base_v1",
+  "threshold": 0.6,
+  "training_experiment_id": "EXP-065",
+  "prepared_experiment_id": "EXP-063",
+  "status": "complete"
+}

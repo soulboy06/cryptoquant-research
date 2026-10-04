@@ -1,0 +1,20 @@
+{
+  "experiment_id": "EXP-005",
+  "status": "passed",
+  "artifacts_checked": 11,
+  "frozen_source_files": 38,
+  "partitions_checked": 3,
+  "fills_replayed": 1013,
+  "equity_checkpoints": 52610,
+  "floor_details": null,
+  "checks": [
+    "artifact and source hashes",
+    "development-only inputs",
+    "fill time, price and availability",
+    "cash/positions replay",
+    "all checkpoint equity sums and drawdown",
+    "P&L and fees",
+    "annual continuity",
+    "floor permanence"
+  ]
+}

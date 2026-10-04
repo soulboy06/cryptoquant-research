@@ -1,0 +1,76 @@
+{
+  "experiment_id": "EXP-084",
+  "type": "research_selection",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T13:55:12.578962+00:00",
+  "prepared_experiment_id": "EXP-063",
+  "base_experiment_ids": [
+    "EXP-068",
+    "EXP-069",
+    "EXP-070",
+    "EXP-071",
+    "EXP-072",
+    "EXP-073",
+    "EXP-074",
+    "EXP-075",
+    "EXP-076",
+    "EXP-077",
+    "EXP-078",
+    "EXP-079",
+    "EXP-080",
+    "EXP-081",
+    "EXP-082",
+    "EXP-083"
+  ],
+  "research_config_path": "configs\\fifth_experiment.toml",
+  "research_config_hash": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+  "execution_config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "cryptoquant",
+    "research-select",
+    "--research-config",
+    "configs\\fifth_experiment.toml",
+    "--experiment-id",
+    "EXP-084",
+    "--prepared-experiment-id",
+    "EXP-063",
+    "--base-experiment-ids",
+    "EXP-068,EXP-069,EXP-070,EXP-071,EXP-072,EXP-073,EXP-074,EXP-075,EXP-076,EXP-077,EXP-078,EXP-079,EXP-080,EXP-081,EXP-082,EXP-083"
+  ],
+  "source_hash": "c4b774ac49432e814baa2d4f5ffbf2190d5f53702c27668be3a2c5d460281ebf",
+  "ended_at_utc": "2026-10-04T13:55:12.729872+00:00",
+  "artifacts": {
+    "selection_summary.json": "5d74a57f9a802ec7fc67ece19edf401e8fe2a477909c81f65e69db09a9c6c7d5",
+    "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "research_config.toml": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+    "report.md": "e2d5e60d1399453cbc647cbc405e0e3b4a39c3dd21e9827431cce3b4433fbd2c"
+  },
+  "selection": {
+    "do_not_run_R2025": false,
+    "net_policy_status": "qualified_and_selected",
+    "net_policy_selected_threshold": 0.5,
+    "gross_policy_selected_threshold": 0.64,
+    "relative_improvement": false,
+    "target_achieved": false
+  }
+}

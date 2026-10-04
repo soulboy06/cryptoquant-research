@@ -1,0 +1,18 @@
+{
+  "step": "prepare",
+  "started_at_utc": "2026-10-04T07:44:21.476468+00:00",
+  "config_hash": "00d06a51fd7033c46607e0eef2bfeec4c125f689b263c512e9ad3cc611c76340",
+  "source_hash": "44844a0f57929b34110537f74935bdd18e3e090c21800a2532158830d99a9a5b",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1"
+    }
+  }
+}

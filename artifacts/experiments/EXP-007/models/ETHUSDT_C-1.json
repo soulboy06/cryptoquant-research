@@ -1,0 +1,124 @@
+{
+  "symbol": "ETHUSDT",
+  "C": 1.0,
+  "feature_names": [
+    "return_1h",
+    "return_4h",
+    "return_24h",
+    "return_72h",
+    "volatility_24h",
+    "range_fraction",
+    "quote_volume_change",
+    "ema24_distance",
+    "ema72_distance"
+  ],
+  "classifier_parameters": {
+    "C": 1.0,
+    "class_weight": null,
+    "dual": false,
+    "fit_intercept": true,
+    "intercept_scaling": 1,
+    "l1_ratio": 0.0,
+    "max_iter": 1000,
+    "n_jobs": null,
+    "penalty": "deprecated",
+    "random_state": 42,
+    "solver": "lbfgs",
+    "tol": 0.0001,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "regularization": "L2",
+  "classes": [
+    0,
+    1
+  ],
+  "coefficients": [
+    [
+      -0.05544850709985374,
+      -0.1383314548583629,
+      -0.18350166522836941,
+      0.06515500499904887,
+      0.06099808121265854,
+      -0.039837944918010224,
+      0.023059892649905742,
+      0.11920296174629175,
+      0.0003831432428369726
+    ]
+  ],
+  "intercept": [
+    0.022519114340251785
+  ],
+  "iterations": [
+    17
+  ],
+  "scaler": {
+    "parameters": {
+      "copy": true,
+      "with_mean": true,
+      "with_std": true
+    },
+    "mean": [
+      -3.1703550626049916e-06,
+      8.823459461913303e-05,
+      0.0005087116915474442,
+      0.0015342144189167154,
+      0.006204373075183823,
+      0.009089714807530003,
+      0.026713113327167328,
+      -8.625730412401561e-05,
+      -0.000253195741558713
+    ],
+    "variance": [
+      4.836813186854839e-05,
+      0.0002023599212307469,
+      0.0012558240563889953,
+      0.003818623819261442,
+      1.3851151974688332e-05,
+      5.902561859397548e-05,
+      0.840732157390307,
+      0.0002838776818596624,
+      0.0009351049371253832
+    ],
+    "scale": [
+      0.006954720114321524,
+      0.014225326753039697,
+      0.03543760793830469,
+      0.06179501451785121,
+      0.0037217135804207624,
+      0.007682813195306487,
+      0.9169144765954494,
+      0.01684867003236939,
+      0.03057948556018206
+    ],
+    "n_samples_seen": 6387
+  },
+  "sample_provenance": {
+    "path": "D:\\量化\\artifacts\\experiments\\EXP-006\\training_samples\\ETHUSDT.parquet",
+    "sha256": "9db5964dc6c01aef74bc310b0b4f997b0b41d28442e9e8884d00169e41c83335",
+    "samples": 6387,
+    "label_1": 3229,
+    "label_0": 3158,
+    "first_decision_utc": "2022-01-01 00:00:00+00:00",
+    "last_decision_utc": "2024-12-31 16:00:00+00:00",
+    "last_label_end_utc": "2024-12-31 20:00:00+00:00"
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  }
+}

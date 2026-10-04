@@ -1,0 +1,5 @@
+{
+  "status": "passed",
+  "input": "synthetic",
+  "check": "Changing current open changes quantities, not EMA signal direction; no formal experiment run."
+}

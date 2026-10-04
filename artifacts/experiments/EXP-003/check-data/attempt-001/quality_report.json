@@ -1,0 +1,191 @@
+{
+  "status": "passed",
+  "config_hash": "00d06a51fd7033c46607e0eef2bfeec4c125f689b263c512e9ad3cc611c76340",
+  "data_policy": "halt_aware_v2",
+  "data_policy_sha256": "c6bfe76b46c15d3233b2c8a7c1de1cb885bf8c41553f38ee1ec01f6e20a47fdf",
+  "data_manifest": "D:\\量化\\artifacts\\experiments\\EXP-003\\prepare\\attempt-001\\manifest.json",
+  "data_manifest_sha256": "2412dadf0b06b2ac4b4997fdb547a72f9047023674e63829e7453ee0c0ac6740",
+  "rules_sha256": "7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1"
+    }
+  },
+  "symbols": {
+    "BTCUSDT": {
+      "symbol": "BTCUSDT",
+      "status": "passed",
+      "input_rows": 42383,
+      "rows": 42384,
+      "archive_rows": 42383,
+      "observed_rows": 42382,
+      "no_trade_rows": 1,
+      "expected_rows": 42384,
+      "duplicates_removed": 0,
+      "input_was_ordered": true,
+      "start_utc": "2021-12-01T00:00:00+00:00",
+      "end_exclusive_utc": "2026-10-02T00:00:00+00:00",
+      "missing_hours": 1,
+      "known_halt_hours": 1,
+      "unexplained_missing_hours": 0,
+      "nonstandard_close_count": 2,
+      "nonstandard_closes": [
+        {
+          "open_time": "2021-12-24T04:00:00+00:00",
+          "close_time": "2021-12-24T04:59:54.362000+00:00",
+          "source_id": "BTCUSDT-1h-2021-12.zip:b01133a69b22aa7904742a06a892ff3811152377f61e23977051a937afe2fbaa"
+        },
+        {
+          "open_time": "2023-03-24T12:00:00+00:00",
+          "close_time": "2023-03-24T12:39:41.646000+00:00",
+          "source_id": "BTCUSDT-1h-2023-03.zip:7f2afb8e0179a57ac31eab5205660298ba5eb77039ac2e21aef9b715ff3d06ce"
+        }
+      ],
+      "conflicting_duplicates": 0,
+      "unclosed_bars": 0
+    },
+    "ETHUSDT": {
+      "symbol": "ETHUSDT",
+      "status": "passed",
+      "input_rows": 42383,
+      "rows": 42384,
+      "archive_rows": 42383,
+      "observed_rows": 42382,
+      "no_trade_rows": 1,
+      "expected_rows": 42384,
+      "duplicates_removed": 0,
+      "input_was_ordered": true,
+      "start_utc": "2021-12-01T00:00:00+00:00",
+      "end_exclusive_utc": "2026-10-02T00:00:00+00:00",
+      "missing_hours": 1,
+      "known_halt_hours": 1,
+      "unexplained_missing_hours": 0,
+      "nonstandard_close_count": 2,
+      "nonstandard_closes": [
+        {
+          "open_time": "2021-12-24T04:00:00+00:00",
+          "close_time": "2021-12-24T04:59:56.158000+00:00",
+          "source_id": "ETHUSDT-1h-2021-12.zip:7cec67435b94112e7d1a8ec45b4d0167735102d12cb8649699aedf5018b09a80"
+        },
+        {
+          "open_time": "2023-03-24T12:00:00+00:00",
+          "close_time": "2023-03-24T12:39:43.061000+00:00",
+          "source_id": "ETHUSDT-1h-2023-03.zip:90d268be1e0d39f7411f88ca3c0f21fe110fee7ff3c1dd054555e1fea6e22d8d"
+        }
+      ],
+      "conflicting_duplicates": 0,
+      "unclosed_bars": 0
+    },
+    "SOLUSDT": {
+      "symbol": "SOLUSDT",
+      "status": "passed",
+      "input_rows": 42383,
+      "rows": 42384,
+      "archive_rows": 42383,
+      "observed_rows": 42382,
+      "no_trade_rows": 1,
+      "expected_rows": 42384,
+      "duplicates_removed": 0,
+      "input_was_ordered": true,
+      "start_utc": "2021-12-01T00:00:00+00:00",
+      "end_exclusive_utc": "2026-10-02T00:00:00+00:00",
+      "missing_hours": 1,
+      "known_halt_hours": 1,
+      "unexplained_missing_hours": 0,
+      "nonstandard_close_count": 1,
+      "nonstandard_closes": [
+        {
+          "open_time": "2023-03-24T12:00:00+00:00",
+          "close_time": "2023-03-24T12:39:46.948000+00:00",
+          "source_id": "SOLUSDT-1h-2023-03.zip:7345fc8807e3e73e11595b5b371bf96d414048f77d1498964fa5c5f8fe3f02e7"
+        }
+      ],
+      "conflicting_duplicates": 0,
+      "unclosed_bars": 0
+    }
+  },
+  "partitions": {
+    "development": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "ef6a5b84eefca9340ae24d05d2778b822ef69b3af21edab78e17fb22f9bd75c8",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "261e3a67d3ae235cb2895d4f7ba48bea35a97a1974a67ca7f02676fa6655d58d",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "65b89257a4554ae97bf2f9118b42f68b8858df02ae26b866b7a0702b86202671",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    },
+    "validation": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\validation\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "b1d134aa9e49f4d6dc894d74831a1ce4ceda41cc93c510136b545583de30365b",
+        "evaluation_rows": 8756,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\validation\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "06ec2ddbff60f2d10f74eaef4ca3aff50022c2c7def5f077450472809682de1a",
+        "evaluation_rows": 8756,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\validation\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "8bb345bc617361dadc7b4bc4109bc4edb56783d0a68902be7945544f95805d5e",
+        "evaluation_rows": 8756,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    },
+    "test": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\test\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "6b138b355d8a8a8e3e22165d8cf40d2b790075437d8e89683baccc99a1e00123",
+        "evaluation_rows": 6552,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\test\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "eb951ef84cf9144f388663b65db89e491bb62664f355459c3ae1b9b9ee31aed4",
+        "evaluation_rows": 6552,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\test\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "d0cca94c46cebf034d0b964985e7d23fffe8aa65bf4b9e66ef948618bffc63ab",
+        "evaluation_rows": 6552,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    }
+  },
+  "total_rows": 127152,
+  "total_archive_rows": 127149,
+  "total_observed_rows": 127146,
+  "total_halt_hours": 3,
+  "total_no_trade_rows": 3,
+  "checked_at_utc": "2026-10-04T07:46:21.292295+00:00"
+}

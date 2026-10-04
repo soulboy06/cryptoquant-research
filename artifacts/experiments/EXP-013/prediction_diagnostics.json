@@ -1,0 +1,32 @@
+{
+  "BTCUSDT": {
+    "samples": 2189,
+    "label_1": 1104,
+    "label_0": 1085,
+    "accuracy": 0.5258108725445408,
+    "threshold_accuracy": 0.4993147555961626,
+    "roc_auc": 0.5335470513591131,
+    "brier": 0.24940561166434416,
+    "last_label_end_utc": "2025-12-31 20:00:00+00:00"
+  },
+  "ETHUSDT": {
+    "samples": 2189,
+    "label_1": 1110,
+    "label_0": 1079,
+    "accuracy": 0.511192325262677,
+    "threshold_accuracy": 0.49657377798081315,
+    "roc_auc": 0.5149379221668379,
+    "brier": 0.2508397377082188,
+    "last_label_end_utc": "2025-12-31 20:00:00+00:00"
+  },
+  "SOLUSDT": {
+    "samples": 2189,
+    "label_1": 1088,
+    "label_0": 1101,
+    "accuracy": 0.5047967108268616,
+    "threshold_accuracy": 0.49246231155778897,
+    "roc_auc": 0.4954019073569482,
+    "brier": 0.251883838801031,
+    "last_label_end_utc": "2025-12-31 20:00:00+00:00"
+  }
+}

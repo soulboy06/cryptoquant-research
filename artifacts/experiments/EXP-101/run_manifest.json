@@ -1,0 +1,82 @@
+{
+  "experiment_id": "EXP-101",
+  "type": "research_comparison",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T13:59:18.936951+00:00",
+  "selection_experiment_id": "EXP-084",
+  "evaluated_experiment_ids": [
+    "EXP-073",
+    "EXP-085",
+    "EXP-086",
+    "EXP-081",
+    "EXP-087",
+    "EXP-088",
+    "EXP-095",
+    "EXP-096",
+    "EXP-097",
+    "EXP-071",
+    "EXP-089",
+    "EXP-090",
+    "EXP-079",
+    "EXP-091",
+    "EXP-092",
+    "EXP-098",
+    "EXP-099",
+    "EXP-100"
+  ],
+  "research_config_path": "configs\\fifth_experiment.toml",
+  "research_config_hash": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+  "execution_config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "cryptoquant",
+    "research-compare",
+    "--research-config",
+    "configs\\fifth_experiment.toml",
+    "--experiment-id",
+    "EXP-101",
+    "--selection-experiment-id",
+    "EXP-084",
+    "--evaluated-experiment-ids",
+    "EXP-073,EXP-085,EXP-086,EXP-081,EXP-087,EXP-088,EXP-095,EXP-096,EXP-097,EXP-071,EXP-089,EXP-090,EXP-079,EXP-091,EXP-092,EXP-098,EXP-099,EXP-100"
+  ],
+  "source_hash": "a7a351dd8ec7188c34e7fc475de3bec287908b10b39f6e5d6cda991a5035ec2e",
+  "ended_at_utc": "2026-10-04T13:59:19.087874+00:00",
+  "artifacts": {
+    "comparison_summary.json": "3eb46d917e36b1c7c70ab7b9d4976e7a344c64e020966e5399337745b6bda10e",
+    "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "research_config.toml": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+    "report.md": "54dc909945e2317feaa74f89d4db84afe48616f3af8a2d5d00d04da8f2f3ead0"
+  },
+  "final_conclusions": {
+    "method_valid": true,
+    "method_valid_details": "数据完整性、时间隔离、无未来特征对齐及独立账本检查全部通过。",
+    "relative_improvement": false,
+    "relative_improvement_reasons": [
+      "新标签部分窗口最大回撤大于旧标签。"
+    ],
+    "target_achieved": false,
+    "target_achieved_reasons": [
+      "前置相对改善未达成。"
+    ]
+  }
+}

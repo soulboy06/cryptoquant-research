@@ -1,0 +1,24 @@
+{
+  "experiment_id": "EXP-114",
+  "type": "ablation_selection_and_freeze",
+  "status": "complete",
+  "input_experiments": [
+    "EXP-102",
+    "EXP-103",
+    "EXP-104",
+    "EXP-105",
+    "EXP-106",
+    "EXP-107",
+    "EXP-108",
+    "EXP-109",
+    "EXP-110",
+    "EXP-111",
+    "EXP-112",
+    "EXP-113"
+  ],
+  "selected_variant": "C2",
+  "artifacts": {
+    "report.md": "bc746024be33ad57ddbfd8361af6f37611cd0ba844c227f02a8cbe4ef0c52e50",
+    "evaluation.json": "041ece5808e5c0835b0f0304689f5bb9d6b7b5ddbaccdee70e11e1d1f336a46e"
+  }
+}

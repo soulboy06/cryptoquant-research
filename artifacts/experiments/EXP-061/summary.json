@@ -1,0 +1,13 @@
+{
+  "candidate_id": "EXP-049",
+  "verdict": "stress_testing_passed_ready_for_freeze",
+  "base_net_return": 0.0153886,
+  "higher_execution_net_return": 0.0055881,
+  "strict_net_return": -0.0135021,
+  "base_max_drawdown": 0.0284069,
+  "higher_execution_max_drawdown": 0.0302841,
+  "strict_max_drawdown": 0.0337338,
+  "closed_cycles": 33,
+  "floor_triggers": 0,
+  "stop_triggers": 0
+}

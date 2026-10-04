@@ -1,0 +1,104 @@
+{
+  "experiment_id": "EXP-020",
+  "type": "validation_comparison",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T09:53:16.627759+00:00",
+  "config_hash": "00d06a51fd7033c46607e0eef2bfeec4c125f689b263c512e9ad3cc611c76340",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "period": "validation",
+  "cost": "base",
+  "test_opened": false,
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2025-12-31 20:00:00+00:00",
+  "replaced_failed_comparison": "EXP-019",
+  "command": [
+    ".venv/Scripts/python.exe",
+    ".cache/compare_validation.py"
+  ],
+  "child_manifests": {
+    "EXP-008": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-008\\run_manifest.json",
+      "sha256": "b4601c8833d1616977d9aa9097f8200d19ae3e251a2d451abf18a420c7114e94",
+      "summary_sha256": "75fa2dbc6b1d87b8ecee1bb7e276442f29552a49a22d01bc3bf1b23e937bbc76"
+    },
+    "EXP-009": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-009\\run_manifest.json",
+      "sha256": "90910367f6f63dc5cd182f29fc9f7506250f9c9838d228f366dfad819327d0b5",
+      "summary_sha256": "b7f0ffa95e648f0ac8779c64d6e0dd6e002a42210daa3c36f14688c8bed9855a"
+    },
+    "EXP-010": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-010\\run_manifest.json",
+      "sha256": "af4a7053ee52b2e7e251b867b30869759adb0613b6b7a0aeaca9449203ed00f7",
+      "summary_sha256": "f77927ce439e5377c0f0d760b81d0ee9629235ca558098ef9323ae2e98e30470"
+    },
+    "EXP-011": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-011\\run_manifest.json",
+      "sha256": "9208886f09f629ea144d86f31fa972cc5220e534c22c6cb7a11e652b6a1d2507",
+      "summary_sha256": "4abf877aca6b2105f0901a86a9988cdbf6525b5e18c916f9411a0aa2c6236d85"
+    },
+    "EXP-012": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-012\\run_manifest.json",
+      "sha256": "8e1c44ae7824f102d166a6b49a8df54834b2de9ebc489ed9dcb434565eea8a3f",
+      "summary_sha256": "7b7262334185f78662ad0981e0894a5c2474c3908cbdd7ee2f0c31a61c77977e"
+    },
+    "EXP-013": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-013\\run_manifest.json",
+      "sha256": "6af3e585e4b95583d616922137f903ea5a312ba15c0dbbf2fd44bea0e033ec09",
+      "summary_sha256": "d7953f448bea9e5d6d347a14564d389a9ad41217d8599cc0312f3919b6e42828"
+    },
+    "EXP-014": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-014\\run_manifest.json",
+      "sha256": "3449b5d1e13ff61fa4ba6b7c8e927ff723c59a65b9b6a8a7479a58fd42fcc5df",
+      "summary_sha256": "d49ec7327da6d367ffb8d4ca7341bfcddc5536a21c5bff1d1f95dbfc2cbf606e"
+    },
+    "EXP-015": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-015\\run_manifest.json",
+      "sha256": "9a83c17451762ffcf59ac3334b6e8a79058ca79dfe9454fd1d621abfc30530c6",
+      "summary_sha256": "faebcc3349a2b26fcd66eaef1a0b47156199f3a45f0c615e0803a83433e399c7"
+    },
+    "EXP-016": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-016\\run_manifest.json",
+      "sha256": "82a55e4fba5b13b2bb5521b28fb719a7a683fec279c6e17dde981a9cd12e61e0",
+      "summary_sha256": "3a4782903f1a0dbcc6355ac4d80248814e91c64b83453136840a1c7b477b16ab"
+    },
+    "EXP-017": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-017\\run_manifest.json",
+      "sha256": "20bd657052d0b174a9260bfb3d1ef00550afa654d7a1c8217cbfe67774a6fc40",
+      "summary_sha256": "115c8f424015ef52a7447a561b64a9a61e43a7107792c6b12e8d0815f8d1b5f7"
+    },
+    "EXP-018": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-018\\run_manifest.json",
+      "sha256": "751a29f565c07ab011ff90cfaabd0d184d9e7fded957845669706b953b9d0c32",
+      "summary_sha256": "faebcc3349a2b26fcd66eaef1a0b47156199f3a45f0c615e0803a83433e399c7"
+    }
+  },
+  "source_hash": "f31adec256096b02c23e15166e327603ee2a8119234e978d72c2853b3ae4405a",
+  "ended_at_utc": "2026-10-04T09:53:16.832315+00:00",
+  "conclusion": "validation_failed_do_not_open_test",
+  "selected": null,
+  "artifacts": {
+    "compare_validation.py": "e3e736c1cd236991ee3d05ca9c0ded7c69c886d880bca0b2c9cf9e208a4e2e0c",
+    "comparison.csv": "7f8d90427059837e570971da492717ad55731e594c63704ce5ffbd1f61b25479",
+    "config.toml": "00d06a51fd7033c46607e0eef2bfeec4c125f689b263c512e9ad3cc611c76340",
+    "report.md": "0b44330c8c1bca2de5b4b81323277a68975fb5db55133ec788eee6f5604d4197",
+    "selection.json": "ccfd7e8c1ab8500102142e56d0f8965a16d99e869a9943bb453d3a125aa501aa",
+    "source_manifest.json": "0ef7467c25fed709e86fbb66aa07e1405793d757ca319744a46eb8138cd69a32"
+  }
+}

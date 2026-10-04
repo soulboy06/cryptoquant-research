@@ -1,0 +1,29 @@
+{
+  "source_hash": "44844a0f57929b34110537f74935bdd18e3e090c21800a2532158830d99a9a5b",
+  "files": {
+    "src/cryptoquant/__init__.py": "54862cb833e572a8fe68c3003517ec6e050002b14edfef546074214ce6894e7f",
+    "src/cryptoquant/__main__.py": "d459a40a7b75f0a99b42ed4dc77c66a96010b575206a91715ddfecd64b544520",
+    "src/cryptoquant/cli.py": "fbd3d098d47783cd7bbd57b3d2112a22664efd51420913a946dc4d0fe077ade6",
+    "src/cryptoquant/config.py": "f267eab442a7947c503245737d4004445d05465e77972e3efafb679ee439d19f",
+    "src/cryptoquant/data/__init__.py": "d707a33ae66e82699472a760d36f611ae252851a393bcdb2e73605b39fea9102",
+    "src/cryptoquant/data/archive.py": "b02d0c1f6d4d89bec99bb490b74d8e5a9224665d2731422d40cc257749042855",
+    "src/cryptoquant/data/calendar.py": "80f5e227a6836738862a6ca01922b92b5253960436aa78a06fa5fad8312b3bff",
+    "src/cryptoquant/data/normalize.py": "044b394ec3f8fb564b52199cd072cb606a76daae2bcd5f0ed9df517334a8b3ee",
+    "src/cryptoquant/data/quality.py": "b533ab14060e091d0b49f43be8128b339dfdaaae0b0c6dc943eecfe814151866",
+    "src/cryptoquant/data/rules.py": "125ce99da1d1ce69c2cf8aa6554c8a1f70eca66c64554db39d31621f1b55059e",
+    "src/cryptoquant/data/workflow.py": "f33f9adff1eb426e61ade4016124455fe08e2a4d7fc0a75aa777a9bc9aac7707",
+    "src/cryptoquant/data/market_calendar.json": "8476774a71ac5a9df23f36b8af6cb4458b6899f08bc5173ba907c25b1fd57d22",
+    "src/cryptoquant/data/market_calendar_v2.json": "c6bfe76b46c15d3233b2c8a7c1de1cb885bf8c41553f38ee1ec01f6e20a47fdf",
+    "tests/test_archive.py": "06fba88655f8e2a1542054767338e173a9101372629a44a816dc71bfa7f6cb3f",
+    "tests/test_calendar.py": "9b719690ecb778438df86248667c2abf657dbf56120843a2d1b1ad5eba6b2276",
+    "tests/test_cli.py": "17a78ed97e4b2ee78ad383d8e231762a10f87ca8d775f3cb4c84fdc4514c155d",
+    "tests/test_config.py": "20711cb02a6e7c858e5cc68d418ec5675e84dd98f6affa8c7b36a38606dafd1a",
+    "tests/test_data_integration.py": "71770b9ac7b90d7a48795bf82a317df51c1a6f64cb348d63f23a1b785e740eb0",
+    "tests/test_normalize.py": "03246c8cecf960e7f7c49e78d3e33246a5d72da1505bc265c6b44ccde0dd8023",
+    "tests/test_quality.py": "3f9209f4bb525dbb71374dc96b3fc261b3ddc9542312b06726b9331b272d0c0f",
+    "tests/test_rules.py": "e89d37fec10a8a989e29cbe67bb5aa6ce640beadbc93205b777e052978ac9cfe",
+    "pyproject.toml": "5dfe9874184417e5c7a942d9a18d6a2cdf3c6dab1dc77fbc845b56dbfca0fc09",
+    "requirements-lock.txt": "ae79ec0c403b98fa95d440dbed5f8e54043aabe98fc0310a263aa703d2ccd034"
+  },
+  "git_commit": null
+}

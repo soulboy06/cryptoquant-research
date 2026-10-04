@@ -1,0 +1,7 @@
+execution_config = "second_experiment.toml"
+label_policies = ["gross_direction_v1", "net_positive_base_v1"]
+C = "0.1"
+thresholds = ["0.40", "0.50", "0.60", "0.64"]
+weekly_target = "0.015"
+max_account_runs = 30
+windows = ["W1", "W2", "R2025"]

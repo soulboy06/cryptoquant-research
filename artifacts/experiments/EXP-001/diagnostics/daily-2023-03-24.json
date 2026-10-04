@@ -1,0 +1,9 @@
+{
+  "daily_archive": "BTCUSDT-1h-2023-03-24.zip",
+  "path": "D:\\量化\\data\\raw\\BTCUSDT\\1h\\BTCUSDT-1h-2023-03-24.zip\\ea9d94f28a39ad8029c9c2863cbb7769137188edd957fea35d0313ae4183561f.zip",
+  "sha256": "ea9d94f28a39ad8029c9c2863cbb7769137188edd957fea35d0313ae4183561f",
+  "actual_rows": 23,
+  "missing_utc_hours": [
+    13
+  ]
+}

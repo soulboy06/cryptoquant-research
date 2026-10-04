@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "source": "https://data-api.binance.vision/api/v3/exchangeInfo",
+  "fetched_at_utc": "2026-10-04T07:46:12.460595+00:00",
+  "sha256": "7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3",
+  "snapshot": "D:\\量化\\data\\rules\\7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3.json",
+  "rules": {
+    "BTCUSDT": {
+      "symbol": "BTCUSDT",
+      "step_size": "0.00001",
+      "min_quantity": "0.00001000",
+      "max_quantity": "138.57586029",
+      "min_notional": "10",
+      "max_notional": null,
+      "average_price_minutes": [
+        5
+      ],
+      "max_position": null
+    },
+    "ETHUSDT": {
+      "symbol": "ETHUSDT",
+      "step_size": "0.0001",
+      "min_quantity": "0.00010000",
+      "max_quantity": "2697.42308075",
+      "min_notional": "10",
+      "max_notional": null,
+      "average_price_minutes": [
+        5
+      ],
+      "max_position": null
+    },
+    "SOLUSDT": {
+      "symbol": "SOLUSDT",
+      "step_size": "0.001",
+      "min_quantity": "0.00100000",
+      "max_quantity": "90000.00000000",
+      "min_notional": "10",
+      "max_notional": null,
+      "average_price_minutes": [
+        5
+      ],
+      "max_position": null
+    }
+  },
+  "limitations": [
+    "Current snapshot used for historical simulation, not historical daily rules.",
+    "Market notional checks use simulated fill price, not reconstructed reference/VWAP/last price."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "at_utc": "2026-10-04T09:23:53.762821+00:00",
+  "markdown_files": 18,
+  "local_links_checked": 170,
+  "missing_links": [],
+  "experiment": "EXP-007",
+  "experiment_status": "complete",
+  "models": 9,
+  "next_task": "model plan task 4: validation interface",
+  "focused_tests": "5 passed in 3.42s",
+  "full_suite_rerun": false,
+  "old_baselines_rerun": false
+}

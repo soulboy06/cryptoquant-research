@@ -1,0 +1,46 @@
+{
+  "experiment_id": "EXP-063",
+  "type": "research_samples",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T13:38:47.899920+00:00",
+  "data_experiment_id": "EXP-003",
+  "source_sample_experiment_id": "EXP-021",
+  "research_config_path": "configs\\fifth_experiment.toml",
+  "research_config_hash": "a9af04e59c1013bd67c8e04a5d7f2d523051ece9458f6eafa263a63623620ec8",
+  "execution_config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "cryptoquant",
+    "research-prepare",
+    "--research-config",
+    "configs\\fifth_experiment.toml",
+    "--data-experiment-id",
+    "EXP-003",
+    "--source-sample-experiment-id",
+    "EXP-021",
+    "--experiment-id",
+    "EXP-063"
+  ],
+  "source_hash": "7d2937b2987707dea7cf90a52e15338354915d1061b5282fc424035f87a8cddb",
+  "ended_at_utc": "2026-10-04T13:38:51.543858+00:00",
+  "prepared_manifest_sha256": "903d0b838b821f76e6b43619476c690ed061970f3a7d453b3c2aea779ad6b121"
+}

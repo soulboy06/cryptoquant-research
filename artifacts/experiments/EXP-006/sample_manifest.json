@@ -1,0 +1,147 @@
+{
+  "experiment_id": "EXP-006",
+  "type": "training_samples",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T08:59:18.435854+00:00",
+  "config_hash": "00d06a51fd7033c46607e0eef2bfeec4c125f689b263c512e9ad3cc611c76340",
+  "period": "development",
+  "start_utc": "2022-01-01 00:00:00+00:00",
+  "label_end_before_utc": "2025-01-01 00:00:00+00:00",
+  "feature_names": [
+    "return_1h",
+    "return_4h",
+    "return_24h",
+    "return_72h",
+    "volatility_24h",
+    "range_fraction",
+    "quote_volume_change",
+    "ema24_distance",
+    "ema72_distance"
+  ],
+  "data_experiment_id": "EXP-003",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1"
+    }
+  },
+  "command": [
+    ".venv/Scripts/python.exe",
+    "-m",
+    "cryptoquant",
+    "build-samples",
+    "--config",
+    "D:\\量化\\configs\\first_experiment.toml",
+    "--data-experiment-id",
+    "EXP-003",
+    "--experiment-id",
+    "EXP-006"
+  ],
+  "symbols": {
+    "BTCUSDT": {
+      "samples": 6387,
+      "excluded": 189,
+      "label_1": 3278,
+      "label_0": 3109,
+      "first_decision_utc": "2022-01-01 00:00:00+00:00",
+      "last_decision_utc": "2024-12-31 16:00:00+00:00",
+      "last_label_end_utc": "2024-12-31 20:00:00+00:00",
+      "exclusion_reasons": {
+        "feature_insufficient_history": 186,
+        "label_unavailable_window": 2,
+        "label_crosses_boundary": 1
+      },
+      "samples_path": "D:\\量化\\artifacts\\experiments\\EXP-006\\training_samples\\BTCUSDT.parquet",
+      "samples_sha256": "6504e4c909f519fd83cb4e8a3a86c4dbc0f1d91652838adea0391b511379f968",
+      "excluded_path": "D:\\量化\\artifacts\\experiments\\EXP-006\\excluded_decisions\\BTCUSDT.parquet",
+      "excluded_sha256": "9cf5acaafc365d02f4acb39cbd66335b6a74c3a78b0d1555f10479693d2baec0"
+    },
+    "ETHUSDT": {
+      "samples": 6387,
+      "excluded": 189,
+      "label_1": 3229,
+      "label_0": 3158,
+      "first_decision_utc": "2022-01-01 00:00:00+00:00",
+      "last_decision_utc": "2024-12-31 16:00:00+00:00",
+      "last_label_end_utc": "2024-12-31 20:00:00+00:00",
+      "exclusion_reasons": {
+        "feature_insufficient_history": 186,
+        "label_unavailable_window": 2,
+        "label_crosses_boundary": 1
+      },
+      "samples_path": "D:\\量化\\artifacts\\experiments\\EXP-006\\training_samples\\ETHUSDT.parquet",
+      "samples_sha256": "9db5964dc6c01aef74bc310b0b4f997b0b41d28442e9e8884d00169e41c83335",
+      "excluded_path": "D:\\量化\\artifacts\\experiments\\EXP-006\\excluded_decisions\\ETHUSDT.parquet",
+      "excluded_sha256": "1c89f1b9f75f06fe8fe2f696f961061e214d6529a2e9b086a7c1cd2f8a9ec4d7"
+    },
+    "SOLUSDT": {
+      "samples": 6387,
+      "excluded": 189,
+      "label_1": 3210,
+      "label_0": 3177,
+      "first_decision_utc": "2022-01-01 00:00:00+00:00",
+      "last_decision_utc": "2024-12-31 16:00:00+00:00",
+      "last_label_end_utc": "2024-12-31 20:00:00+00:00",
+      "exclusion_reasons": {
+        "feature_insufficient_history": 186,
+        "label_unavailable_window": 2,
+        "label_crosses_boundary": 1
+      },
+      "samples_path": "D:\\量化\\artifacts\\experiments\\EXP-006\\training_samples\\SOLUSDT.parquet",
+      "samples_sha256": "30ec00cd797bf06790465d7752b54f070517b4799d017d31add596a4dc741db3",
+      "excluded_path": "D:\\量化\\artifacts\\experiments\\EXP-006\\excluded_decisions\\SOLUSDT.parquet",
+      "excluded_sha256": "1c60e413908e9e847ea23ba3257ac798422e4e1dc259753bc57d1d67b33d322f"
+    }
+  },
+  "source_hash": "913f9834a60d77771cb2e2b8061c38ce7a61df9e11a7e2059be99c6b6f6f0a29",
+  "data": {
+    "data_experiment_id": "EXP-003",
+    "period": "development",
+    "data_manifest_sha256": "2412dadf0b06b2ac4b4997fdb547a72f9047023674e63829e7453ee0c0ac6740",
+    "quality_report_sha256": "2e591ffa5667d73928dc9fd313960da8e7ecd79c6dab43de2ba5ad5bfb11eb93",
+    "rules_sha256": "7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3",
+    "data_policy_sha256": "c6bfe76b46c15d3233b2c8a7c1de1cb885bf8c41553f38ee1ec01f6e20a47fdf",
+    "rule_report_sha256": "214532b597f37fa165d5ec577f313cd672c66c57d21a83d0b1a0ac824aed4d93",
+    "partitions": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "ef6a5b84eefca9340ae24d05d2778b822ef69b3af21edab78e17fb22f9bd75c8",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "261e3a67d3ae235cb2895d4f7ba48bea35a97a1974a67ca7f02676fa6655d58d",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "65b89257a4554ae97bf2f9118b42f68b8858df02ae26b866b7a0702b86202671",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    }
+  },
+  "ended_at_utc": "2026-10-04T08:59:19.950753+00:00",
+  "artifacts": {
+    "config.toml": "00d06a51fd7033c46607e0eef2bfeec4c125f689b263c512e9ad3cc611c76340",
+    "report.md": "79146c8ba6e02ac3959c8abf080394e075e70d5d37fbf6108126af2726b0b4bc",
+    "source_manifest.json": "d151a87a09384371dbcbae15f03730a69921c076b8b36f4194dffc693dfc7d66",
+    "excluded_decisions/BTCUSDT.parquet": "9cf5acaafc365d02f4acb39cbd66335b6a74c3a78b0d1555f10479693d2baec0",
+    "excluded_decisions/ETHUSDT.parquet": "1c89f1b9f75f06fe8fe2f696f961061e214d6529a2e9b086a7c1cd2f8a9ec4d7",
+    "excluded_decisions/SOLUSDT.parquet": "1c60e413908e9e847ea23ba3257ac798422e4e1dc259753bc57d1d67b33d322f",
+    "training_samples/BTCUSDT.parquet": "6504e4c909f519fd83cb4e8a3a86c4dbc0f1d91652838adea0391b511379f968",
+    "training_samples/ETHUSDT.parquet": "9db5964dc6c01aef74bc310b0b4f997b0b41d28442e9e8884d00169e41c83335",
+    "training_samples/SOLUSDT.parquet": "30ec00cd797bf06790465d7752b54f070517b4799d017d31add596a4dc741db3"
+  }
+}

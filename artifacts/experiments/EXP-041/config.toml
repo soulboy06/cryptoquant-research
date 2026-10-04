@@ -1,0 +1,30 @@
+mode = "simulation"
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+interval = "1h"
+data_policy = "halt_aware_v2"
+feature_policy = "kline_and_funding"
+model_family = "lightgbm"
+download_start = "2021-12-01T00:00:00Z"
+download_end = "2026-10-02T00:00:00Z"
+development_start = "2022-01-01T00:00:00Z"
+development_end = "2025-01-01T00:00:00Z"
+validation_start = "2025-01-01T00:00:00Z"
+validation_end = "2025-12-31T20:00:00Z"
+test_start = "2026-01-01T00:00:00Z"
+test_end = "2026-10-01T00:00:00Z"
+initial_cash = "100"
+equity_floor = "50"
+weight_per_symbol = "0.30"
+stop_loss = "0.08"
+cooldown_hours = 4
+minimum_order_notional = "10"
+
+[costs.base]
+fee = "0.001"
+adverse_price = "0.0005"
+[costs.higher_execution]
+fee = "0.001"
+adverse_price = "0.001"
+[costs.strict]
+fee = "0.002"
+adverse_price = "0.001"

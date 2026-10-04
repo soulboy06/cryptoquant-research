@@ -1,0 +1,35 @@
+{
+  "status": "failed",
+  "symbol": "BTCUSDT",
+  "verified_source_archives": 88,
+  "actual_rows": 42383,
+  "expected_rows": 42384,
+  "missing_hours": [
+    "2023-03-24T13:00:00+00:00"
+  ],
+  "nonstandard_close_times": [
+    {
+      "archive": "BTCUSDT-1h-2021-12.zip",
+      "source_sha256": "b01133a69b22aa7904742a06a892ff3811152377f61e23977051a937afe2fbaa",
+      "row": 557,
+      "open_time_utc": "2021-12-24T04:00:00+00:00",
+      "raw_close_time": "1640321994362",
+      "close_time_utc": "2021-12-24T04:59:54.362000+00:00",
+      "gap_microseconds": 5638000
+    },
+    {
+      "archive": "BTCUSDT-1h-2023-03.zip",
+      "source_sha256": "7f2afb8e0179a57ac31eab5205660298ba5eb77039ac2e21aef9b715ff3d06ce",
+      "row": 565,
+      "open_time_utc": "2023-03-24T12:00:00+00:00",
+      "raw_close_time": "1679661581646",
+      "close_time_utc": "2023-03-24T12:39:41.646000+00:00",
+      "gap_microseconds": 1218354000
+    }
+  ],
+  "other_symbols": "not downloaded because strict preparation stopped on BTC",
+  "filled_prices": false,
+  "backtest_started": false,
+  "official_maintenance_source": "https://www.binance.com/en/support/announcement/detail/813a31506e9f478ea8c1058b425df87a",
+  "interpretation": "Gap coincides with announced spot maintenance; this is an inference, not a repaired dataset."
+}

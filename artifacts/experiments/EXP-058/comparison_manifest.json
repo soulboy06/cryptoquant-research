@@ -1,0 +1,242 @@
+{
+  "experiment_id": "EXP-058",
+  "type": "validation_comparison",
+  "status": "complete",
+  "started_at_utc": "2026-10-04T10:42:53.027597+00:00",
+  "config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "feature_policy": "kline_and_funding",
+  "model_family": "logistic_regression",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "period": "validation",
+  "cost": "base",
+  "test_opened": false,
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2025-12-31 20:00:00+00:00",
+  "previous_comparison": "EXP-034",
+  "command": [
+    ".venv/Scripts/python.exe",
+    "artifacts/experiments/EXP-058/compare_validation.py"
+  ],
+  "child_manifests": {
+    "EXP-023": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-023\\run_manifest.json",
+      "sha256": "e72c2ec7406483eaa37bf7ffb41f5a4ec54cb3ab20aa04399c49a20256de5f9b",
+      "summary_sha256": "75fa2dbc6b1d87b8ecee1bb7e276442f29552a49a22d01bc3bf1b23e937bbc76"
+    },
+    "EXP-024": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-024\\run_manifest.json",
+      "sha256": "158ae5e6d7f510d84415cb471e9857bce83c9af9cd17853dd273c2a5fd732d99",
+      "summary_sha256": "b7f0ffa95e648f0ac8779c64d6e0dd6e002a42210daa3c36f14688c8bed9855a"
+    },
+    "EXP-025": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-025\\run_manifest.json",
+      "sha256": "e5b656fc4f8dcb405e2e5cdaf4913f28e246f0a56c61fec7c814f7759f821876",
+      "summary_sha256": "6f8a138b00865f0bf4f2e18ba71eb1edb5cf24fad88257bcb03b6fab274e1a3c"
+    },
+    "EXP-026": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-026\\run_manifest.json",
+      "sha256": "1a27c5dafda8996ed554f830857d3b08f7175a0f64a9c2e6cd7660bdc3e08ff4",
+      "summary_sha256": "8f117c3ab902e78b421b3b4fb3e298bf35c90aa22a5dd84b564b3b101d8e1342"
+    },
+    "EXP-027": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-027\\run_manifest.json",
+      "sha256": "708930420c1c7eaa7a8182b0118ad2d2f90146601954cabad9f80d9a8a6db043",
+      "summary_sha256": "ed7a774b9c2ec0319e245fe62332a2c6316079d94c679271a8ccd7d129ddc153"
+    },
+    "EXP-028": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-028\\run_manifest.json",
+      "sha256": "89d2e4eb61c97ff1c2182e291ec8efe19c3a92b14e20896deb0c182387c94334",
+      "summary_sha256": "6b1039ba09f4e43d60d100f189d9cc0a0afc34bc962be789cc61a2de55162b43"
+    },
+    "EXP-029": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-029\\run_manifest.json",
+      "sha256": "fe35ee8ae446a50dd1c8c5d71f66eb734b55ab9685f058cc910ee258b098f2e7",
+      "summary_sha256": "0db2091f7476e4e56d994675681dd67ba420dd2741dc0f5d68d16a2f64c9beaf"
+    },
+    "EXP-030": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-030\\run_manifest.json",
+      "sha256": "0070620f1b9695eb4a9397dece7aed47f1a10e13e5758053f3e3d3cdde9f03dd",
+      "summary_sha256": "9902c0277ef5eb4163128baeee2ce086f9f9b4be25981db88d1c5526b3632bee"
+    },
+    "EXP-031": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-031\\run_manifest.json",
+      "sha256": "680f492415c132324014b4950cb5f0f2b1cd8589a12299604975c21f8fabd092",
+      "summary_sha256": "1fbaf8735c1dd2b79aa13c5b2430fb7bf5dd5efffd0a33c212fefe19fcba75bb"
+    },
+    "EXP-032": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-032\\run_manifest.json",
+      "sha256": "a80902005ad235baf5416d86d3dc2b734f6b16ca364267d9c07db344b1f38ba4",
+      "summary_sha256": "39db87fab19d31a5b2cab5fef5104a862b1879cab0ff8bdde1e5ca5cd3ae8ae8"
+    },
+    "EXP-033": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-033\\run_manifest.json",
+      "sha256": "7b625ce0862dd858ff40bc8c384ae6c5638452f9760fc3e43bc0a2cb9a86960d",
+      "summary_sha256": "9902c0277ef5eb4163128baeee2ce086f9f9b4be25981db88d1c5526b3632bee"
+    },
+    "EXP-046": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-046\\run_manifest.json",
+      "sha256": "7f92518296be9387d8eda57937d6f812053e7629943472c1041dec7aeb4fc342",
+      "summary_sha256": "629683cd316563ee16aff5e3a1dcedaca79b16c0aabb1a817d02c605a9178b8e"
+    },
+    "EXP-047": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-047\\run_manifest.json",
+      "sha256": "9dbdd95c26dde275f6b68d8301c77460bf10d9fae710b0fd7906eeeeb6cce2cd",
+      "summary_sha256": "d87ae7882f9637d11b12c9281e02862419a427b6663b30d064b1faa4595653be"
+    },
+    "EXP-048": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-048\\run_manifest.json",
+      "sha256": "4d6f55b88a19a8149fc992080445cbcd59835a8fb121e9119ca5051891a8e640",
+      "summary_sha256": "0b67b5263f430eddaece749ea8619e20f860ce0516c33e02af5b87436418bbbc"
+    },
+    "EXP-049": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-049\\run_manifest.json",
+      "sha256": "b41f5ba3115026b321e6853c4cfe609d34d7f1bd35a81fda65e25dd82e791d52",
+      "summary_sha256": "354a92b4377b744d9dffdaa6020eec8765b0f6ba2f0316fb4ac64abe51667800"
+    },
+    "EXP-050": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-050\\run_manifest.json",
+      "sha256": "a9df44c6539bf8cf3e4d8e19c8acb61438cf395dc812e1c6b82e3c5ada50f697",
+      "summary_sha256": "cc20d279d6c33bf90b321fa0c78b82019b217dcc125b3814187ffa9e95ba18f8"
+    },
+    "EXP-051": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-051\\run_manifest.json",
+      "sha256": "b3794ca811d59aac53e4e0d420d6936553c5870e19b0060192b674759331acef",
+      "summary_sha256": "c4862dc9204116c0904c5eeca7cc2ad9ec39dd573ee99690cae10565a843a829"
+    },
+    "EXP-052": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-052\\run_manifest.json",
+      "sha256": "5bc8969262fd00aa2fbd4b05f34d2cafc34154a452f58729e0b85881afa041a1",
+      "summary_sha256": "fd699a35ca303b09c9aad24ff42bff9e9e5bfa3d4dc765b58725ea05731d0741"
+    },
+    "EXP-053": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-053\\run_manifest.json",
+      "sha256": "7f448b8bead6b6c1395eafda91daa2b0a109d9d470ee4990365d4628152e5ed5",
+      "summary_sha256": "14e9aa5d6375205cad236a2e6cc3d8cfbf4d3a7b498c98d662cfdd8204fe7acd"
+    },
+    "EXP-054": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-054\\run_manifest.json",
+      "sha256": "50fdb6430bea3e0565c950cdf60221f9926aa897d8bcead6eae8f9116fb6f9d0",
+      "summary_sha256": "b3bc0d1d2a6724d6b8e99f48c86fc7cbd3fcac24edd3c910c923dffffe46f313"
+    },
+    "EXP-055": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-055\\run_manifest.json",
+      "sha256": "007daccc88e4ee9a262522d89a491dfbb2a18816523e5a947ccba7ae164c6f2b",
+      "summary_sha256": "c4862dc9204116c0904c5eeca7cc2ad9ec39dd573ee99690cae10565a843a829"
+    },
+    "EXP-056": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-056\\run_manifest.json",
+      "sha256": "a133cb5e3311d524787640c7cb7af6845a03250018ee6dd2b8da8e20105c9707",
+      "summary_sha256": "fd699a35ca303b09c9aad24ff42bff9e9e5bfa3d4dc765b58725ea05731d0741"
+    },
+    "EXP-057": {
+      "path": "D:\\量化\\artifacts\\experiments\\EXP-057\\run_manifest.json",
+      "sha256": "4f2e9861680391bfc5a9c24f1d683299872e5433d5161d6a2fa290203051c1c9",
+      "summary_sha256": "14e9aa5d6375205cad236a2e6cc3d8cfbf4d3a7b498c98d662cfdd8204fe7acd"
+    }
+  },
+  "source_hash": "4de54ca3902178d6b3a086653e4abbccfa261de99dae272b34524c8ec7e337f0",
+  "ended_at_utc": "2026-10-04T10:42:53.305923+00:00",
+  "conclusion": "validation_qualified_requires_cost_and_freeze",
+  "selected": {
+    "experiment_id": "EXP-049",
+    "C": 0.1,
+    "threshold": 0.64,
+    "status": "complete",
+    "summary": {
+      "strategy": "logistic_regression",
+      "period": "validation",
+      "cost": "base",
+      "initial_equity": "100",
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2025-12-31 20:00:00+00:00",
+      "final_equity": "101.53886172893175000000",
+      "final_cash": "100.75587950193175000000",
+      "residual_value": "0.78298222700000000000",
+      "net_return": "0.01538861728931750000",
+      "max_drawdown": "0.02840685426003450000",
+      "longest_drawdown_hours": 3353.0,
+      "drawdown_unrecovered": true,
+      "fills": 66,
+      "rejected_orders": 6305,
+      "rejection_reasons": {
+        "zero_quantity": 6305
+      },
+      "fees_usdt": "1.96942878421015000000",
+      "turnover_usdt": "1969.42878421015000000",
+      "turnover_multiple": "19.69428784210150000",
+      "mean_hourly_open_exposure": "0.01515628039245981370410412859",
+      "closed_cycles": 33,
+      "floor_triggers": 0,
+      "stop_triggers": 0,
+      "permanent_buy_lock": false,
+      "stale_checkpoints": 0,
+      "realized_pnl": "1.50958979514125855647713719",
+      "per_symbol": {
+        "BTCUSDT": {
+          "realized_pnl": "-1.24413357950658012376575404",
+          "buy_fills": 5,
+          "sell_fills": 5,
+          "fees_usdt": "0.28752635606315000000",
+          "residual_quantity": "0.00000846",
+          "residual_value": "0.7406040510000000",
+          "residual_unrealized_pnl": "0.02859203635533012376575402981"
+        },
+        "ETHUSDT": {
+          "realized_pnl": "3.11312593652334807207860094",
+          "buy_fills": 24,
+          "sell_fills": 24,
+          "fees_usdt": "1.4434603861320000000",
+          "residual_quantity": "0.0000061",
+          "residual_value": "0.018124076000000",
+          "residual_unrealized_pnl": "-0.0006363839253480720786009514441"
+        },
+        "SOLUSDT": {
+          "realized_pnl": "-0.35940256187550939183570971",
+          "buy_fills": 4,
+          "sell_fills": 4,
+          "fees_usdt": "0.238442042015000000",
+          "residual_quantity": "0.000195",
+          "residual_value": "0.02425410000000",
+          "residual_unrealized_pnl": "0.001316281360509391835709702825"
+        }
+      },
+      "limitations": [
+        "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+        "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+        "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+        "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+        "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+        "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+        "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+        "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+      ]
+    },
+    "qualified": true,
+    "failure_reasons": []
+  },
+  "artifacts": {
+    "compare_validation.py": "ebc16e28a64963f236244a326f4ef03ed82750326d2fe5cc3094e46fef1635c5",
+    "comparison.csv": "5af9ab954b82e1b9937ed83a0121b1c74ddf78bdc5f2d5a9bd9193b68c9e5041",
+    "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "report.md": "3901a76989359cba601812f38d8f6313615efc96e08076e9c171d45a0013af01",
+    "selection.json": "1b561cf206e101700d79652c3740287becaac55601df758b20149ca34ae4ec3d",
+    "source_manifest.json": "a662dd368c601944a61ad5fab6e4ca08386e305c34a4e6e84124fe8c022257ff"
+  }
+}

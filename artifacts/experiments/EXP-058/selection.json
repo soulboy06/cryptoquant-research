@@ -1,0 +1,1922 @@
+{
+  "candidates": [
+    {
+      "experiment_id": "EXP-025",
+      "C": 0.1,
+      "threshold": 0.55,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "49.62182240321710000000",
+        "final_cash": "48.67795296821710000000",
+        "residual_value": "0.94386943500000000000",
+        "net_return": "-0.50378177596782900000",
+        "max_drawdown": "0.5102867635256163933963262409",
+        "longest_drawdown_hours": 8303.0,
+        "drawdown_unrecovered": true,
+        "fills": 704,
+        "rejected_orders": 4613,
+        "rejection_reasons": {
+          "zero_quantity": 4532,
+          "minimum_notional": 68,
+          "risk_blocked": 13
+        },
+        "fees_usdt": "14.80838417812095000000",
+        "turnover_usdt": "14808.38417812095000000",
+        "turnover_multiple": "148.08384178120950000",
+        "mean_hourly_open_exposure": "0.07518227172988279054429050464",
+        "closed_cycles": 352,
+        "floor_triggers": 1,
+        "stop_triggers": 14,
+        "permanent_buy_lock": true,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-50.06360794548627142253213778",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-6.77927421696955838624912323",
+            "buy_fills": 104,
+            "sell_fills": 104,
+            "fees_usdt": "4.34975986001295000000",
+            "residual_quantity": "0.00000742",
+            "residual_value": "0.6495605270000000",
+            "residual_unrealized_pnl": "-0.1936250446813416137508768764"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-25.47232688491517821331668556",
+            "buy_fills": 171,
+            "sell_fills": 171,
+            "fees_usdt": "7.1117408198980000000",
+            "residual_quantity": "0.0000623",
+            "residual_value": "0.185103268000000",
+            "residual_unrealized_pnl": "-0.06701218015682178668331443755"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-17.81200684360153482296632899",
+            "buy_fills": 77,
+            "sell_fills": 77,
+            "fees_usdt": "3.346883498210000000",
+            "residual_quantity": "0.000878",
+            "residual_value": "0.10920564000000",
+            "residual_unrealized_pnl": "-0.05393242645846517703367097492"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive",
+        "max_drawdown_exceeds_25_percent",
+        "equity_floor_triggered"
+      ]
+    },
+    {
+      "experiment_id": "EXP-026",
+      "C": 0.1,
+      "threshold": 0.6,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "92.84924558899395000000",
+        "final_cash": "92.26094518199395000000",
+        "residual_value": "0.58830040700000000000",
+        "net_return": "-0.07150754411006050000",
+        "max_drawdown": "0.11239374911808950000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 190,
+        "rejected_orders": 6191,
+        "rejection_reasons": {
+          "zero_quantity": 6181,
+          "minimum_notional": 10
+        },
+        "fees_usdt": "5.25264918418195000000",
+        "turnover_usdt": "5252.64918418195000000",
+        "turnover_multiple": "52.52649184181950000",
+        "mean_hourly_open_exposure": "0.02294573833606693744477514654",
+        "closed_cycles": 95,
+        "floor_triggers": 0,
+        "stop_triggers": 3,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-7.17779884209769764648365851",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.89738803797629495604314841",
+            "buy_fills": 22,
+            "sell_fills": 22,
+            "fees_usdt": "1.19426620980845000000",
+            "residual_quantity": "0.00000334",
+            "residual_value": "0.2923897790000000",
+            "residual_unrealized_pnl": "0.009586378726244956043148375828"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-0.63507962732224458751511718",
+            "buy_fills": 60,
+            "sell_fills": 60,
+            "fees_usdt": "3.3376488122935000000",
+            "residual_quantity": "0.0000723",
+            "residual_value": "0.214814868000000",
+            "residual_unrealized_pnl": "0.01324176369124458751511715630"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-5.64533117679915810292539292",
+            "buy_fills": 13,
+            "sell_fills": 13,
+            "fees_usdt": "0.720734162080000000",
+            "residual_quantity": "0.000652",
+            "residual_value": "0.08109576000000",
+            "residual_unrealized_pnl": "0.004216288674158102925392912410"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-046",
+      "C": 0.1,
+      "threshold": 0.61,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "92.88726497545305000000",
+        "final_cash": "92.08383145295305000000",
+        "residual_value": "0.80343352250000000000",
+        "net_return": "-0.07112735024546950000",
+        "max_drawdown": "0.09825426200187150000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 138,
+        "rejected_orders": 6242,
+        "rejection_reasons": {
+          "zero_quantity": 6236,
+          "minimum_notional": 6
+        },
+        "fees_usdt": "3.84915545860570000000",
+        "turnover_usdt": "3849.15545860570000000",
+        "turnover_multiple": "38.49155458605700000",
+        "mean_hourly_open_exposure": "0.02049655700403724626465131407",
+        "closed_cycles": 69,
+        "floor_triggers": 0,
+        "stop_triggers": 2,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-7.14831888341331010174440101",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.46685998815924576615261138",
+            "buy_fills": 15,
+            "sell_fills": 15,
+            "fees_usdt": "0.81730632469520000000",
+            "residual_quantity": "0.00000537",
+            "residual_value": "0.4700997345000000",
+            "residual_unrealized_pnl": "0.01571944577979576615261138431"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-2.44727057299315072592332319",
+            "buy_fills": 47,
+            "sell_fills": 47,
+            "fees_usdt": "2.6397001098605000000",
+            "residual_quantity": "0.0000823",
+            "residual_value": "0.244526468000000",
+            "residual_unrealized_pnl": "0.01505472608565072592332316361"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.23418832226091360966846644",
+            "buy_fills": 7,
+            "sell_fills": 7,
+            "fees_usdt": "0.392149024050000000",
+            "residual_quantity": "0.000714",
+            "residual_value": "0.08880732000000",
+            "residual_unrealized_pnl": "0.004809687000913609668466415393"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-047",
+      "C": 0.1,
+      "threshold": 0.62,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "94.77736444986390000000",
+        "final_cash": "93.99045496786390000000",
+        "residual_value": "0.78690948200000000000",
+        "net_return": "-0.05222635550136100000",
+        "max_drawdown": "0.07228779283229150000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 108,
+        "rejected_orders": 6269,
+        "rejection_reasons": {
+          "zero_quantity": 6264,
+          "minimum_notional": 5
+        },
+        "fees_usdt": "3.05927384485650000000",
+        "turnover_usdt": "3059.27384485650000000",
+        "turnover_multiple": "30.59273844856500000",
+        "mean_hourly_open_exposure": "0.01846623082024907305972436862",
+        "closed_cycles": 54,
+        "floor_triggers": 0,
+        "stop_triggers": 1,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-5.24013835778848770238639324",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.74008240370121721863832200",
+            "buy_fills": 9,
+            "sell_fills": 9,
+            "fees_usdt": "0.49848036641050000000",
+            "residual_quantity": "0.00000724",
+            "residual_value": "0.6338029940000000",
+            "residual_unrealized_pnl": "0.008342678679117218638322000797"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "0.73077737469041023120855300",
+            "buy_fills": 41,
+            "sell_fills": 41,
+            "fees_usdt": "2.3357282949760000000",
+            "residual_quantity": "0.0000378",
+            "residual_value": "0.112309848000000",
+            "residual_unrealized_pnl": "0.006954346265589768791447009129"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-5.23083332877768071495662424",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.225065183470000000",
+            "residual_quantity": "0.000328",
+            "residual_value": "0.04079664000000",
+            "residual_unrealized_pnl": "0.002205782707680714956624249686"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-048",
+      "C": 0.1,
+      "threshold": 0.63,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "97.80639597199535000000",
+        "final_cash": "96.93458446149535000000",
+        "residual_value": "0.87181151050000000000",
+        "net_return": "-0.02193604028004650000",
+        "max_drawdown": "0.06597505938831650000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 84,
+        "rejected_orders": 6293,
+        "rejection_reasons": {
+          "zero_quantity": 6292,
+          "minimum_notional": 1
+        },
+        "fees_usdt": "2.41890254672080000000",
+        "turnover_usdt": "2418.90254672080000000",
+        "turnover_multiple": "24.18902546720800000",
+        "mean_hourly_open_exposure": "0.01628025014857340397626676471",
+        "closed_cycles": 42,
+        "floor_triggers": 0,
+        "stop_triggers": 1,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-2.24291319787845453805868550",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.98308321442489363693415934",
+            "buy_fills": 6,
+            "sell_fills": 6,
+            "fees_usdt": "0.33509982610230000000",
+            "residual_quantity": "0.00000817",
+            "residual_value": "0.7152169145000000",
+            "residual_unrealized_pnl": "0.03974191096474363693415933724"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "2.40343968913550776883223880",
+            "buy_fills": 31,
+            "sell_fills": 31,
+            "fees_usdt": "1.7977960946335000000",
+            "residual_quantity": "0.0000481",
+            "residual_value": "0.142912796000000",
+            "residual_unrealized_pnl": "0.008824078079992231167761250169"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-3.66326967258906866995676496",
+            "buy_fills": 5,
+            "sell_fills": 5,
+            "fees_usdt": "0.286006625985000000",
+            "residual_quantity": "0.000110",
+            "residual_value": "0.01368180000000",
+            "residual_unrealized_pnl": "0.0007431808290686699567649449690"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-049",
+      "C": 0.1,
+      "threshold": 0.64,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "101.53886172893175000000",
+        "final_cash": "100.75587950193175000000",
+        "residual_value": "0.78298222700000000000",
+        "net_return": "0.01538861728931750000",
+        "max_drawdown": "0.02840685426003450000",
+        "longest_drawdown_hours": 3353.0,
+        "drawdown_unrecovered": true,
+        "fills": 66,
+        "rejected_orders": 6305,
+        "rejection_reasons": {
+          "zero_quantity": 6305
+        },
+        "fees_usdt": "1.96942878421015000000",
+        "turnover_usdt": "1969.42878421015000000",
+        "turnover_multiple": "19.69428784210150000",
+        "mean_hourly_open_exposure": "0.01515628039245981370410412859",
+        "closed_cycles": 33,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "1.50958979514125855647713719",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.24413357950658012376575404",
+            "buy_fills": 5,
+            "sell_fills": 5,
+            "fees_usdt": "0.28752635606315000000",
+            "residual_quantity": "0.00000846",
+            "residual_value": "0.7406040510000000",
+            "residual_unrealized_pnl": "0.02859203635533012376575402981"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "3.11312593652334807207860094",
+            "buy_fills": 24,
+            "sell_fills": 24,
+            "fees_usdt": "1.4434603861320000000",
+            "residual_quantity": "0.0000061",
+            "residual_value": "0.018124076000000",
+            "residual_unrealized_pnl": "-0.0006363839253480720786009514441"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-0.35940256187550939183570971",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.238442042015000000",
+            "residual_quantity": "0.000195",
+            "residual_value": "0.02425410000000",
+            "residual_unrealized_pnl": "0.001316281360509391835709702825"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": true,
+      "failure_reasons": []
+    },
+    {
+      "experiment_id": "EXP-027",
+      "C": 0.1,
+      "threshold": 0.65,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "101.87311919716220000000",
+        "final_cash": "100.98800607816220000000",
+        "residual_value": "0.88511311900000000000",
+        "net_return": "0.01873119197162200000",
+        "max_drawdown": "0.02584445900727224215242846398",
+        "longest_drawdown_hours": 3353.0,
+        "drawdown_unrecovered": true,
+        "fills": 44,
+        "rejected_orders": 6253,
+        "rejection_reasons": {
+          "zero_quantity": 6253
+        },
+        "fees_usdt": "1.32231075082880000000",
+        "turnover_usdt": "1322.31075082880000000",
+        "turnover_multiple": "13.22310750828800000",
+        "mean_hourly_open_exposure": "0.01415591369085784867940554617",
+        "closed_cycles": 22,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "1.87368599813497319843187904",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.37638815424154336342394028",
+            "buy_fills": 3,
+            "sell_fills": 3,
+            "fees_usdt": "0.17267303098780000000",
+            "residual_quantity": "0.00000910",
+            "residual_value": "0.7966308350000000",
+            "residual_unrealized_pnl": "0.01170836148174336342394027514"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "2.94945173111445596260277953",
+            "buy_fills": 17,
+            "sell_fills": 17,
+            "fees_usdt": "1.0302787221910000000",
+            "residual_quantity": "0.0000019",
+            "residual_value": "0.005645204000000",
+            "residual_unrealized_pnl": "-0.0001984820324559626027795105157"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-0.69937757873793940074696021",
+            "buy_fills": 2,
+            "sell_fills": 2,
+            "fees_usdt": "0.119358997650000000",
+            "residual_quantity": "0.000666",
+            "residual_value": "0.08283708000000",
+            "residual_unrealized_pnl": "-0.01207668042206059925303979106"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "fewer_than_30_closed_cycles"
+      ]
+    },
+    {
+      "experiment_id": "EXP-028",
+      "C": 1.0,
+      "threshold": 0.55,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "49.54880433979365000000",
+        "final_cash": "48.76403732879365000000",
+        "residual_value": "0.78476701100000000000",
+        "net_return": "-0.50451195660206350000",
+        "max_drawdown": "0.5117440152485508004606144105",
+        "longest_drawdown_hours": 8303.0,
+        "drawdown_unrecovered": true,
+        "fills": 738,
+        "rejected_orders": 4611,
+        "rejection_reasons": {
+          "zero_quantity": 4532,
+          "minimum_notional": 67,
+          "risk_blocked": 12
+        },
+        "fees_usdt": "15.88035633713695000000",
+        "turnover_usdt": "15880.35633713695000000",
+        "turnover_multiple": "158.80356337136950000",
+        "mean_hourly_open_exposure": "0.07806506054435739593364878467",
+        "closed_cycles": 369,
+        "floor_triggers": 1,
+        "stop_triggers": 13,
+        "permanent_buy_lock": true,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-50.22842575018516952286317157",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-7.89064774531587734392445381",
+            "buy_fills": 109,
+            "sell_fills": 109,
+            "fees_usdt": "4.64241369557145000000",
+            "residual_quantity": "0.00000590",
+            "residual_value": "0.5164969150000000",
+            "residual_unrealized_pnl": "-0.1323002858334726560755462860"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-24.62748513601338022862568309",
+            "buy_fills": 179,
+            "sell_fills": 179,
+            "fees_usdt": "7.6491722953905000000",
+            "residual_quantity": "0.0000761",
+            "residual_value": "0.226105276000000",
+            "residual_unrealized_pnl": "-0.06980388076861977137431692834"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-17.71029286885591195031303467",
+            "buy_fills": 81,
+            "sell_fills": 81,
+            "fees_usdt": "3.588770346175000000",
+            "residual_quantity": "0.000339",
+            "residual_value": "0.04216482000000",
+            "residual_unrealized_pnl": "-0.02066574341908804968696532256"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive",
+        "max_drawdown_exceeds_25_percent",
+        "equity_floor_triggered"
+      ]
+    },
+    {
+      "experiment_id": "EXP-029",
+      "C": 1.0,
+      "threshold": 0.6,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "93.38067338188340000000",
+        "final_cash": "92.69246122788340000000",
+        "residual_value": "0.68821215400000000000",
+        "net_return": "-0.06619326618116600000",
+        "max_drawdown": "0.11198700665253100000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 182,
+        "rejected_orders": 6199,
+        "rejection_reasons": {
+          "zero_quantity": 6188,
+          "minimum_notional": 11
+        },
+        "fees_usdt": "5.05065653833755000000",
+        "turnover_usdt": "5050.65653833755000000",
+        "turnover_multiple": "50.50656538337550000",
+        "mean_hourly_open_exposure": "0.02321068751145841404934733052",
+        "closed_cycles": 91,
+        "floor_triggers": 0,
+        "stop_triggers": 3,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-6.65100343793606892086653650",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.48922431886560273039767600",
+            "buy_fills": 20,
+            "sell_fills": 20,
+            "fees_usdt": "1.09203272889405000000",
+            "residual_quantity": "0.00000388",
+            "residual_value": "0.3396623780000000",
+            "residual_unrealized_pnl": "0.01110225171000273039767595723"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "0.54312381165180877561455125",
+            "buy_fills": 59,
+            "sell_fills": 59,
+            "fees_usdt": "3.2922098579035000000",
+            "residual_quantity": "0.0000811",
+            "residual_value": "0.240961076000000",
+            "residual_unrealized_pnl": "0.01483746031219122438544868048"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-5.70490293072227496608341175",
+            "buy_fills": 12,
+            "sell_fills": 12,
+            "fees_usdt": "0.666413951540000000",
+            "residual_quantity": "0.000865",
+            "residual_value": "0.10758870000000",
+            "residual_unrealized_pnl": "0.005737107797274966083411741608"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-050",
+      "C": 1.0,
+      "threshold": 0.61,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "92.46863211217635000000",
+        "final_cash": "91.69834942067635000000",
+        "residual_value": "0.77028269150000000000",
+        "net_return": "-0.07531367887823650000",
+        "max_drawdown": "0.10005751966159300000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 142,
+        "rejected_orders": 6238,
+        "rejection_reasons": {
+          "zero_quantity": 6232,
+          "minimum_notional": 6
+        },
+        "fees_usdt": "3.94576693562535000000",
+        "turnover_usdt": "3945.76693562535000000",
+        "turnover_multiple": "39.45766935625350000",
+        "mean_hourly_open_exposure": "0.02100995559506795185844254638",
+        "closed_cycles": 71,
+        "floor_triggers": 0,
+        "stop_triggers": 2,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-7.56485018561516693562062834",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.84286564806258078106256508",
+            "buy_fills": 15,
+            "sell_fills": 15,
+            "fees_usdt": "0.81344869306835000000",
+            "residual_quantity": "0.00000539",
+            "residual_value": "0.4718505715000000",
+            "residual_unrealized_pnl": "0.01577727844093078106256507929"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-2.61117370095322255280143582",
+            "buy_fills": 48,
+            "sell_fills": 48,
+            "fees_usdt": "2.6848083768970000000",
+            "residual_quantity": "0.0000770",
+            "residual_value": "0.228779320000000",
+            "residual_unrealized_pnl": "0.01409277858122255280143587264"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.11081083659936360175662744",
+            "buy_fills": 8,
+            "sell_fills": 8,
+            "fees_usdt": "0.447509865660000000",
+            "residual_quantity": "0.000560",
+            "residual_value": "0.06965280000000",
+            "residual_unrealized_pnl": "0.003612240769363601756627418760"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-051",
+      "C": 1.0,
+      "threshold": 0.62,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "93.16309706758005000000",
+        "final_cash": "92.48263159658005000000",
+        "residual_value": "0.68046547100000000000",
+        "net_return": "-0.06836902932419950000",
+        "max_drawdown": "0.09885345141631450000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 116,
+        "rejected_orders": 6262,
+        "rejection_reasons": {
+          "zero_quantity": 6257,
+          "minimum_notional": 5
+        },
+        "fees_usdt": "3.23859698406150000000",
+        "turnover_usdt": "3238.59698406150000000",
+        "turnover_multiple": "32.38596984061500000",
+        "mean_hourly_open_exposure": "0.01851484776887850011180906492",
+        "closed_cycles": 58,
+        "floor_triggers": 0,
+        "stop_triggers": 2,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-6.86126061433993007463421679",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.72850179547350265496186485",
+            "buy_fills": 10,
+            "sell_fills": 10,
+            "fees_usdt": "0.54939610840900000000",
+            "residual_quantity": "0.00000694",
+            "residual_value": "0.6075404390000000",
+            "residual_unrealized_pnl": "0.01874987610005265496186483692"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-1.67984997771007597492412395",
+            "buy_fills": 43,
+            "sell_fills": 43,
+            "fees_usdt": "2.4107109746375000000",
+            "residual_quantity": "0.0000222",
+            "residual_value": "0.065959752000000",
+            "residual_unrealized_pnl": "0.004091903218575974924123953075"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.45290884115635144474822799",
+            "buy_fills": 5,
+            "sell_fills": 5,
+            "fees_usdt": "0.278489901015000000",
+            "residual_quantity": "0.000056",
+            "residual_value": "0.00696528000000",
+            "residual_unrealized_pnl": "0.001515902601351444748227986228"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-052",
+      "C": 1.0,
+      "threshold": 0.63,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "97.55544602545400000000",
+        "final_cash": "96.82068821895400000000",
+        "residual_value": "0.73475780650000000000",
+        "net_return": "-0.02444553974546000000",
+        "max_drawdown": "0.06597505938831650000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 90,
+        "rejected_orders": 6287,
+        "rejection_reasons": {
+          "zero_quantity": 6284,
+          "minimum_notional": 3
+        },
+        "fees_usdt": "2.58334982085320000000",
+        "turnover_usdt": "2583.34982085320000000",
+        "turnover_multiple": "25.83349820853200000",
+        "mean_hourly_open_exposure": "0.01720098237503992158097847178",
+        "closed_cycles": 45,
+        "floor_triggers": 0,
+        "stop_triggers": 1,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-2.45627343899098633803613727",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.97815666891189661979175613",
+            "buy_fills": 7,
+            "sell_fills": 7,
+            "fees_usdt": "0.39049561665270000000",
+            "residual_quantity": "0.00000785",
+            "residual_value": "0.6872035225000000",
+            "residual_unrealized_pnl": "0.009090367831396619791756132922"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "3.26859164410216154070669689",
+            "buy_fills": 34,
+            "sell_fills": 34,
+            "fees_usdt": "1.9665498837105000000",
+            "residual_quantity": "0.0000024",
+            "residual_value": "0.007130784000000",
+            "residual_unrealized_pnl": "0.0004432971673384592933031372096"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.74670841418125125895107803",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.226304320490000000",
+            "residual_quantity": "0.000325",
+            "residual_value": "0.04042350000000",
+            "residual_unrealized_pnl": "0.002185799446251258951078029772"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-053",
+      "C": 1.0,
+      "threshold": 0.64,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "99.88534901292995000000",
+        "final_cash": "98.83290745292995000000",
+        "residual_value": "1.05244156000000000000",
+        "net_return": "-0.00114650987070050000",
+        "max_drawdown": "0.04246506231753450000",
+        "longest_drawdown_hours": 3353.0,
+        "drawdown_unrecovered": true,
+        "fills": 70,
+        "rejected_orders": 6302,
+        "rejection_reasons": {
+          "zero_quantity": 6301,
+          "minimum_notional": 1
+        },
+        "fees_usdt": "2.06297166039425000000",
+        "turnover_usdt": "2062.97166039425000000",
+        "turnover_multiple": "20.62971660394250000",
+        "mean_hourly_open_exposure": "0.01577137905119705222047268521",
+        "closed_cycles": 35,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-0.13467431946448826600456149",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.23722389403205364023611428",
+            "buy_fills": 5,
+            "sell_fills": 5,
+            "fees_usdt": "0.28413638215225000000",
+            "residual_quantity": "0.00000848",
+            "residual_value": "0.7423548880000000",
+            "residual_unrealized_pnl": "0.02864320294300364023611427227"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "2.36441392571772052804636764",
+            "buy_fills": 26,
+            "sell_fills": 26,
+            "fees_usdt": "1.5433265425970000000",
+            "residual_quantity": "0.0000957",
+            "residual_value": "0.284340012000000",
+            "residual_unrealized_pnl": "-0.01001693092872052804636765849"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-1.26186435115015515381481485",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.235508735645000000",
+            "residual_quantity": "0.000207",
+            "residual_value": "0.02574666000000",
+            "residual_unrealized_pnl": "0.001397060380155153814814849247"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-030",
+      "C": 1.0,
+      "threshold": 0.65,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "101.19707230186225000000",
+        "final_cash": "100.36114452736225000000",
+        "residual_value": "0.83592777450000000000",
+        "net_return": "0.01197072301862250000",
+        "max_drawdown": "0.02840685426003450000",
+        "longest_drawdown_hours": 3353.0,
+        "drawdown_unrecovered": true,
+        "fills": 48,
+        "rejected_orders": 6323,
+        "rejection_reasons": {
+          "zero_quantity": 6323
+        },
+        "fees_usdt": "1.43211435390090000000",
+        "turnover_usdt": "1432.11435390090000000",
+        "turnover_multiple": "14.32114353900900000",
+        "mean_hourly_open_exposure": "0.01427089373850921909710716278",
+        "closed_cycles": 24,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "1.19137924078506585882450159",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.85895344194520226537496331",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.22901667103040000000",
+            "residual_quantity": "0.00000881",
+            "residual_value": "0.7712436985000000",
+            "residual_unrealized_pnl": "0.01147250142395226537496330334"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "2.92168327960562900781520398",
+            "buy_fills": 17,
+            "sell_fills": 17,
+            "fees_usdt": "1.0240361060505000000",
+            "residual_quantity": "0.0000031",
+            "residual_value": "0.009210596000000",
+            "residual_unrealized_pnl": "-0.0003237141121290078152039880449"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-0.87135059687536088361573908",
+            "buy_fills": 3,
+            "sell_fills": 3,
+            "fees_usdt": "0.179061576820000000",
+            "residual_quantity": "0.000446",
+            "residual_value": "0.05547348000000",
+            "residual_unrealized_pnl": "-0.005455726234639116384260923018"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "fewer_than_30_closed_cycles"
+      ]
+    },
+    {
+      "experiment_id": "EXP-031",
+      "C": 10.0,
+      "threshold": 0.55,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "49.59397011009335000000",
+        "final_cash": "48.81642375509335000000",
+        "residual_value": "0.77754635500000000000",
+        "net_return": "-0.50406029889906650000",
+        "max_drawdown": "0.5113050298543089267542536897",
+        "longest_drawdown_hours": 8303.0,
+        "drawdown_unrecovered": true,
+        "fills": 738,
+        "rejected_orders": 4611,
+        "rejection_reasons": {
+          "zero_quantity": 4531,
+          "minimum_notional": 68,
+          "risk_blocked": 12
+        },
+        "fees_usdt": "15.89622261889550000000",
+        "turnover_usdt": "15896.22261889550000000",
+        "turnover_multiple": "158.96222618895500000",
+        "mean_hourly_open_exposure": "0.07802026599533698098874140722",
+        "closed_cycles": 369,
+        "floor_triggers": 1,
+        "stop_triggers": 13,
+        "permanent_buy_lock": true,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-50.18942113277215334231193921",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-7.95380731061181157381001286",
+            "buy_fills": 108,
+            "sell_fills": 108,
+            "fees_usdt": "4.60620756398300000000",
+            "residual_quantity": "0.00000606",
+            "residual_value": "0.5305036110000000",
+            "residual_unrealized_pnl": "-0.1359015036908384261899871452"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-24.64201018665594721811624216",
+            "buy_fills": 179,
+            "sell_fills": 179,
+            "fees_usdt": "7.6569785224175000000",
+            "residual_quantity": "0.0000749",
+            "residual_value": "0.222539884000000",
+            "residual_unrealized_pnl": "-0.06870147008305278188375792119"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-17.59360363550439455038568419",
+            "buy_fills": 82,
+            "sell_fills": 82,
+            "fees_usdt": "3.633036532495000000",
+            "residual_quantity": "0.000197",
+            "residual_value": "0.02450286000000",
+            "residual_unrealized_pnl": "-0.01200578336060544961431577897"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive",
+        "max_drawdown_exceeds_25_percent",
+        "equity_floor_triggered"
+      ]
+    },
+    {
+      "experiment_id": "EXP-032",
+      "C": 10.0,
+      "threshold": 0.6,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "94.31810479157585000000",
+        "final_cash": "93.67934163007585000000",
+        "residual_value": "0.63876316150000000000",
+        "net_return": "-0.05681895208424150000",
+        "max_drawdown": "0.10371011552747200000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 184,
+        "rejected_orders": 6197,
+        "rejection_reasons": {
+          "zero_quantity": 6188,
+          "minimum_notional": 9
+        },
+        "fees_usdt": "5.14825816523735000000",
+        "turnover_usdt": "5148.25816523735000000",
+        "turnover_multiple": "51.48258165237350000",
+        "mean_hourly_open_exposure": "0.02333925228994656824194860959",
+        "closed_cycles": 92,
+        "floor_triggers": 0,
+        "stop_triggers": 3,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-5.71069862556059598094494398",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.49402258396371005790547405",
+            "buy_fills": 20,
+            "sell_fills": 20,
+            "fees_usdt": "1.10059340929335000000",
+            "residual_quantity": "0.00000383",
+            "residual_value": "0.3352852855000000",
+            "residual_unrealized_pnl": "0.01096228137956005790547403921"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "1.48583589286232426001115827",
+            "buy_fills": 60,
+            "sell_fills": 60,
+            "fees_usdt": "3.3770014786690000000",
+            "residual_quantity": "0.0000666",
+            "residual_value": "0.197879256000000",
+            "residual_unrealized_pnl": "0.01220763475767573998884170237"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-5.70251193445921018305062820",
+            "buy_fills": 12,
+            "sell_fills": 12,
+            "fees_usdt": "0.670663277275000000",
+            "residual_quantity": "0.000849",
+            "residual_value": "0.10559862000000",
+            "residual_unrealized_pnl": "0.005633500999210183050628171849"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-054",
+      "C": 10.0,
+      "threshold": 0.61,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "92.22850785028280000000",
+        "final_cash": "91.43108718528280000000",
+        "residual_value": "0.79742066500000000000",
+        "net_return": "-0.07771492149717200000",
+        "max_drawdown": "0.10005751966159300000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 140,
+        "rejected_orders": 6240,
+        "rejection_reasons": {
+          "zero_quantity": 6234,
+          "minimum_notional": 6
+        },
+        "fees_usdt": "3.89306703057990000000",
+        "turnover_usdt": "3893.06703057990000000",
+        "turnover_multiple": "38.93067030579900000",
+        "mean_hourly_open_exposure": "0.02089070438571535444582070588",
+        "closed_cycles": 70,
+        "floor_triggers": 0,
+        "stop_triggers": 2,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-7.80462495577653551250284997",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.08264041822394935794478671",
+            "buy_fills": 14,
+            "sell_fills": 14,
+            "fees_usdt": "0.76074878802290000000",
+            "residual_quantity": "0.00000570",
+            "residual_value": "0.4989885450000000",
+            "residual_unrealized_pnl": "0.01542778670874935794478671293"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-2.61117370095322255280143582",
+            "buy_fills": 48,
+            "sell_fills": 48,
+            "fees_usdt": "2.6848083768970000000",
+            "residual_quantity": "0.0000770",
+            "residual_value": "0.228779320000000",
+            "residual_unrealized_pnl": "0.01409277858122255280143587264"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.11081083659936360175662744",
+            "buy_fills": 8,
+            "sell_fills": 8,
+            "fees_usdt": "0.447509865660000000",
+            "residual_quantity": "0.000560",
+            "residual_value": "0.06965280000000",
+            "residual_unrealized_pnl": "0.003612240769363601756627418760"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-055",
+      "C": 10.0,
+      "threshold": 0.62,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "93.16309706758005000000",
+        "final_cash": "92.48263159658005000000",
+        "residual_value": "0.68046547100000000000",
+        "net_return": "-0.06836902932419950000",
+        "max_drawdown": "0.09885345141631450000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 116,
+        "rejected_orders": 6262,
+        "rejection_reasons": {
+          "zero_quantity": 6257,
+          "minimum_notional": 5
+        },
+        "fees_usdt": "3.23859698406150000000",
+        "turnover_usdt": "3238.59698406150000000",
+        "turnover_multiple": "32.38596984061500000",
+        "mean_hourly_open_exposure": "0.01851484776887850011180906492",
+        "closed_cycles": 58,
+        "floor_triggers": 0,
+        "stop_triggers": 2,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-6.86126061433993007463421679",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.72850179547350265496186485",
+            "buy_fills": 10,
+            "sell_fills": 10,
+            "fees_usdt": "0.54939610840900000000",
+            "residual_quantity": "0.00000694",
+            "residual_value": "0.6075404390000000",
+            "residual_unrealized_pnl": "0.01874987610005265496186483692"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-1.67984997771007597492412395",
+            "buy_fills": 43,
+            "sell_fills": 43,
+            "fees_usdt": "2.4107109746375000000",
+            "residual_quantity": "0.0000222",
+            "residual_value": "0.065959752000000",
+            "residual_unrealized_pnl": "0.004091903218575974924123953075"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.45290884115635144474822799",
+            "buy_fills": 5,
+            "sell_fills": 5,
+            "fees_usdt": "0.278489901015000000",
+            "residual_quantity": "0.000056",
+            "residual_value": "0.00696528000000",
+            "residual_unrealized_pnl": "0.001515902601351444748227986228"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-056",
+      "C": 10.0,
+      "threshold": 0.63,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "97.55544602545400000000",
+        "final_cash": "96.82068821895400000000",
+        "residual_value": "0.73475780650000000000",
+        "net_return": "-0.02444553974546000000",
+        "max_drawdown": "0.06597505938831650000",
+        "longest_drawdown_hours": 8596.0,
+        "drawdown_unrecovered": true,
+        "fills": 90,
+        "rejected_orders": 6287,
+        "rejection_reasons": {
+          "zero_quantity": 6284,
+          "minimum_notional": 3
+        },
+        "fees_usdt": "2.58334982085320000000",
+        "turnover_usdt": "2583.34982085320000000",
+        "turnover_multiple": "25.83349820853200000",
+        "mean_hourly_open_exposure": "0.01720098237503992158097847178",
+        "closed_cycles": 45,
+        "floor_triggers": 0,
+        "stop_triggers": 1,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-2.45627343899098633803613727",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.97815666891189661979175613",
+            "buy_fills": 7,
+            "sell_fills": 7,
+            "fees_usdt": "0.39049561665270000000",
+            "residual_quantity": "0.00000785",
+            "residual_value": "0.6872035225000000",
+            "residual_unrealized_pnl": "0.009090367831396619791756132922"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "3.26859164410216154070669689",
+            "buy_fills": 34,
+            "sell_fills": 34,
+            "fees_usdt": "1.9665498837105000000",
+            "residual_quantity": "0.0000024",
+            "residual_value": "0.007130784000000",
+            "residual_unrealized_pnl": "0.0004432971673384592933031372096"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-4.74670841418125125895107803",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.226304320490000000",
+            "residual_quantity": "0.000325",
+            "residual_value": "0.04042350000000",
+            "residual_unrealized_pnl": "0.002185799446251258951078029772"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-057",
+      "C": 10.0,
+      "threshold": 0.64,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "99.88534901292995000000",
+        "final_cash": "98.83290745292995000000",
+        "residual_value": "1.05244156000000000000",
+        "net_return": "-0.00114650987070050000",
+        "max_drawdown": "0.04246506231753450000",
+        "longest_drawdown_hours": 3353.0,
+        "drawdown_unrecovered": true,
+        "fills": 70,
+        "rejected_orders": 6302,
+        "rejection_reasons": {
+          "zero_quantity": 6301,
+          "minimum_notional": 1
+        },
+        "fees_usdt": "2.06297166039425000000",
+        "turnover_usdt": "2062.97166039425000000",
+        "turnover_multiple": "20.62971660394250000",
+        "mean_hourly_open_exposure": "0.01577137905119705222047268521",
+        "closed_cycles": 35,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-0.13467431946448826600456149",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.23722389403205364023611428",
+            "buy_fills": 5,
+            "sell_fills": 5,
+            "fees_usdt": "0.28413638215225000000",
+            "residual_quantity": "0.00000848",
+            "residual_value": "0.7423548880000000",
+            "residual_unrealized_pnl": "0.02864320294300364023611427227"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "2.36441392571772052804636764",
+            "buy_fills": 26,
+            "sell_fills": 26,
+            "fees_usdt": "1.5433265425970000000",
+            "residual_quantity": "0.0000957",
+            "residual_value": "0.284340012000000",
+            "residual_unrealized_pnl": "-0.01001693092872052804636765849"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-1.26186435115015515381481485",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.235508735645000000",
+            "residual_quantity": "0.000207",
+            "residual_value": "0.02574666000000",
+            "residual_unrealized_pnl": "0.001397060380155153814814849247"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive"
+      ]
+    },
+    {
+      "experiment_id": "EXP-033",
+      "C": 10.0,
+      "threshold": 0.65,
+      "status": "complete",
+      "summary": {
+        "strategy": "logistic_regression",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "101.19707230186225000000",
+        "final_cash": "100.36114452736225000000",
+        "residual_value": "0.83592777450000000000",
+        "net_return": "0.01197072301862250000",
+        "max_drawdown": "0.02840685426003450000",
+        "longest_drawdown_hours": 3353.0,
+        "drawdown_unrecovered": true,
+        "fills": 48,
+        "rejected_orders": 6323,
+        "rejection_reasons": {
+          "zero_quantity": 6323
+        },
+        "fees_usdt": "1.43211435390090000000",
+        "turnover_usdt": "1432.11435390090000000",
+        "turnover_multiple": "14.32114353900900000",
+        "mean_hourly_open_exposure": "0.01427089373850921909710716278",
+        "closed_cycles": 24,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "1.19137924078506585882450159",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-0.85895344194520226537496331",
+            "buy_fills": 4,
+            "sell_fills": 4,
+            "fees_usdt": "0.22901667103040000000",
+            "residual_quantity": "0.00000881",
+            "residual_value": "0.7712436985000000",
+            "residual_unrealized_pnl": "0.01147250142395226537496330334"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "2.92168327960562900781520398",
+            "buy_fills": 17,
+            "sell_fills": 17,
+            "fees_usdt": "1.0240361060505000000",
+            "residual_quantity": "0.0000031",
+            "residual_value": "0.009210596000000",
+            "residual_unrealized_pnl": "-0.0003237141121290078152039880449"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-0.87135059687536088361573908",
+            "buy_fills": 3,
+            "sell_fills": 3,
+            "fees_usdt": "0.179061576820000000",
+            "residual_quantity": "0.000446",
+            "residual_value": "0.05547348000000",
+            "residual_unrealized_pnl": "-0.005455726234639116384260923018"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "fewer_than_30_closed_cycles"
+      ]
+    }
+  ],
+  "selected": {
+    "experiment_id": "EXP-049",
+    "C": 0.1,
+    "threshold": 0.64,
+    "status": "complete",
+    "summary": {
+      "strategy": "logistic_regression",
+      "period": "validation",
+      "cost": "base",
+      "initial_equity": "100",
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2025-12-31 20:00:00+00:00",
+      "final_equity": "101.53886172893175000000",
+      "final_cash": "100.75587950193175000000",
+      "residual_value": "0.78298222700000000000",
+      "net_return": "0.01538861728931750000",
+      "max_drawdown": "0.02840685426003450000",
+      "longest_drawdown_hours": 3353.0,
+      "drawdown_unrecovered": true,
+      "fills": 66,
+      "rejected_orders": 6305,
+      "rejection_reasons": {
+        "zero_quantity": 6305
+      },
+      "fees_usdt": "1.96942878421015000000",
+      "turnover_usdt": "1969.42878421015000000",
+      "turnover_multiple": "19.69428784210150000",
+      "mean_hourly_open_exposure": "0.01515628039245981370410412859",
+      "closed_cycles": 33,
+      "floor_triggers": 0,
+      "stop_triggers": 0,
+      "permanent_buy_lock": false,
+      "stale_checkpoints": 0,
+      "realized_pnl": "1.50958979514125855647713719",
+      "per_symbol": {
+        "BTCUSDT": {
+          "realized_pnl": "-1.24413357950658012376575404",
+          "buy_fills": 5,
+          "sell_fills": 5,
+          "fees_usdt": "0.28752635606315000000",
+          "residual_quantity": "0.00000846",
+          "residual_value": "0.7406040510000000",
+          "residual_unrealized_pnl": "0.02859203635533012376575402981"
+        },
+        "ETHUSDT": {
+          "realized_pnl": "3.11312593652334807207860094",
+          "buy_fills": 24,
+          "sell_fills": 24,
+          "fees_usdt": "1.4434603861320000000",
+          "residual_quantity": "0.0000061",
+          "residual_value": "0.018124076000000",
+          "residual_unrealized_pnl": "-0.0006363839253480720786009514441"
+        },
+        "SOLUSDT": {
+          "realized_pnl": "-0.35940256187550939183570971",
+          "buy_fills": 4,
+          "sell_fills": 4,
+          "fees_usdt": "0.238442042015000000",
+          "residual_quantity": "0.000195",
+          "residual_value": "0.02425410000000",
+          "residual_unrealized_pnl": "0.001316281360509391835709702825"
+        }
+      },
+      "limitations": [
+        "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+        "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+        "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+        "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+        "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+        "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+        "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+        "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+      ]
+    },
+    "qualified": true,
+    "failure_reasons": []
+  },
+  "ranking": "final_equity desc, drawdown asc, turnover asc, C asc, threshold desc",
+  "eligibility": "base validation: return>0, drawdown<=25%, floor=0, closed_cycles>=30",
+  "benchmarks": {
+    "buy_hold": {
+      "experiment_id": "EXP-023",
+      "status": "complete",
+      "summary": {
+        "strategy": "buy_hold",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "84.31914311667075000000",
+        "final_cash": "83.09633737267075000000",
+        "residual_value": "1.22280574400000000000",
+        "net_return": "-0.15680856883329250000",
+        "max_drawdown": "0.4724109766040957661147898713",
+        "longest_drawdown_hours": 4919.0,
+        "drawdown_unrecovered": true,
+        "fills": 6,
+        "rejected_orders": 0,
+        "rejection_reasons": {},
+        "fees_usdt": "0.16238175835025000000",
+        "turnover_usdt": "162.38175835025000000",
+        "turnover_multiple": "1.62381758350250000",
+        "mean_hourly_open_exposure": "0.8900385351931132707330361980",
+        "closed_cycles": 3,
+        "floor_triggers": 0,
+        "stop_triggers": 0,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-15.53232018365657732732732732",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-1.95483628765964639639639640",
+            "buy_fills": 1,
+            "sell_fills": 1,
+            "fees_usdt": "0.05708369667325000000",
+            "residual_quantity": "0.00000968",
+            "residual_value": "0.8474051080000000",
+            "residual_unrealized_pnl": "-0.05977065560360360360360360356"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-3.30956503769479879879879880",
+            "buy_fills": 1,
+            "sell_fills": 1,
+            "fees_usdt": "0.0558542300170000000",
+            "residual_quantity": "0.0000911",
+            "residual_value": "0.270672676000000",
+            "residual_unrealized_pnl": "-0.03385564620120120120120120123"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-10.26791885830213213213213212",
+            "buy_fills": 1,
+            "sell_fills": 1,
+            "fees_usdt": "0.049443831660000000",
+            "residual_quantity": "0.000842",
+            "residual_value": "0.10472796000000",
+            "residual_unrealized_pnl": "-0.05491039786786786786786786783"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "EMA在缺口后重启，744个连续观察之前不调仓；风险退出不受预热限制。尾差和陈旧估值都保留。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      }
+    },
+    "ema_trend": {
+      "experiment_id": "EXP-024",
+      "status": "complete",
+      "summary": {
+        "strategy": "ema_trend",
+        "period": "validation",
+        "cost": "base",
+        "initial_equity": "100",
+        "start_utc": "2025-01-01 00:00:00+00:00",
+        "end_utc": "2025-12-31 20:00:00+00:00",
+        "final_equity": "65.25949350309055000000",
+        "final_cash": "64.68939180159055000000",
+        "residual_value": "0.57010170150000000000",
+        "net_return": "-0.34740506496909450000",
+        "max_drawdown": "0.4593357746007163708996597617",
+        "longest_drawdown_hours": 8312.0,
+        "drawdown_unrecovered": true,
+        "fills": 405,
+        "rejected_orders": 6155,
+        "rejection_reasons": {
+          "zero_quantity": 4780,
+          "minimum_notional": 1374,
+          "risk_blocked": 1
+        },
+        "fees_usdt": "10.04609307483640000000",
+        "turnover_usdt": "10046.09307483640000000",
+        "turnover_multiple": "100.46093074836400000",
+        "mean_hourly_open_exposure": "0.4448653492076227880283574070",
+        "closed_cycles": 202,
+        "floor_triggers": 0,
+        "stop_triggers": 5,
+        "permanent_buy_lock": false,
+        "stale_checkpoints": 0,
+        "realized_pnl": "-34.73299526602198635781533543",
+        "per_symbol": {
+          "BTCUSDT": {
+            "realized_pnl": "-10.57362616338333513222404113",
+            "buy_fills": 66,
+            "sell_fills": 66,
+            "fees_usdt": "3.18257237332890000000",
+            "residual_quantity": "0.00000407",
+            "residual_value": "0.3562953295000000",
+            "residual_unrealized_pnl": "-0.006631769757614867775958926598"
+          },
+          "ETHUSDT": {
+            "realized_pnl": "-9.29781832510347038536216506",
+            "buy_fills": 71,
+            "sell_fills": 71,
+            "fees_usdt": "3.5902892106525000000",
+            "residual_quantity": "0.0000697",
+            "residual_value": "0.207089852000000",
+            "residual_unrealized_pnl": "-0.0008273296600296146378349690162"
+          },
+          "SOLUSDT": {
+            "realized_pnl": "-14.86155077753518084022912924",
+            "buy_fills": 65,
+            "sell_fills": 66,
+            "fees_usdt": "3.273231490855000000",
+            "residual_quantity": "0.000054",
+            "residual_value": "0.00671652000000",
+            "residual_unrealized_pnl": "-0.0000521314698191597708706823896"
+          }
+        },
+        "limitations": [
+          "本次只评价validation，没有打开保留测试，不是实时或真实收益。",
+          "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+          "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+          "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+          "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+          "EMA在缺口后重启，744个连续观察之前不调仓；风险退出不受预热限制。尾差和陈旧估值都保留。",
+          "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+          "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+        ]
+      },
+      "qualified": false,
+      "failure_reasons": [
+        "net_return_not_positive",
+        "max_drawdown_exceeds_25_percent"
+      ]
+    }
+  },
+  "next_test_route": "model_ema_buy_hold",
+  "test_opened": false,
+  "conclusion": "validation_qualified_requires_cost_and_freeze"
+}

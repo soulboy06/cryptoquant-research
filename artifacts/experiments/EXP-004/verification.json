@@ -1,0 +1,24 @@
+{
+  "experiment_id": "EXP-004",
+  "status": "passed",
+  "artifacts_checked": 11,
+  "frozen_source_files": 38,
+  "partitions_checked": 3,
+  "fills_replayed": 6,
+  "equity_checkpoints": 52610,
+  "floor_details": {
+    "time": "2022-06-10 17:00:00+00:00",
+    "trigger_equity": "49.41231550600000000",
+    "post_exit_equity": "49.36478528725305000000"
+  },
+  "checks": [
+    "artifact and source hashes",
+    "development-only inputs",
+    "fill time, price and availability",
+    "cash/positions replay",
+    "all checkpoint equity sums and drawdown",
+    "P&L and fees",
+    "annual continuity",
+    "floor permanence"
+  ]
+}
