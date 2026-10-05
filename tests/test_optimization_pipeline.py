@@ -3,6 +3,7 @@ import pandas as pd
 import pytest
 
 from cryptoquant.optimization.engine import (
+    build_candidate_regression_targets,
     build_candidate_targets,
     calculate_fitness_score,
 )
@@ -120,3 +121,63 @@ def test_fitness_score_monotonicity():
         min_cycles=35, floor_triggers=1
     )
     assert s4 < s1 - 50.0
+
+
+def test_regression_target_generation_logic():
+    """Verify continuous net return regression target generation respects margin hurdles."""
+    symbols = ('BTCUSDT', 'ETHUSDT', 'SOLUSDT')
+    timestamps = pd.date_range('2023-01-01', periods=10, freq='4h', tz='UTC')
+    
+    # Combined regression predictions dataframe (expected net returns)
+    pred_records = []
+    for t in timestamps:
+        pred_records.append({'symbol': 'BTCUSDT', 'decision_time': t, 'expected_net_return': 0.005})
+        pred_records.append({'symbol': 'ETHUSDT', 'decision_time': t, 'expected_net_return': -0.002})
+        pred_records.append({'symbol': 'SOLUSDT', 'decision_time': t, 'expected_net_return': 0.003})
+    pred_df = pd.DataFrame(pred_records)
+    
+    regime_records = []
+    for i, t in enumerate(timestamps):
+        regime_records.append({
+            'decision_time': t,
+            'state_valid': True,
+            'allow_buy': bool(i < 5),
+            'close': 16500.0,
+            'ma_short': 16500.0,
+            'ma_long': 16000.0,
+        })
+    regime_df = pd.DataFrame(regime_records)
+    
+    mom_records = []
+    for t in timestamps:
+        mom_records.append({'decision_time': t, 'symbol': 'BTCUSDT', 'return_72h': 0.01, 'history_valid': True})
+        mom_records.append({'decision_time': t, 'symbol': 'ETHUSDT', 'return_72h': -0.02, 'history_valid': True})
+        mom_records.append({'decision_time': t, 'symbol': 'SOLUSDT', 'return_72h': 0.05, 'history_valid': True})
+    mom_df = pd.DataFrame(mom_records)
+    
+    sizing = SizingScheme(
+        name='test_sizing',
+        favorable_weight=Decimal('0.30'),
+        weak_alpha_weight=Decimal('0.25'),
+        weak_ordinary_weight=Decimal('0.00'),
+    )
+    
+    # Margin = +0.001 (requires expected net return >= +0.1%)
+    targets = build_candidate_regression_targets(pred_df, regime_df, mom_df, sizing, margin=0.001, symbols=symbols)
+    
+    assert len(targets) == 30
+    assert (targets['probability'] >= 0.0).all() and (targets['probability'] <= 1.0).all()
+    
+    target_map = targets.set_index(['decision_time', 'symbol'])['target_weight'].to_dict()
+    for i, t in enumerate(timestamps):
+        if i < 5:
+            # Favorable
+            assert target_map[(t, 'BTCUSDT')] == Decimal('0.30')
+            assert target_map[(t, 'ETHUSDT')] == Decimal('0.00')  # -0.002 < 0.001
+            assert target_map[(t, 'SOLUSDT')] == Decimal('0.30')
+        else:
+            # Weak
+            assert target_map[(t, 'BTCUSDT')] == Decimal('0.00')  # ordinary
+            assert target_map[(t, 'ETHUSDT')] == Decimal('0.00')  # ordinary + below margin
+            assert target_map[(t, 'SOLUSDT')] == Decimal('0.25')  # alpha leader!
+

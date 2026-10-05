@@ -863,6 +863,44 @@
 - 边界核验：
   - 2026 数据完全封存（0 读取、0 统计）；100 USDT 虚拟资金、50 USDT 底线与现货无杠杆规则严格保持。
 
+### WL-057: 2026-10-05 20:45:00+08:00 系统性 Alpha 第一阶段（4h 连续净收益回归受控实验）执行、基线比较与严格剪枝判定
+
+- 用户要求：
+  1. 第一阶段只验证一个问题：连续收益回归是否比当前 4h 二分类预测更能赚钱；
+  2. 保持当前 12 个特征、现有交易引擎、风险规则、仓位上限、决策频率和退出逻辑全部不变，仅将预测目标从 `net_positive_base_v1` 二分类替换为未来 4h 净收益连续回归；
+  3. 比较 Logistic Regression 分类基准（OPT-0026: +0.1293%/w, R6: +0.0979%/w）与 Ridge、ElasticNet、LightGBM Regressor 等少量回归模型；评价指标为扣除全部成本后的净收益、g_week、MDD 和跨年份稳定性；
+  4. 若 4h 连续回归无法明显超过约 0.1293%/week 基准，则如实判定证据不足，坚决终止并不进行细碎参数搜索；
+  5. 修正文档中的成本表述：base 标签往返盈亏平衡约为严格的 **0.30055%**（非约 0.25%）；不得将当前 4h 标签描述为“4h 强制平仓”，先根据源码确认实际持仓与退出机制（动态时限 8h 上限 + 浮盈 1% 激活动态保本 50% 锁定 + 信号退出）；
+  6. 严格 Walk-Forward（Fold 1: 22->23, Fold 2: 22-23->24, Fold 3: 22-24->25），2026 继续 0 读取、0 统计。
+- 架构扩展与代码改动：
+  - 更新 `DECISIONS.md` 记录决策 D-047；
+  - 扩展 `src/cryptoquant/optimization/engine.py`：
+    - `fit_and_predict_regression_fold`：严格 Walk-Forward 时序滚动训练回归模型（支持 Ridge, ElasticNet, LightGBM Regressor，StandardScaler 仅在训练集 fit）；
+    - `build_candidate_regression_targets`：将预测预期连续净收益 $\hat{y}$ 转换为交易信号（当 $\hat{y} > \text{margin}$ 且符合市场状态与 Alpha 规则时开仓）；
+    - `evaluate_candidate_regression_walk_forward`：三窗仿真回测与跨窗口指标汇总；
+  - 扩展 `src/cryptoquant/optimization/search_space.py`：注册回归模型候选族及安全边际（0, 10, 20 bps）；
+  - 编写单测 `tests/test_optimization_pipeline.py::test_regression_fold_and_target_generation`，4 项针对性单测 100% 通过（1.25s）；
+  - 创建并执行对比运行脚本 `scripts/run_regression_vs_classification.py`。
+- 实验实证数据与核心结论：
+  - 覆盖 18 组回归参数配置在 3 个 Fold 的完整时序外账本回测；
+  - 最佳回归候选为 `REG-017_LGB_Reg_conservative_margin10bps`：
+    - 合成周收益：**+0.0030% / week**（年复利仅 +0.16%）；
+    - 各年份表现：W1 (2023) 0.00%（0 交易）、W2 (2024) +0.32%（1 交易）、2025 年 +0.14%（1 交易），最大回撤 1.34%；
+  - 线性回归模型（Ridge / ElasticNet）：
+    - Ridge (alpha=10.0, margin=0): 周收益 **-0.0769% / week**，W1 +1.87%, W2 -1.64%, 2025 -11.52%, 最大回撤 12.35%；
+    - ElasticNet (alpha=0.001, margin=0): 周收益 **+0.0004% / week**，仅触发 4 笔交易；
+  - 分类基准表现：
+    - OPT-0026（LR C=0.10, th=0.48）: 周收益 **+0.1293% / week**（W1 +7.16%, W2 +17.41%, 2025 -2.70%, MDD 11.51%）；
+    - R6 人工基准: 周收益 **+0.0979% / week**（W1 +5.06%, W2 +13.70%, 2025 -2.44%, MDD 11.21%）。
+- 归因诊断与剪枝判定：
+  - 4h 连续回归表现大幅落后分类基准的核心根因：在 4 小时高频低信噪比环境下，真实 $R^2 \approx 0$。均方误差（MSE）损失函数驱动预测值严重向负均值（全样本净收益均值约 -0.28%）强力收缩（Shrinkage）；
+  - 在 margin=0 时，受残余噪声驱动频繁开仓，被 0.30055% 的往返交易摩擦吞噬，导致持续亏损（Ridge MDD 达 12.35%）；而在 margin=10~20 bps 时，预测值几乎无法跨越阈值，导致系统休眠拒单；
+  - 根据用户预设的剪枝原则，**实事求是判定 4h 连续净收益回归路线证据不足，正式彻底终止该路线，坚决不进行无意义的参数搜索**；
+  - 产物留存：`artifacts/research/regression_phase1/`（`regression_summary.csv`, `top_candidates.json`, `comparison_report.md`）。
+- 边界核验：
+  - 2026 数据完全物理封存（0 读取、0 统计）；
+  - 100 USDT 虚拟资金、50 USDT 底线、现货无杠杆规则与风控机制严格守恒。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

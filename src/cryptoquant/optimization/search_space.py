@@ -80,3 +80,37 @@ SIZING_SCHEMES = [
     # Conservative overall: 25% on favorable, 20% on alpha, 0% on ordinary
     SizingScheme('conservative_overall', Decimal('0.25'), Decimal('0.20'), Decimal('0.00')),
 ]
+
+
+# 4. Continuous Net Return Regression Model Candidates (Phase 1)
+@dataclass(frozen=True)
+class RegressionModelCandidate:
+    name: str
+    family: str  # 'ridge', 'elastic_net', 'lightgbm_regressor'
+    params: dict[str, Any]
+
+
+REGRESSION_MODELS = [
+    # Ridge regression variants (L2 regularization)
+    RegressionModelCandidate('Ridge_a1.0', 'ridge', {'alpha': 1.0}),
+    RegressionModelCandidate('Ridge_a10.0', 'ridge', {'alpha': 10.0}),
+    RegressionModelCandidate('Ridge_a100.0', 'ridge', {'alpha': 100.0}),
+    # ElasticNet variants (L1 + L2 regularization)
+    RegressionModelCandidate('ElasticNet_a0.001', 'elastic_net', {'alpha': 0.001, 'l1_ratio': 0.5, 'max_iter': 2000, 'random_state': 42}),
+    # LightGBM Regressor variants (controlled depth tree regression)
+    RegressionModelCandidate('LGB_Reg_shallow', 'lightgbm_regressor', {
+        'max_depth': 2, 'num_leaves': 4, 'min_child_samples': 80,
+        'learning_rate': 0.03, 'n_estimators': 60, 'subsample': 0.8,
+        'colsample_bytree': 0.8, 'random_state': 42, 'verbosity': -1, 'n_jobs': 1
+    }),
+    RegressionModelCandidate('LGB_Reg_conservative', 'lightgbm_regressor', {
+        'max_depth': 2, 'num_leaves': 3, 'min_child_samples': 100,
+        'learning_rate': 0.02, 'n_estimators': 50, 'subsample': 0.8,
+        'colsample_bytree': 0.8, 'random_state': 42, 'verbosity': -1, 'n_jobs': 1
+    }),
+]
+
+# 5. Regression Decision Margins (Hurdles on expected net return)
+# 0.000 = 0.0% expected net return, 0.001 = +0.1%, 0.002 = +0.2%
+REGRESSION_MARGINS = [0.000, 0.001, 0.002]
+
