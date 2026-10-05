@@ -704,6 +704,7 @@
 - 修复独立3751f9d、事前冻结33ca36e、结果证据5fcb8ad已上传origin/codex/cycle-state-integrity；创建[PR #1](https://github.com/soulboy06/cryptoquant-research/pull/1)并关联本聊天，未合并main。
 - 13份当前相关文档的UTF-8与459个本地Markdown链接检查通过，没有缺失目标。Git diff检查在识别Windows CR行尾的设置下通过；冻结产物原字节和压缩包不因文本换行整理改写。
 - STATUS记录上传完成和PR，保留旧失败、实验SHA及三候选失格；没有后台账户、实盘、新参数或2026测试读取。本轮任务完成，后续研究按附件先向用户汇报，不自动启动。
+- 大型events.json与既有CSV／Parquet一样通过完整证据包交付，追加精确忽略规则避免重复散装提交；本地原文件与冻结SHA保留，未删除或改写。
 
 ## 后续追加格式
 
