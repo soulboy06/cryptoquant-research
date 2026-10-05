@@ -1,0 +1,107 @@
+{
+  "experiment_id": "EXP-140",
+  "type": "dynamic_comparison",
+  "status": "complete",
+  "started_at_utc": "2026-10-05T06:09:50.541095+00:00",
+  "command": "dynamic-compare --research-config configs\\eighth_experiment.toml --state-experiment-id EXP-122 --selection-experiment-id EXP-139 --evaluated-experiment-ids EXP-130,EXP-131,EXP-132,EXP-133,EXP-134,EXP-135,EXP-136,EXP-137,EXP-138 --experiment-id EXP-140",
+  "research_config_hash": "65a1096ae24eba92fc146528c3c6f8aa7fbf79b8f49db8eb21833cb4982a87b9",
+  "execution_config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "budget": {
+    "total_used": 11,
+    "total_limit": 19,
+    "base_accounts_used": 10,
+    "base_accounts_limit": 10,
+    "pressure_accounts_used": 0,
+    "pressure_accounts_limit": 6,
+    "accounts_used": 10,
+    "accounts_limit": 16,
+    "records": [
+      {
+        "experiment_id": "EXP-129",
+        "type": "dynamic_evaluation",
+        "status": "failed",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-130",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-131",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-132",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-133",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-134",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-135",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-136",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-137",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-138",
+        "type": "dynamic_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-139",
+        "type": "dynamic_selection",
+        "status": "complete",
+        "cost": null
+      }
+    ]
+  },
+  "source_hash": "3343911dd689d51c42b25297b50d3e7e87e3b94934a03227048587f9416fa097",
+  "finished_at_utc": "2026-10-05T06:09:50.711939+00:00"
+}

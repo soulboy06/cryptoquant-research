@@ -10,11 +10,15 @@ from cryptoquant.models.research_config import load_research_config, RESEARCH_WI
 from cryptoquant.models.research_models import train_research_window, load_research_models, execute_research_train
 from cryptoquant.models.labels import GROSS_POLICY, NET_POLICY
 from cryptoquant.models.training import predict_probabilities
+from cryptoquant.data.archive import sha_file
+from cryptoquant.data.workflow import environment, snapshot_source
+from cryptoquant.cli import write_json
+from cryptoquant.models.features import ALL_FEATURE_NAMES
+from test_research_integrity import research_copy
 
 
-def test_research_train_window_w1_execution(tmp_path, monkeypatch):
-    root = Path.cwd()
-    cfg = load_research_config(root / 'configs/fifth_experiment.toml', root)
+def test_research_train_window_w1_execution(tmp_path, monkeypatch, research_copy):
+    root, cfg = research_copy
     
     # 1. Guard against reading test partition
     orig_read_parquet = pd.read_parquet
@@ -25,7 +29,7 @@ def test_research_train_window_w1_execution(tmp_path, monkeypatch):
         return orig_read_parquet(path, *args, **kwargs)
     monkeypatch.setattr(pd, 'read_parquet', guarded_read_parquet)
     
-    out_dir = tmp_path / 'EXP-TEST-TRAIN'
+    out_dir = tmp_path / 'artifacts/experiments/EXP-997'
     models_meta, artifacts_dict, label_card = train_research_window(
         root=root,
         prepared_id='EXP-063',
@@ -80,21 +84,38 @@ def test_research_train_window_w1_execution(tmp_path, monkeypatch):
         assert len(l_df) == meta['training_samples']
 
     # 3. Test load_research_models
-    exp_fake_dir = tmp_path / 'artifacts/experiments/EXP-997'
-    exp_fake_dir.mkdir(parents=True)
-    import shutil
-    shutil.copytree(out_dir / 'models', exp_fake_dir / 'models')
+    exp_fake_dir = out_dir
+    source_hash = snapshot_source(exp_fake_dir, cfg.research_config_path)
+    (exp_fake_dir / 'config.toml').write_bytes(cfg.execution_config_path.read_bytes())
+    (exp_fake_dir / 'research_config.toml').write_bytes(cfg.research_config_path.read_bytes())
+    for name in ['config.toml', 'research_config.toml']:
+        artifacts_dict[name] = sha_file(exp_fake_dir / name)
     train_manifest = dict(
         experiment_id='EXP-997',
         type='research_training',
         status='complete',
         window='W1',
+        prepared_experiment_id='EXP-063',
+        prepared_manifest_sha256=sha_file(root / 'artifacts/experiments/EXP-063/prepared_manifest.json'),
+        fit_start_utc=RESEARCH_WINDOWS['W1'].fit_start.isoformat(),
+        fit_end_utc=RESEARCH_WINDOWS['W1'].fit_end.isoformat(),
+        C=.1,
+        model_family='logistic_regression',
+        feature_names=ALL_FEATURE_NAMES,
+        label_card=label_card,
+        execution_config_hash=cfg.execution_config_hash,
+        research_config_hash=cfg.research_config_hash,
         **label_card,
-        symbols={sym: dict(model_path=str(exp_fake_dir / 'models' / f'{sym}.joblib'),
-                           model_sha256=meta['model_sha256'])
-                 for sym, meta in models_meta.items()}
+        symbols=models_meta,
+        artifacts=artifacts_dict
     )
-    (exp_fake_dir / 'train_manifest.json').write_text(json.dumps(train_manifest), encoding='utf-8')
+    write_json(exp_fake_dir / 'train_manifest.json', train_manifest)
+    write_json(exp_fake_dir / 'run_manifest.json', dict(
+        experiment_id='EXP-997', type='research_training', status='complete', window='W1',
+        label_policy=NET_POLICY, C=.1, prepared_experiment_id='EXP-063',
+        execution_config_hash=cfg.execution_config_hash, research_config_hash=cfg.research_config_hash,
+        environment=environment(), source_hash=source_hash,
+        train_manifest_sha256=sha_file(exp_fake_dir / 'train_manifest.json')))
     loaded_models, loaded_manifest = load_research_models(
         tmp_path, 'EXP-997', cfg, expected_window='W1', expected_policy=NET_POLICY
     )
@@ -103,8 +124,9 @@ def test_research_train_window_w1_execution(tmp_path, monkeypatch):
     assert loaded_manifest['label_policy'] == NET_POLICY
 
 
-def test_research_train_cli_args_and_duplicate_rejection(tmp_path):
-    root = Path.cwd()
+def test_research_train_cli_args_and_duplicate_rejection(tmp_path, monkeypatch, research_copy):
+    root, _ = research_copy
+    monkeypatch.chdir(root)
     exp_id = 'EXP-998'
     args = [
         'research-train',
@@ -116,14 +138,6 @@ def test_research_train_cli_args_and_duplicate_rejection(tmp_path):
     ]
     
     target_dir = root / 'artifacts/experiments' / exp_id
-    if target_dir.exists():
-        import shutil
-        shutil.rmtree(target_dir)
-        
     target_dir.mkdir(parents=True)
-    try:
-        # Should exit with code 1 due to refusal to overwrite
-        assert main(args) == 1
-    finally:
-        if target_dir.exists():
-            target_dir.rmdir()
+    # Only pytest's isolated temporary directory is used; never remove an existing experiment.
+    assert main(args) == 1

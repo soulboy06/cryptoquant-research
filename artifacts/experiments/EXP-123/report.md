@@ -1,0 +1,122 @@
+# EXP-123 R1历史账户
+
+来源与接口：已核对冻结配置、状态、模型、R0输入SHA及有限预算；执行接口小型合成等价证据不代表全年账户重跑。
+
+历史相对改善与代价：按冻结门槛评价收益、回撤、交易周期、手续费与阻断买单；减少交易不单独判为成功，止损记录全部保留。
+
+收益目标：长期几何平均周净收益1.5%单列；三窗独立100 USDT账户的几何合成不是三年连续账户。
+
+2023、2024、2025全部为已查看研究／选择数据，没有新独立样本外或实时模拟证明。2026继续封存；未接真实账户、借款、合约或付费部署。
+
+原第六轮strict W2 EXP-119 +14.9816541437466%未达15%，原失败保留。
+
+详细精确结果与失格项：
+
+```json
+{
+  "strategy": "logistic_regression",
+  "period": "development",
+  "cost": "base",
+  "initial_equity": "100",
+  "start_utc": "2023-01-01 00:00:00+00:00",
+  "end_utc": "2024-01-01 00:00:00+00:00",
+  "final_equity": "100.16837672145160000000",
+  "final_cash": "99.69667891005160000000",
+  "residual_value": "0.47169781140000000000",
+  "net_return": "0.00168376721451600000",
+  "max_drawdown": "0.04015164449635917594148415220",
+  "longest_drawdown_hours": 5978.0,
+  "drawdown_unrecovered": true,
+  "fills": 36,
+  "rejected_orders": 4967,
+  "rejection_reasons": {
+    "minimum_notional": 9,
+    "risk_blocked": 2,
+    "zero_quantity": 4930,
+    "regime_blocked": 23,
+    "no_quote": 3
+  },
+  "fees_usdt": "1.09375765252070000000",
+  "turnover_usdt": "1093.75765252070000000",
+  "turnover_multiple": "10.93757652520700000",
+  "mean_hourly_open_exposure": "0.006444924049407060825609001186",
+  "closed_cycles": 18,
+  "floor_triggers": 0,
+  "stop_triggers": 0,
+  "permanent_buy_lock": false,
+  "stale_checkpoints": 4,
+  "realized_pnl": "0.07686140884020933371017804",
+  "per_symbol": {
+    "BTCUSDT": {
+      "realized_pnl": "1.13211189669688045878709388",
+      "buy_fills": 3,
+      "sell_fills": 3,
+      "fees_usdt": "0.18260618201470000000",
+      "residual_quantity": "0.00000688",
+      "residual_value": "0.2909110304000000",
+      "residual_unrealized_pnl": "0.05926714717671954121290611458"
+    },
+    "ETHUSDT": {
+      "realized_pnl": "0.42053041600490446448041826",
+      "buy_fills": 2,
+      "sell_fills": 2,
+      "fees_usdt": "0.1219624117060000000",
+      "residual_quantity": "0.0000663",
+      "residual_value": "0.151287981000000",
+      "residual_unrealized_pnl": "0.03320124379809553551958173933"
+    },
+    "SOLUSDT": {
+      "realized_pnl": "-1.47578090386157558955733410",
+      "buy_fills": 13,
+      "sell_fills": 13,
+      "fees_usdt": "0.789189058800000000",
+      "residual_quantity": "0.000290",
+      "residual_value": "0.02949880000000",
+      "residual_unrealized_pnl": "-0.0009530783634244104426658886450"
+    }
+  },
+  "limitations": [
+    "本次只评价development/W1，没有打开保留测试，不是实时或真实收益。",
+    "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+    "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+    "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+    "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+    "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+    "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+    "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+  ],
+  "window": "W1",
+  "exit_variant": "C2",
+  "breakeven_triggers": 2,
+  "duration_triggers": 0,
+  "g_week": 3.226479138440652e-05,
+  "total_window_hours": 8760.0,
+  "full_weeks_count": 52,
+  "losing_full_weeks_count": 27,
+  "losing_full_weeks_ratio": 0.5192307692307693,
+  "worst_full_week_return": -0.017990225225453904,
+  "partial_week_present": true,
+  "experiment_id": "EXP-123",
+  "regime_variant": "R1",
+  "state_experiment_id": "EXP-122",
+  "training_experiment_id": "EXP-065",
+  "prepared_experiment_id": "EXP-063",
+  "label_policy": "net_positive_base_v1",
+  "threshold": 0.5,
+  "status": "complete",
+  "regime_blocked_records": 23,
+  "regime_blocked_positive_quantity_records": 23,
+  "regime_blocked_zero_quantity_records": 0,
+  "regime_blocked_by_symbol": {
+    "SOLUSDT": 17,
+    "ETHUSDT": 6
+  },
+  "regime_blocked_positive_by_symbol": {
+    "SOLUSDT": 17,
+    "ETHUSDT": 6
+  },
+  "allowed_decisions": 701,
+  "total_decisions": 2190,
+  "blocked_count_limitation": "Counts include repeated rebalance attempts; positive quantity does not imply an independent missed trade or profitable opportunity."
+}
+```

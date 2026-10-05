@@ -1,0 +1,121 @@
+{
+  "version": "halt_aware_v1",
+  "announcement_url": "https://www.binance.com/en/support/announcement/detail/813a31506e9f478ea8c1058b425df87a",
+  "warmup_hours": 744,
+  "halts": [
+    {
+      "symbol": "BTCUSDT",
+      "open_time": "2023-03-24T13:00:00+00:00"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "open_time": "2023-03-24T13:00:00+00:00"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "open_time": "2023-03-24T13:00:00+00:00"
+    }
+  ],
+  "early_closes": [
+    {
+      "symbol": "BTCUSDT",
+      "open_time": "2021-12-24T04:00:00+00:00",
+      "close_time": "2021-12-24T04:59:54.362000+00:00"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "open_time": "2023-03-24T12:00:00+00:00",
+      "close_time": "2023-03-24T12:39:41.646000+00:00"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "open_time": "2021-12-24T04:00:00+00:00",
+      "close_time": "2021-12-24T04:59:56.158000+00:00"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "open_time": "2023-03-24T12:00:00+00:00",
+      "close_time": "2023-03-24T12:39:43.061000+00:00"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "open_time": "2023-03-24T12:00:00+00:00",
+      "close_time": "2023-03-24T12:39:46.948000+00:00"
+    }
+  ],
+  "evidence": [
+    {
+      "symbol": "BTCUSDT",
+      "day": "2021-12-24",
+      "rows": 24,
+      "url": "https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2021-12-24.zip",
+      "sha256": "63fa9b4e1602b631124e3e4d12e6d6977b549cb02de400ad86930e86cec9c1ad",
+      "abnormal_close": [
+        {
+          "open_time_ms": "1640318400000",
+          "close_time_ms": "1640321994362"
+        }
+      ]
+    },
+    {
+      "symbol": "BTCUSDT",
+      "day": "2023-03-24",
+      "rows": 23,
+      "url": "https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1h/BTCUSDT-1h-2023-03-24.zip",
+      "sha256": "ea9d94f28a39ad8029c9c2863cbb7769137188edd957fea35d0313ae4183561f",
+      "abnormal_close": [
+        {
+          "open_time_ms": "1679659200000",
+          "close_time_ms": "1679661581646"
+        }
+      ]
+    },
+    {
+      "symbol": "ETHUSDT",
+      "day": "2021-12-24",
+      "rows": 24,
+      "url": "https://data.binance.vision/data/spot/daily/klines/ETHUSDT/1h/ETHUSDT-1h-2021-12-24.zip",
+      "sha256": "09274dcd189ffbc1567bc8f685f625084a94789b10f035dd9b730b5e2db0385f",
+      "abnormal_close": [
+        {
+          "open_time_ms": "1640318400000",
+          "close_time_ms": "1640321996158"
+        }
+      ]
+    },
+    {
+      "symbol": "ETHUSDT",
+      "day": "2023-03-24",
+      "rows": 23,
+      "url": "https://data.binance.vision/data/spot/daily/klines/ETHUSDT/1h/ETHUSDT-1h-2023-03-24.zip",
+      "sha256": "7b9d19487c37b354003717872987ae5ecb2178b4ff0de1ecdd5a5c84da2f10b1",
+      "abnormal_close": [
+        {
+          "open_time_ms": "1679659200000",
+          "close_time_ms": "1679661583061"
+        }
+      ]
+    },
+    {
+      "symbol": "SOLUSDT",
+      "day": "2021-12-24",
+      "rows": 24,
+      "url": "https://data.binance.vision/data/spot/daily/klines/SOLUSDT/1h/SOLUSDT-1h-2021-12-24.zip",
+      "sha256": "caa546d9dad68ad8bf9f656ebf6ce86cad9b75d300cc3e5924ba6c0d2d09100f",
+      "abnormal_close": []
+    },
+    {
+      "symbol": "SOLUSDT",
+      "day": "2023-03-24",
+      "rows": 23,
+      "url": "https://data.binance.vision/data/spot/daily/klines/SOLUSDT/1h/SOLUSDT-1h-2023-03-24.zip",
+      "sha256": "ec4941f66dd4579e321046b7fc6403417b965f319d01ca77fef930078856b5d5",
+      "abnormal_close": [
+        {
+          "open_time_ms": "1679659200000",
+          "close_time_ms": "1679661586948"
+        }
+      ]
+    }
+  ]
+}

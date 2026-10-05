@@ -108,8 +108,9 @@ def test_candidate_selection_filtering_and_three_tier_evaluation():
     
     # Test three-tier conclusions
     three_tier = evaluate_three_tier_conclusions(results)
-    assert three_tier['method_valid'] is True
+    assert three_tier['method_valid'] is False
+    assert '未验收' in three_tier['method_valid_details']
     # In this synthetic case, net at 0.60 has net_ret=0.02 vs gross at 0.64 has net_ret=0.01 -> improvement True
-    assert three_tier['relative_improvement'] is True
+    assert three_tier['relative_improvement'] is False  # 三窗比较尚未齐备。
     # But weekly return is ~0.00038 << 0.015, so target_achieved must be False
     assert three_tier['target_achieved'] is False

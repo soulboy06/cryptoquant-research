@@ -1,6 +1,7 @@
 """第五轮的有限研究参数；原执行Config与时间分区不改写。"""
 
 from dataclasses import dataclass
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
@@ -40,6 +41,25 @@ _FIXED_VALUES_V6 = dict(execution_config='second_experiment.toml', label_policie
                         C='0.1', thresholds=['0.50'], weekly_target='0.015',
                         max_account_runs=30, windows=list(RESEARCH_WINDOWS),
                         exit_variants=['C0', 'C1', 'C2', 'C3'])
+_FIXED_REGIME_PARAMETERS = dict(symbol='BTCUSDT', adx_period=14, adx_min=20,
+                                ema_period=72, slope_hours=24, history_hours=744)
+_FIXED_VALUES_V7 = dict(execution_config='second_experiment.toml', label_policies=['net_positive_base_v1'],
+                        C='0.1', thresholds=['0.50'], weekly_target='0.015',
+                        max_account_runs=9, windows=list(RESEARCH_WINDOWS), exit_variants=['C2'],
+                        regime_variants=['R0', 'R1'], regime=dict(_FIXED_REGIME_PARAMETERS))
+_FIXED_DYNAMIC_VARIANTS = {
+    'R2': dict(name='dynamic_threshold', favorable_threshold='0.50', favorable_weight='0.30',
+               weak_threshold='0.60', weak_weight='0.30'),
+    'R3': dict(name='dynamic_sizing', favorable_threshold='0.50', favorable_weight='0.30',
+               weak_threshold='0.50', weak_weight='0.10'),
+    'R4': dict(name='dual_synergy', favorable_threshold='0.50', favorable_weight='0.30',
+               weak_threshold='0.60', weak_weight='0.15'),
+}
+_FIXED_VALUES_V8 = dict(execution_config='second_experiment.toml', label_policies=['net_positive_base_v1'],
+                        C='0.1', thresholds=['0.50', '0.60'], weekly_target='0.015',
+                        max_account_runs=16, windows=list(RESEARCH_WINDOWS), exit_variants=['C2'],
+                        dynamic_variants=['R2', 'R3', 'R4'], regime=dict(_FIXED_REGIME_PARAMETERS),
+                        variants=dict(_FIXED_DYNAMIC_VARIANTS))
 
 
 @dataclass(frozen=True)
@@ -56,6 +76,10 @@ class ResearchConfig:
     max_account_runs: int
     windows: tuple[str, ...]
     exit_variants: tuple[str, ...] = ('C0', 'C1', 'C2', 'C3')
+    regime_variants: tuple[str, ...] = ()
+    regime_parameters: Mapping[str, str | int] | None = None
+    dynamic_variants: tuple[str, ...] = ()
+    variant_parameters: Mapping[str, Mapping[str, str | int]] | None = None
 
 
 def load_research_config(path, root=None):
@@ -69,6 +93,10 @@ def load_research_config(path, root=None):
     if values == _FIXED_VALUES_V5:
         exit_variants = ('C0', 'C1', 'C2', 'C3')
     elif values == _FIXED_VALUES_V6:
+        exit_variants = tuple(values['exit_variants'])
+    elif values == _FIXED_VALUES_V7:
+        exit_variants = tuple(values['exit_variants'])
+    elif values == _FIXED_VALUES_V8:
         exit_variants = tuple(values['exit_variants'])
     else:
         raise ValueError('research fields or candidates differ from fixed research scope')
@@ -94,4 +122,9 @@ def load_research_config(path, root=None):
     return ResearchConfig(execution, execution_path, path, execution.config_hash, hashlib.sha256(raw).hexdigest(),
                           tuple(values['label_policies']), Decimal(values['C']),
                           tuple(Decimal(x) for x in values['thresholds']), Decimal(values['weekly_target']),
-                          values['max_account_runs'], tuple(values['windows']), exit_variants)
+                          values['max_account_runs'], tuple(values['windows']), exit_variants,
+                          tuple(values.get('regime_variants', ())),
+                          MappingProxyType(dict(values['regime'])) if 'regime' in values else None,
+                          tuple(values.get('dynamic_variants', ())),
+                          MappingProxyType({k: MappingProxyType(v) for k, v in values['variants'].items()}) if 'variants' in values else None)
+

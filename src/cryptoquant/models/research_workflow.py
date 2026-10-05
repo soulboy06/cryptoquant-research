@@ -25,6 +25,10 @@ from cryptoquant.models.predictions import build_window_probabilities
 from cryptoquant.models.research_config import load_research_config, RESEARCH_WINDOWS
 from cryptoquant.models.research_data import load_research_features
 from cryptoquant.models.research_models import load_research_models
+from cryptoquant.models.research_integrity import verify_prepared, bound_metadata_file
+from cryptoquant.models.research_gates import (
+    authorize_research, enforce_account_budget, collect_base_candidates, collect_comparison, _verify_training,
+)
 from cryptoquant.models.research_reporting import (
     RESEARCH_THRESHOLDS, RESEARCH_COST_TIERS,
     research_decision_targets, compute_weekly_statistics,
@@ -36,6 +40,13 @@ def execute_research_evaluate(args, root):
     """执行单个受控窗口的模型回测评价。"""
     root = Path(root).resolve()
     cfg = load_research_config(args.research_config, root)
+    exit_variant = getattr(args, 'exit_variant', 'C0')
+    qualification = authorize_research(root, cfg, args.prepared_experiment_id, args.window, args.label_policy,
+                                      selection_id=getattr(args, 'selection_experiment_id', None),
+                                      threshold=args.threshold, cost=args.cost, variant=exit_variant)
+    training_evidence = _verify_training(root, args.training_experiment_id, args.prepared_experiment_id,
+                                         cfg, args.window, args.label_policy, {})
+    budget = enforce_account_budget(root, cfg, (args.label_policy, args.window, float(args.threshold), args.cost, exit_variant))
     out_dir = root / 'artifacts/experiments' / experiment_id(args.experiment_id)
     if out_dir.exists():
         raise ValueError(f"experiment directory already exists: {out_dir}")
@@ -53,6 +64,10 @@ def execute_research_evaluate(args, root):
         label_policy=args.label_policy,
         threshold=float(args.threshold),
         cost=args.cost,
+        exit_variant=exit_variant,
+        **qualification,
+        training_evidence=training_evidence,
+        account_budget=budget,
         research_config_path=str(args.research_config),
         research_config_hash=cfg.research_config_hash,
         execution_config_hash=cfg.execution_config_hash,
@@ -65,13 +80,24 @@ def execute_research_evaluate(args, root):
                  '--window', args.window,
                  '--label-policy', args.label_policy,
                  '--threshold', str(args.threshold),
-                 '--cost', args.cost]
+                 '--cost', args.cost,
+                 '--exit-variant', exit_variant,
+                 '--data-experiment-id', getattr(args, 'data_experiment_id', 'EXP-003')]
     )
+    selection_id = getattr(args, 'selection_experiment_id', None)
+    if selection_id is not None:
+        manifest['command'].extend(['--selection-experiment-id', selection_id])
     write_json(out_dir / 'run_manifest.json', manifest)
     
     try:
-        source_hash = snapshot_source(out_dir, cfg.research_config_path)
+        # Preserve frozen profile even when the actual account attempt fails.
+        (out_dir / 'config.toml').write_bytes(cfg.execution_config_path.read_bytes())
+        (out_dir / 'research_config.toml').write_bytes(cfg.research_config_path.read_bytes())
+        manifest['artifacts'] = {'config.toml': cfg.execution_config_hash,
+                                 'research_config.toml': cfg.research_config_hash}
+        source_hash = snapshot_source(out_dir, cfg.execution_config_path)
         manifest['source_hash'] = source_hash
+        write_json(out_dir / 'run_manifest.json', manifest)
         artifacts_dict = {}
         
         # 1. Determine period
@@ -93,9 +119,11 @@ def execute_research_evaluate(args, root):
         if period == 'development':
             feature_frames, prep_manifest = load_research_features(root, args.prepared_experiment_id, cfg)
         else: # validation (R2025)
+            prep_manifest, _ = verify_prepared(root, args.prepared_experiment_id, cfg)
             prep_dir = root / 'artifacts/experiments' / experiment_id(args.prepared_experiment_id)
             funding_snaps = {
-                s: pd.read_parquet(prep_dir / 'funding_snapshot' / f'{s}.parquet')
+                s: pd.read_parquet(bound_metadata_file(root, prep_dir, prep_manifest,
+                                    prep_manifest['funding_snapshot'][s], 'snapshot_path', 'snapshot_sha256'))
                 for s in cfg.execution_config.symbols
             }
             feature_frames = {
@@ -107,6 +135,7 @@ def execute_research_evaluate(args, root):
         models, train_manifest = load_research_models(
             root, args.training_experiment_id, cfg, expected_window=args.window, expected_policy=args.label_policy
         )
+        manifest['model_verified_source'] = train_manifest.get('verified_source')
         
         # 5. Predict window probabilities
         probs_df = build_window_probabilities(feature_frames, models, cfg.execution_config, period, window=args.window)
@@ -268,6 +297,8 @@ def execute_research_select(args, root):
     """执行 16 组 base 模拟的综合筛选与胜出阈值冻结。"""
     root = Path(root).resolve()
     cfg = load_research_config(args.research_config, root)
+    base_summaries, input_evidence = collect_base_candidates(root, args.base_experiment_ids, cfg,
+                                                           args.prepared_experiment_id)
     out_dir = root / 'artifacts/experiments' / experiment_id(args.experiment_id)
     if out_dir.exists():
         raise ValueError(f"experiment directory already exists: {out_dir}")
@@ -299,16 +330,6 @@ def execute_research_select(args, root):
         artifacts_dict = {}
         
         # 1. Load summaries of the 16 base experiments
-        base_summaries = {}
-        for exp_id in args.base_experiment_ids:
-            exp_folder = root / 'artifacts/experiments' / experiment_id(exp_id)
-            sum_path = exp_folder / 'summary.json'
-            if not sum_path.exists():
-                raise ValueError(f"summary.json missing in {exp_id}")
-            data = json.loads(sum_path.read_text('utf-8'))
-            key = (data['label_policy'], data['window'], float(data['threshold']))
-            base_summaries[key] = data
-            
         # 2. Evaluate candidates per policy
         selection_results = evaluate_research_candidates(base_summaries, cfg)
         
@@ -320,6 +341,7 @@ def execute_research_select(args, root):
             experiment_id=args.experiment_id,
             prepared_experiment_id=args.prepared_experiment_id,
             selection_results=selection_results,
+            input_evidence=input_evidence,
             three_tier_conclusions=three_tier,
             do_not_run_R2025=selection_results['do_not_run_R2025']
         )
@@ -348,6 +370,7 @@ def execute_research_select(args, root):
             'relative_improvement': three_tier['relative_improvement'],
             'target_achieved': three_tier['target_achieved']
         }
+        manifest['input_evidence'] = input_evidence
         write_json(out_dir / 'run_manifest.json', manifest)
         
         print(f"research-select complete: {args.experiment_id}; do_not_run_R2025={selection_results['do_not_run_R2025']}")
@@ -389,6 +412,9 @@ def generate_select_report(data, cfg):
     for policy in [GROSS_POLICY, NET_POLICY]:
         p_res = results.get(policy, {})
         for cand in p_res.get('all_candidates', []):
+            if cand.get('status') == 'failed_candidate':
+                lines.append(f"| `{policy}` | {cand['threshold']} | 失败／未完成 | - | - | 失败／未完成 | - | - | - | 不合格 | {cand['errors']} |")
+                continue
             qual_str = "合格" if cand['qualified'] else "未达标"
             lines.append(
                 f"| `{policy}` | {cand['threshold']} | {cand['w1_net_return']*100:+.2f}% | {cand['w1_max_drawdown']*100:.2f}% | {cand['w1_closed_cycles']} | "
@@ -401,7 +427,7 @@ def generate_select_report(data, cfg):
         "",
         f"- `gross_direction_v1` 选择状态：`{results.get(GROSS_POLICY, {}).get('status')}`；选定/对照阈值：`{results.get(GROSS_POLICY, {}).get('selected_threshold')}`",
         f"- `net_positive_base_v1` 选择状态：`{results.get(NET_POLICY, {}).get('status')}`；选定阈值：`{results.get(NET_POLICY, {}).get('selected_threshold')}`",
-        f"- 后续 R2025 盲测执行资格 (`do_not_run_R2025`)：**{'拒绝执行 (True)' if data['do_not_run_R2025'] else '准予执行 (False)'}**",
+        f"- 后续已查看 R2025 研究比较执行资格 (`do_not_run_R2025`)：**{'拒绝执行 (True)' if data['do_not_run_R2025'] else '准予执行 (False)'}**",
         "",
         "## 4. 三层研究结论评价",
         "",
@@ -429,6 +455,8 @@ def execute_research_compare(args, root):
     """执行第五轮综合研究比较与最终三层结论报告。"""
     root = Path(root).resolve()
     cfg = load_research_config(args.research_config, root)
+    selection_results, eval_summaries, input_evidence = collect_comparison(
+        root, args.evaluated_experiment_ids, args.selection_experiment_id, cfg)
     out_dir = root / 'artifacts/experiments' / experiment_id(args.experiment_id)
     if out_dir.exists():
         raise ValueError(f"experiment directory already exists: {out_dir}")
@@ -460,27 +488,12 @@ def execute_research_compare(args, root):
         artifacts_dict = {}
         
         # 1. Load selection summary
-        sel_folder = root / 'artifacts/experiments' / experiment_id(args.selection_experiment_id)
-        sel_summary_path = sel_folder / 'selection_summary.json'
-        if not sel_summary_path.exists():
-            raise ValueError(f"selection_summary.json missing in {args.selection_experiment_id}")
-        sel_data = json.loads(sel_summary_path.read_text('utf-8'))
-        selection_results = sel_data['selection_results']
         
         # 2. Load all evaluated summaries
-        eval_summaries = {}
         stress_results = {}
         r2025_results = {}
         
-        for exp_id in args.evaluated_experiment_ids:
-            exp_folder = root / 'artifacts/experiments' / experiment_id(exp_id)
-            sum_path = exp_folder / 'summary.json'
-            if not sum_path.exists():
-                continue
-            data = json.loads(sum_path.read_text('utf-8'))
-            key = (data['label_policy'], data['window'], float(data['threshold']), data['cost'])
-            eval_summaries[key] = data
-            
+        for data in eval_summaries.values():
             # Index stress results
             if data['cost'] in {'higher_execution', 'strict'}:
                 stress_results[(data['label_policy'], data['window'], data['cost'])] = data
@@ -498,7 +511,8 @@ def execute_research_compare(args, root):
             selection_experiment_id=args.selection_experiment_id,
             selection_results=selection_results,
             evaluated_summaries={f"{k[0]}_{k[1]}_{k[2]}_{k[3]}": v for k, v in eval_summaries.items()},
-            final_conclusions=final_conclusions
+            final_conclusions=final_conclusions,
+            input_evidence=input_evidence
         )
         write_json(out_dir / 'comparison_summary.json', comparison_data)
         artifacts_dict['comparison_summary.json'] = sha_file(out_dir / 'comparison_summary.json')
@@ -518,6 +532,7 @@ def execute_research_compare(args, root):
         manifest['ended_at_utc'] = datetime.now(timezone.utc).isoformat()
         manifest['artifacts'] = artifacts_dict
         manifest['final_conclusions'] = final_conclusions
+        manifest['input_evidence'] = input_evidence
         write_json(out_dir / 'run_manifest.json', manifest)
         
         print(f"research-compare complete: {args.experiment_id}; target_achieved={final_conclusions['target_achieved']}")
@@ -547,9 +562,10 @@ def generate_compare_report(data, cfg):
         "## 1. 研究方案与实验概述",
         "",
         "- 本轮研究核心假说：在特征计算阶段引入摩擦成本感知标签（`net_positive_base_v1`），过滤无法覆盖交易摩擦的随机微利噪声，能否在独立多时间窗口中稳定提高胜率、降低交易频率并实现长期复合周收益。",
-        "- 对比策略：`gross_direction_v1`（上涨方向标签，对照阈值 T=0.64） vs `net_positive_base_v1`（净盈利标签，胜出冻结阈值 T=0.50）。",
-        "- 覆盖窗口：`W1`（2023 全年）、`W2`（2024 全年）及 `R2025`（2025 全年盲测，严格依据滚动选择合格后方准予运行）。",
-        "- 覆盖成本档位：`base`（基准 0.30% 单边双程摩擦）、`higher_execution`（不利偏移翻倍 0.40%）、`strict`（严苛双边手续费翻倍 0.60%）。",
+        f"- `{GROSS_POLICY}`：T={sel_res[GROSS_POLICY]['selected_threshold']}；status={sel_res[GROSS_POLICY]['status']}；is_reference_only={sel_res[GROSS_POLICY]['is_reference_only']}。",
+        f"- `{NET_POLICY}`：T={sel_res[NET_POLICY]['selected_threshold']}；status={sel_res[NET_POLICY]['status']}；is_reference_only={sel_res[NET_POLICY]['is_reference_only']}。",
+        "- 覆盖窗口：`W1`（2023 全年）、`W2`（2024 全年）及 `R2025`（已查看2025研究比较，依据冻结选择执行）。",
+        "- 覆盖成本档位：`base`（理论往返摩擦0.30%）、`higher_execution`（理论往返摩擦0.40%）、`strict`（理论往返摩擦0.60%）。",
         "",
         "## 2. 胜出候选跨窗口与多成本档位对账表",
         "",
@@ -586,11 +602,11 @@ def generate_compare_report(data, cfg):
         lines.append(f"- {r}")
     lines.extend([
         "",
-        "## 4. 深度洞察与机制分析",
+        "## 4. 输入证据与解释限制",
         "",
-        "1. **标签过滤噪声的决定性作用**：旧 `gross_direction_v1` 标签在两受控窗口中完全未能选出合格候选（低阈值回撤超标 28%~46%，高阈值交易笔数只有 5 笔未达 30 笔）；而新 `net_positive_base_v1` 成功过滤掉 1000 余笔微利噪声后，在 T=0.50 处两窗均同时达标，并在 2024 实现 +32.40% 显著正收益，回撤控制在 5.99%~7.07%。",
-        "2. **距离用户目标的客观差距**：虽然新标签显著改善了低回撤下的收益表现（两窗合成周几何收益达到 +0.2973%/周），但与用户设定的 +1.500%/周（折合年化约 +116.89%）仍存在数倍的客观差距。在现货无杠杆且单币 30% 仓位限制下，难以仅通过优化标签达到每周 1.5% 的超高复利。",
-        "3. **摩擦脆弱性**：在严苛成本档位（strict）下，高交易频率策略依然会遭遇手续费磨损，进一步验证了降低交易摩擦与控制换手率的核心重要性。",
+        f"- 完整比较输入：{len(summaries)}个选定候选账户；收益与成本结论由上表实际摘要计算。",
+        f"- 净标签选择状态：{data['selection_results'][NET_POLICY]['status']}；阈值：{data['selection_results'][NET_POLICY]['selected_threshold']}。",
+        "- 年份与政策差异不直接证明亏损原因或统计显著性；需要独立机制检查与后续样本证据。",
         "",
         "## 5. 合规与边界守则声明",
         "",

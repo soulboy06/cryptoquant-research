@@ -1,0 +1,353 @@
+{
+  "experiment_id": "EXP-128",
+  "description": "第七轮市场状态过滤拦截代价与机会损失专项诊断",
+  "source_shas": {
+    "states_122": "ed429139c0c8e017ea67f3d3c3cf1d606149e80daacdc471cbf2d128534dc67e",
+    "orders_123": "34aa4826b06036e765ff84539dbd01dc57ec4eaecd66e4bd69a85e202516f6f6",
+    "fills_123": "cf16c9cc2837327036a5bec7d4fb4b1790d6c5f17789568729bcdef826e9d6d7",
+    "equity_123": "2150ef5771f2f98614fd016bb64dd5314b3779df7465ae007914589569056fce",
+    "summary_123": "0c377da1e85d76bd9b863370ca27294a77633c2b4b3df922ac5c24e6ded9586e",
+    "orders_124": "64dbb006f3f6c6b7eb245b4d5d6a9d110172f034965740e7a8da6ccb1a354739",
+    "fills_124": "f350c935c9af18575d411d820902babe9d8096689e5d36283333627890e6e05e",
+    "equity_124": "f9f93908641e57b5cf731e5c755b61190d8046b4d2a29472b530de5d6c36490b",
+    "summary_124": "18a9d875d82f0e40ba9e4413ba2a1cbe9eda61c7ad00f5530a4f82a62cf9c8c8",
+    "orders_125": "b7dd875d58e1bf02ffadda67d01a275a950b39db56edd859cc28226f556c0c72",
+    "fills_125": "9472b945253545a4ea6b7a5c07cf8359139cd9526928ab6698f13447fe658169",
+    "equity_125": "36cac0ef25f41dddd0e6be0912fe55d71d8c376a91f3e555b08037651d1646c6",
+    "summary_125": "25d9695d71a216cc4e041e9063e96c53d797fa5c5e0ec22984d390f4f4baedc7",
+    "fills_108": "b1bc569734e15f442f61bb8bfa44abae62f4fa2205a60e9a2758eb93f816bd05",
+    "summary_108": "f6d027d82ffd3a9b573fa878316491f0afb4a8c92ea6afcb1261e62de3ae48c4",
+    "fills_109": "ed4bc09b38d8543f91a00de914f82c309c3ca1771ee231fcf460e25d392fb551",
+    "summary_109": "312dadba960eb8b642c65556659145ba6dcc6be91f6960e7da93624a98f25219",
+    "fills_110": "171c7c8515b776c4104172a10bce283ebc7c890a8d5b74a1ba5c98b8fb22b448",
+    "summary_110": "b3072853a7904004b841d18350894fb13d7ce7f193d26313865461926dec4f5c",
+    "selection_126": "a0c46194640446496e227a711bcb73bda206696dec8b1d8c0c98e4f84aa455bc",
+    "comparison_127": "46abbead67a1061e8077692fa690b0d58e32d73966726ff1be15fe736645d6ba"
+  },
+  "blocked_orders": {
+    "W1": {
+      "total_blocked": 23,
+      "by_symbol": {
+        "SOLUSDT": 17,
+        "ETHUSDT": 6
+      },
+      "only_slope_failed": 15,
+      "only_adx_failed": 5,
+      "both_failed": 3,
+      "prob_mean": 0.5188538991924395,
+      "prob_min": 0.5011288311546753,
+      "prob_max": 0.5674762057647917,
+      "prob_ge_055": 2,
+      "prob_ge_060": 0,
+      "prob_ge_065": 0
+    },
+    "W2": {
+      "total_blocked": 70,
+      "by_symbol": {
+        "SOLUSDT": 28,
+        "BTCUSDT": 21,
+        "ETHUSDT": 21
+      },
+      "only_slope_failed": 61,
+      "only_adx_failed": 6,
+      "both_failed": 3,
+      "prob_mean": 0.552016658073089,
+      "prob_min": 0.5003289397630633,
+      "prob_max": 0.7279431789246339,
+      "prob_ge_055": 22,
+      "prob_ge_060": 10,
+      "prob_ge_065": 6
+    },
+    "R2025": {
+      "total_blocked": 110,
+      "by_symbol": {
+        "ETHUSDT": 65,
+        "SOLUSDT": 31,
+        "BTCUSDT": 14
+      },
+      "only_slope_failed": 91,
+      "only_adx_failed": 5,
+      "both_failed": 14,
+      "prob_mean": 0.5607281412157572,
+      "prob_min": 0.5000735516931577,
+      "prob_max": 0.8289241203697181,
+      "prob_ge_055": 47,
+      "prob_ge_060": 21,
+      "prob_ge_065": 13
+    }
+  },
+  "w2_2024_missed_profit": {
+    "total_cycles_r0": 68,
+    "executed_cycles_r1": 17,
+    "blocked_cycles_r1": 51,
+    "total_pnl_r0_usdt": 23.28539462404482,
+    "executed_pnl_r1_usdt": 5.437528544192389,
+    "missed_pnl_usdt": 17.84786607985243,
+    "missed_by_symbol": {
+      "BTCUSDT": {
+        "count": 16,
+        "missed_pnl_usdt": 2.3035948898119614,
+        "avg_pnl_usdt": 0.14397468061324759,
+        "win_count": 10,
+        "loss_count": 6
+      },
+      "ETHUSDT": {
+        "count": 15,
+        "missed_pnl_usdt": 0.554516931745475,
+        "avg_pnl_usdt": 0.03696779544969833,
+        "win_count": 8,
+        "loss_count": 7
+      },
+      "SOLUSDT": {
+        "count": 20,
+        "missed_pnl_usdt": 14.989754258294994,
+        "avg_pnl_usdt": 0.7494877129147497,
+        "win_count": 13,
+        "loss_count": 7
+      }
+    },
+    "top10_profitable_cycles_r0": [
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-08-05 12:00:00+00:00",
+        "exit_time": "2024-08-05 16:00:00+00:00",
+        "buy_price": 116.027985,
+        "sell_price": 130.384775,
+        "notional": 33.18400371,
+        "fee_usdt": 0.07047404936,
+        "pnl": 4.035567890640003,
+        "pnl_pct": 0.12161184424602402,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      },
+      {
+        "symbol": "ETHUSDT",
+        "entry_time": "2024-12-20 12:00:00+00:00",
+        "exit_time": "2024-12-20 16:00:00+00:00",
+        "buy_price": 3106.23234,
+        "sell_price": 3372.93269,
+        "notional": 35.411048676,
+        "fee_usdt": 0.07386248134199999,
+        "pnl": 2.9665215086579977,
+        "pnl_pct": 0.08377389598937722,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-12-20 12:00:00+00:00",
+        "exit_time": "2024-12-20 16:00:00+00:00",
+        "buy_price": 176.10801,
+        "sell_price": 189.795055,
+        "notional": 35.74992603,
+        "fee_usdt": 0.074278322195,
+        "pnl": 2.704191812805,
+        "pnl_pct": 0.07564188553944821,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-03-06 04:00:00+00:00",
+        "exit_time": "2024-03-06 08:00:00+00:00",
+        "buy_price": 122.431185,
+        "sell_price": 133.1334,
+        "notional": 30.11807151,
+        "fee_usdt": 0.06286888791,
+        "pnl": 2.5698760020900018,
+        "pnl_pct": 0.08532671161354852,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": true
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-04-13 20:00:00+00:00",
+        "exit_time": "2024-04-14 08:00:00+00:00",
+        "buy_price": 133.796865,
+        "sell_price": 143.977975,
+        "notional": 32.512638195,
+        "fee_usdt": 0.06749928612,
+        "pnl": 2.406510443879995,
+        "pnl_pct": 0.07401769211857077,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-08-05 20:00:00+00:00",
+        "exit_time": "2024-08-06 04:00:00+00:00",
+        "buy_price": 128.82438,
+        "sell_price": 138.560685,
+        "notional": 34.52493384,
+        "fee_usdt": 0.071520636735,
+        "pnl": 2.399248418265003,
+        "pnl_pct": 0.06949320828198878,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-03-15 12:00:00+00:00",
+        "exit_time": "2024-03-15 16:00:00+00:00",
+        "buy_price": 170.085,
+        "sell_price": 181.759075,
+        "notional": 30.95547,
+        "fee_usdt": 0.06403562165,
+        "pnl": 2.0606460283500034,
+        "pnl_pct": 0.06656807434518047,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      },
+      {
+        "symbol": "ETHUSDT",
+        "entry_time": "2024-05-20 20:00:00+00:00",
+        "exit_time": "2024-05-21 00:00:00+00:00",
+        "buy_price": 3440.57943,
+        "sell_price": 3659.959105,
+        "notional": 33.029562528,
+        "fee_usdt": 0.068165169936,
+        "pnl": 2.037879710063997,
+        "pnl_pct": 0.06169865884043831,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": true
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2024-03-01 00:00:00+00:00",
+        "exit_time": "2024-03-01 04:00:00+00:00",
+        "buy_price": 125.74284,
+        "sell_price": 133.883025,
+        "notional": 29.5495674,
+        "fee_usdt": 0.061012078275000006,
+        "pnl": 1.851931396725,
+        "pnl_pct": 0.06267203074942478,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": true
+      },
+      {
+        "symbol": "BTCUSDT",
+        "entry_time": "2024-12-20 12:00:00+00:00",
+        "exit_time": "2024-12-20 16:00:00+00:00",
+        "buy_price": 92770.351995,
+        "sell_price": 96943.134185,
+        "notional": 34.32503023815,
+        "fee_usdt": 0.0701939898866,
+        "pnl": 1.473735420413405,
+        "pnl_pct": 0.04293471586735693,
+        "exit_reason": "strategy_exit",
+        "executed_in_124": false
+      }
+    ]
+  },
+  "r2025_residual_loss": {
+    "total_cycles_r0": 134,
+    "blocked_cycles_r1": 85,
+    "saved_loss_usdt": -13.536429854436744,
+    "saved_by_symbol": {
+      "BTCUSDT": {
+        "count": 10,
+        "saved_loss_usdt": -0.913159755551245,
+        "win_count": 5,
+        "loss_count": 5
+      },
+      "ETHUSDT": {
+        "count": 47,
+        "saved_loss_usdt": -10.373026255000497,
+        "win_count": 19,
+        "loss_count": 28
+      },
+      "SOLUSDT": {
+        "count": 28,
+        "saved_loss_usdt": -2.250243843885002,
+        "win_count": 14,
+        "loss_count": 14
+      }
+    },
+    "actual_cycles_r1": 52,
+    "actual_pnl_r1_usdt": -8.813972052017409,
+    "actual_wins": 27,
+    "actual_losses": 25,
+    "actual_by_symbol": {
+      "BTCUSDT": {
+        "count": 10,
+        "realized_pnl_usdt": -1.6413292362684047,
+        "win_count": 6,
+        "loss_count": 4
+      },
+      "ETHUSDT": {
+        "count": 28,
+        "realized_pnl_usdt": -0.7272920959140095,
+        "win_count": 14,
+        "loss_count": 14
+      },
+      "SOLUSDT": {
+        "count": 14,
+        "realized_pnl_usdt": -6.445350719834995,
+        "win_count": 7,
+        "loss_count": 7
+      }
+    },
+    "top5_worst_losses_r1": [
+      {
+        "symbol": "ETHUSDT",
+        "entry_time": "2025-03-03 00:00:00+00:00",
+        "exit_time": "2025-03-03 15:00:00+00:00",
+        "buy_price": 2519.37906,
+        "sell_price": 2273.68259,
+        "notional": 29.224797096,
+        "fee_usdt": 0.05559951514,
+        "pnl": -2.905678567139997,
+        "pnl_pct": -0.09942510661734236,
+        "exit_reason": "stop_loss"
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2025-03-03 04:00:00+00:00",
+        "exit_time": "2025-03-03 15:00:00+00:00",
+        "buy_price": 169.974945,
+        "sell_price": 155.06243,
+        "notional": 29.065715595,
+        "fee_usdt": 0.055581391125000004,
+        "pnl": -2.605621456125,
+        "pnl_pct": -0.0896458732491427,
+        "exit_reason": "stop_loss"
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2025-01-20 16:00:00+00:00",
+        "exit_time": "2025-01-21 06:00:00+00:00",
+        "buy_price": 254.197035,
+        "sell_price": 232.34377,
+        "notional": 29.232659025,
+        "fee_usdt": 0.055952192575000004,
+        "pnl": -2.569077667574998,
+        "pnl_pct": -0.08788381738992346,
+        "exit_reason": "stop_loss"
+      },
+      {
+        "symbol": "SOLUSDT",
+        "entry_time": "2025-01-20 00:00:00+00:00",
+        "exit_time": "2025-01-20 03:00:00+00:00",
+        "buy_price": 252.5262,
+        "sell_price": 231.90399,
+        "notional": 29.7980916,
+        "fee_usdt": 0.05716276242,
+        "pnl": -2.490583542419998,
+        "pnl_pct": -0.08358198155280515,
+        "exit_reason": "stop_loss"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "entry_time": "2025-03-03 16:00:00+00:00",
+        "exit_time": "2025-03-04 14:00:00+00:00",
+        "buy_price": 90080.39769,
+        "sell_price": 82762.598,
+        "notional": 27.024119307,
+        "fee_usdt": 0.051852898707,
+        "pnl": -2.2471928057070016,
+        "pnl_pct": -0.08315508010375443,
+        "exit_reason": "stop_loss"
+      }
+    ]
+  }
+}

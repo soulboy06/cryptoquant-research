@@ -57,11 +57,41 @@ def validate_frames(frames, config, period='development', *, window=None):
     return grid, records
 
 
+def _validate_buy_permission(permission, strategy, grid, start, end):
+    """唯一完整的共同UTC许可；只消费交易字段，不能携带标签或未来信息。"""
+    if permission is None:
+        return None
+    columns = ['decision_time', 'available_time', 'state_valid', 'allow_buy']
+    if strategy != 'logistic_regression':
+        raise ValueError('buy permission requires model strategy')
+    if not isinstance(permission, pd.DataFrame) or list(permission.columns) != columns:
+        raise ValueError('invalid buy permission columns; no labels allowed')
+    if permission.empty:
+        raise ValueError('empty buy permission cannot disable filtering; use None')
+    for column in ['decision_time', 'available_time']:
+        if str(getattr(permission[column].dtype, 'tz', None)) != 'UTC' or permission[column].isna().any():
+            raise ValueError('buy permission times must be nonmissing UTC datetime')
+    times = pd.DatetimeIndex(permission.decision_time)
+    expected = grid[(grid >= start) & (grid < end) & (grid.hour % 4 == 0)]
+    if not times.is_unique or not times.equals(expected):
+        raise ValueError('buy permission requires complete unique four-hour decision grid')
+    if (permission.available_time > permission.decision_time).any():
+        raise ValueError('buy permission exposes future availability')
+    for column in ['state_valid', 'allow_buy']:
+        if not pd.api.types.is_bool_dtype(permission[column].dtype) or permission[column].isna().any():
+            raise ValueError('buy permission flags must be nonmissing booleans')
+    if (~permission.state_valid & permission.allow_buy).any():
+        raise ValueError('invalid buy permission state cannot allow buying')
+    return dict(zip(times, permission.allow_buy))
+
+
 def run_backtest(frames, rules, config, strategy, cost_name, period='development', decision_targets=None, *, window=None,
-                 exit_variant=None, max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None):
+                 exit_variant=None, max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None,
+                 buy_permission=None):
     """独立账户评价；window模型信号须来自原连续历史特征。
 
     ema_trend在此循环重算EMA，744h视图会改变连续历史，故拒绝window。
+    buy_permission仅供模型策略使用；None关闭，完整许可表只拦BUY，不改变目标或SELL。
     """
     if strategy not in {'buy_hold', 'ema_trend', 'logistic_regression'} or cost_name not in config.costs:
         raise ValueError('unsupported baseline or cost')
@@ -71,6 +101,7 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
     if window is not None and strategy == 'ema_trend':
         raise ValueError('ema_trend window requires continuous EMA history; unsupported')
     grid, rows = validate_frames(frames, config, period, window=window)
+    permitted = _validate_buy_permission(buy_permission, strategy, grid, start, end)
     external = {}
     if strategy == 'logistic_regression':
         columns = ['symbol', 'decision_time', 'probability', 'target_weight']
@@ -86,9 +117,10 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
             probability, weight = row['probability'], row['target_weight']
             if not pd.isna(probability) and (not math.isfinite(probability) or not 0 <= probability <= 1):
                 raise ValueError('invalid decision probability')
+            allowed_weights = {ZERO, amount('0.10'), amount('0.15'), config.weight_per_symbol}
             if pd.isna(weight):
                 row['target_weight'] = None
-            elif amount(weight) not in {ZERO, config.weight_per_symbol} or pd.isna(probability):
+            elif amount(weight) not in allowed_weights or pd.isna(probability):
                 raise ValueError('invalid decision target weight')
             external[key] = row
         expected = {(t, s) for t in grid if start <= t < end and t.hour % 4 == 0 for s in config.symbols}
@@ -226,6 +258,9 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
                 if intent.side == 'BUY' and not risk.can_buy(intent.symbol, time):
                     orders.append(dict(time=time, symbol=intent.symbol, side='BUY', requested_quantity=intent.quantity,
                                        accepted=False, reason='risk_blocked', intent_reason=intent.reason, quantity=ZERO, price=ZERO))
+                elif intent.side == 'BUY' and permitted is not None and not permitted[time]:
+                    orders.append(dict(time=time, symbol=intent.symbol, side='BUY', requested_quantity=intent.quantity,
+                                       accepted=False, reason='regime_blocked', intent_reason=intent.reason, quantity=ZERO, price=ZERO))
                 else:
                     execute(intent, time, quotes, full_exit=intent.reason == 'strategy_exit')
         snapshot(time, 'open', quotes)

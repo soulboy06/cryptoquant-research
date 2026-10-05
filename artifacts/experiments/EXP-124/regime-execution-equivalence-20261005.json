@@ -1,0 +1,35 @@
+{
+  "scope": "synthetic 16-hour C2, three costs; no historical account replay",
+  "current_log": ".cache/regime-execution-equivalence-emptyfix.log",
+  "source_sha256": {
+    ".cache\\engine-before-regime.py": "9923d5cffa0909b771053ebd6764a598847af13961df7ce98acfcafe78835864",
+    "src\\cryptoquant\\baselines\\engine.py": "24667fc455f77c2b868dfb60dddd531d178fe2605a25f8e9a846933b8371747e",
+    "tests\\test_regime_execution.py": "60eca4be18db50dae6dbeac7467d7298ad4e6a8c84534b3de43b6dbad05dcf33"
+  },
+  "checks": [
+    {
+      "cost": "base",
+      "fills": 8,
+      "orders": 15,
+      "breakeven_triggers": 1,
+      "none_equals_old": true,
+      "all_true_equals_none": true
+    },
+    {
+      "cost": "higher_execution",
+      "fills": 8,
+      "orders": 15,
+      "breakeven_triggers": 1,
+      "none_equals_old": true,
+      "all_true_equals_none": true
+    },
+    {
+      "cost": "strict",
+      "fills": 8,
+      "orders": 15,
+      "breakeven_triggers": 1,
+      "none_equals_old": true,
+      "all_true_equals_none": true
+    }
+  ]
+}

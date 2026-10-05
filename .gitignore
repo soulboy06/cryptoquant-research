@@ -9,7 +9,7 @@ __pycache__/
 build/
 
 # Raw and processed historical market data (reproducible via fetch commands)
-data/
+/data/
 
 # Intermediate bulky experiment outputs (checkpoints, trade event logs, duplicate source snapshots)
 artifacts/experiments/**/*.csv

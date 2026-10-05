@@ -1,0 +1,38 @@
+execution_config = "second_experiment.toml"
+label_policies = ["net_positive_base_v1"]
+C = "0.1"
+thresholds = ["0.50", "0.60"]
+weekly_target = "0.015"
+max_account_runs = 15
+windows = ["W1", "W2", "R2025"]
+exit_variants = ["C2"]
+dynamic_variants = ["R2", "R3", "R4"]
+
+[regime]
+symbol = "BTCUSDT"
+adx_period = 14
+adx_min = 20
+ema_period = 72
+slope_hours = 24
+history_hours = 744
+
+[variants.R2]
+name = "dynamic_threshold"
+favorable_threshold = "0.50"
+favorable_weight = "0.30"
+weak_threshold = "0.60"
+weak_weight = "0.30"
+
+[variants.R3]
+name = "dynamic_sizing"
+favorable_threshold = "0.50"
+favorable_weight = "0.30"
+weak_threshold = "0.50"
+weak_weight = "0.10"
+
+[variants.R4]
+name = "dual_synergy"
+favorable_threshold = "0.50"
+favorable_weight = "0.30"
+weak_threshold = "0.60"
+weak_weight = "0.15"

@@ -1,0 +1,21 @@
+{
+  "scope": "old frozen C2 source manifests versus pre-regime execution source only",
+  "checked_accounts": [
+    "EXP-108",
+    "EXP-109",
+    "EXP-110",
+    "EXP-115",
+    "EXP-116",
+    "EXP-117",
+    "EXP-118",
+    "EXP-119",
+    "EXP-120"
+  ],
+  "current_sha256": {
+    "src/cryptoquant/baselines/engine.py": "9923d5cffa0909b771053ebd6764a598847af13961df7ce98acfcafe78835864",
+    "src/cryptoquant/trading/ledger.py": "284d4a7e3ef6cda6479bc94d5916ecce25c0556c945000f09fe56f7f0ec876bc",
+    "src/cryptoquant/trading/orders.py": "aed7f4a1705110f29197abe8026352ecdc05c2a783d3c2f6e8638e4996cbbc68",
+    "src/cryptoquant/trading/risk.py": "0509c59fc8241c0cb5f43e492ad5a8908b9358e983cd50e88eebcabe36b1f661"
+  },
+  "preserved_engine": ".cache/engine-before-regime.py"
+}

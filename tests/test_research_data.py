@@ -70,7 +70,13 @@ def test_research_prepare_pipeline_integration(tmp_path, monkeypatch):
 
 
 def test_research_prepare_cli_and_duplicate_rejection(tmp_path, monkeypatch):
-    root = Path.cwd()
+    import shutil
+    project = Path(__file__).resolve().parents[1]
+    root = tmp_path
+    (root / 'configs').mkdir()
+    for filename in ['fifth_experiment.toml', 'second_experiment.toml']:
+        shutil.copyfile(project / 'configs' / filename, root / 'configs' / filename)
+    monkeypatch.chdir(root)
     exp_id = 'EXP-999'
     args = [
         'research-prepare',
@@ -81,17 +87,9 @@ def test_research_prepare_cli_and_duplicate_rejection(tmp_path, monkeypatch):
     ]
     
     target_dir = root / 'artifacts/experiments' / exp_id
-    if target_dir.exists():
-        import shutil
-        shutil.rmtree(target_dir)
-    
     target_dir.mkdir(parents=True)
-    try:
-        # Should return 1 due to refusal to overwrite
-        assert main(args) == 1
-    finally:
-        if target_dir.exists():
-            target_dir.rmdir()
+    # 只碰pytest临时目录；绝不删除项目内已存在的EXP-999。
+    assert main(args) == 1
 
 
 def test_research_sources_sha_mismatch_rejection(tmp_path, monkeypatch):

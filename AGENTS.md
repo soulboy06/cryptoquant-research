@@ -36,6 +36,12 @@
 | [第五轮成本感知标签实施计划](docs/superpowers/plans/2026-10-04-cost-aware-label-implementation.md) | 标签／配置、受控窗口、准备、三模型fit、选择／周统计及实验入口六项任务；复选框只标实际执行，不能据计划认为新CLI已存在 |
 | [第六轮出场与持仓约束方案](docs/superpowers/specs/2026-10-04-exit-rules-and-holding-constraint-design.md) | 第六轮改进方案：时限上限与动态保本止损消融设计，严格定义价格基准与摩擦，预先冻结评价标准 |
 | [第六轮出场与持仓约束实施计划](docs/superpowers/plans/2026-10-04-exit-rules-and-holding-constraint-implementation.md) | 风控扩展、四组析因回测（C0~C3）、压力测试与综合对比的五项任务清单 |
+| [研究来源与入口验收计划](docs/superpowers/plans/2026-10-05-research-integrity-acceptance.md) | 样本／模型绑定、研究选择与有限预算、有限出场检查；实际完成见STATUS |
+| [第七轮市场状态过滤方案](docs/superpowers/specs/2026-10-05-market-regime-filter-design.md) | BTC闭合状态限制买单，R0／R1精简对照，已有持仓与9个新账户预算 |
+| [第七轮市场状态过滤计划](docs/superpowers/plans/2026-10-05-market-regime-filter-implementation.md) | 状态准备、买入许可、有限研究及交接；编制不表示实施／回测完成 |
+| [第八轮动态阈值与自适应仓位方案](docs/superpowers/specs/2026-10-05-dynamic-threshold-and-position-scaling-design.md) | 第八轮改进方案：动态提阈值与自适应降仓变体（R2/R3/R4），兼顾牛市动量与震荡防守 |
+| [第八轮动态阈值与自适应仓位实施计划](docs/superpowers/plans/2026-10-05-dynamic-threshold-and-position-scaling-implementation.md) | 动态目标生成、交易引擎多档仓位支持、Base回测与条件压力测试任务清单 |
+| [第八轮全景对比报告](artifacts/experiments/EXP-140/report.md) | R2/R3/R4动态响应全量9账户回测、基础筛选失格与三层结论最终评定 |
 
 ### 开始工作前
 
@@ -146,6 +152,8 @@
 
 ## 开发与沟通方式
 
+- 用户于2026-10-05确定后续改进方向：优先研究市场状态过滤，逐步验证“何时不交易”和按状态调节阈值／仓位；后续按结果再研究波动率缩放、币种相对强弱与组合选择，最后考虑特征／标签改进。优先用简单规则、少量候选及逐项对照，不默认升级复杂模型、扩大币种或大规模搜参。下一轮以现有C2研究配置为对照，保持模型／12项特征／既有出场参数和风险上限，通过状态过滤及少量响应变体做比较；具体指标、状态边界、候选参数、评价标准和预算先写入方案并冻结，不把讨论中的例子当成已验证最优值。现有校验与验收缺口先补齐，具体行动看STATUS。
+- 上述方向是待检验假说，不能认定震荡入场已经是唯一亏损原因，也不能把交易次数减少当作盈利改善。评价扣费净收益、回撤、交易与费用及跨时间表现；预测目标若为净收益，不重复扣同一成本。保留失败，2025仍是已查看研究比较，2026继续封存；100 USDT共用本金、固定50 USDT底线及现有仓位／杠杆／实盘边界不变。
 - 优先使用简单、可复现、可检查的 Python 实现；技术选型随任务需要决定，不为了使用 AI 或显卡增加复杂度。
 - 本机硬件：Ryzen 9 7945HX、约 32 GB 内存、RTX 4060 Laptop GPU 8 GB 显存。先控制数据规模，按实际瓶颈选择优化方式。
 - 将配置和逻辑分开，资金、费用、交易对、时间范围和风险参数应清楚可见。

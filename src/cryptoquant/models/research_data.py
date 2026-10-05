@@ -6,6 +6,7 @@
 """
 
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 import json
 from pathlib import Path
 
@@ -19,11 +20,12 @@ from cryptoquant.data.workflow import environment, snapshot_source
 from cryptoquant.models.features import build_features, ALL_FEATURE_NAMES
 from cryptoquant.models.samples import METADATA
 from cryptoquant.models.labels import (
-    label_values, GROSS_POLICY, NET_POLICY, label_metadata, validate_label_metadata
+    label_values, GROSS_POLICY, NET_POLICY, LABEL_POLICIES, label_metadata, validate_label_metadata
 )
 from cryptoquant.models.research_config import (
     load_research_config, ResearchConfig, RESEARCH_WINDOWS
 )
+from cryptoquant.models.research_integrity import verify_prepared, bound_metadata_file
 
 FUNDING_CUTOFF_UTC = pd.Timestamp('2025-12-31 20:00:00+00:00')
 
@@ -81,25 +83,25 @@ def verify_sources(root, data_id, sample_id, research_cfg):
 
 
 def create_funding_snapshots(root, exp_dir, research_cfg, exp021_manifest):
-    """读取已校验资金费率并截断到 2025-12-31 20:00:00 UTC，保存不可变副本。"""
+    """复用EXP-063已截断副本；后续准备不得再次打开含2026的完整归档。"""
     root = Path(root).resolve()
     snapshot_dir = exp_dir / 'funding_snapshot'
     snapshot_dir.mkdir(parents=True, exist_ok=True)
     snapshots = {}
     snapshot_meta = {}
+    prepared, _ = verify_prepared(root, 'EXP-063', research_cfg)
+    prepared_dir = root / 'artifacts/experiments/EXP-063'
     
     for symbol in research_cfg.execution_config.symbols:
         src_info = exp021_manifest.get('funding_data', {}).get(symbol)
         if not src_info:
             raise ValueError(f'missing funding info for {symbol} in source manifest')
-        src_path = Path(src_info['path'])
-        if not src_path.is_absolute():
-            src_path = root / src_path
-        if not src_path.exists():
-            raise ValueError(f'funding source file {src_path} not found')
+        existing = prepared['funding_snapshot'][symbol]
+        if existing['source_sha256'] != src_info['sha256']:
+            raise ValueError(f'funding archive provenance mismatch for {symbol}')
+        src_path = bound_metadata_file(root, prepared_dir, prepared, existing,
+                                       'snapshot_path', 'snapshot_sha256')
         src_sha = sha_file(src_path)
-        if src_sha != src_info['sha256']:
-            raise ValueError(f'funding source SHA mismatch for {symbol}')
         
         full_df = pd.read_parquet(src_path)
         if (full_df.symbol != symbol).any():
@@ -110,7 +112,7 @@ def create_funding_snapshots(root, exp_dir, research_cfg, exp021_manifest):
         if not times.is_unique or not times.is_monotonic_increasing:
             raise ValueError(f'non-unique or non-monotonic funding times for {symbol}')
         
-        # Read after archive, truncated to 2025-12-31 20:00:00 UTC
+        # This input is already sealed at the research cutoff.
         snap_df = full_df[full_df.funding_time <= FUNDING_CUTOFF_UTC].copy().reset_index(drop=True)
         if snap_df.empty or snap_df.funding_time.max() > FUNDING_CUTOFF_UTC:
             raise ValueError(f'funding snapshot cutoff violation for {symbol}')
@@ -123,12 +125,14 @@ def create_funding_snapshots(root, exp_dir, research_cfg, exp021_manifest):
         snapshot_meta[symbol] = dict(
             source_path=str(src_path),
             source_sha256=src_sha,
+            source_experiment_id='EXP-063',
+            upstream_archive_sha256=existing['source_sha256'],
             snapshot_path=str(target_path),
             snapshot_sha256=snap_sha,
             rows=len(snap_df),
             min_funding_time_utc=snap_df.funding_time.min().isoformat(),
             max_funding_time_utc=snap_df.funding_time.max().isoformat(),
-            note='read_archive_and_truncated_at_2025_12_31_20_00_utc'
+            note='reuse_verified_EXP_063_truncated_snapshot'
         )
     return snapshots, snapshot_meta
 
@@ -176,7 +180,9 @@ def generate_policy_samples(frames, exp021_samples, research_cfg, exp_dir):
     policy_dfs = {}
     policy_meta = {}
     
-    for policy in research_cfg.label_policies:
+    # Prepared libraries always carry both targets; active training/evaluation
+    # policies remain restricted by the requesting research configuration.
+    for policy in LABEL_POLICIES:
         p_dir = samples_root / policy
         p_dir.mkdir(parents=True, exist_ok=True)
         policy_dfs[policy] = {}
@@ -309,7 +315,7 @@ def execute_research_prepare(args, root):
         for s in cfg.execution_config.symbols:
             artifacts_dict[f'funding_snapshot/{s}.parquet'] = funding_meta[s]['snapshot_sha256']
             artifacts_dict[f'features/{s}.parquet'] = features_meta[s]['sha256']
-            for p in cfg.label_policies:
+            for p in LABEL_POLICIES:
                 artifacts_dict[f'samples/{p}/{s}.parquet'] = policy_meta[p][s]['sha256']
         
         prepared_manifest = dict(
@@ -388,7 +394,7 @@ def generate_prepare_report(manifest, cfg):
         "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |"
     ])
     for s in cfg.execution_config.symbols:
-        for p in cfg.label_policies:
+        for p in LABEL_POLICIES:
             meta = manifest['samples'][p][s]
             total = meta['total_samples']
             pos = meta['label_1']
@@ -412,17 +418,130 @@ def generate_prepare_report(manifest, cfg):
     return "\n".join(lines)
 
 
-def load_research_samples(root, prepared_id, window, label_policy, symbol):
+def _utc_columns(frame, names, nullable=()):
+    for name in names:
+        if name not in frame or str(getattr(frame[name].dtype, 'tz', None)) != 'UTC':
+            raise ValueError(f'{name} must be UTC datetime')
+        if name not in nullable and frame[name].isna().any():
+            raise ValueError(f'{name} must be non-null UTC')
+
+
+def _validate_feature_frame(frame, symbol, metadata):
+    required = METADATA + ALL_FEATURE_NAMES + ['feature_valid', 'invalid_reason']
+    if frame.empty or frame.columns.duplicated().any() or not set(required) <= set(frame):
+        raise ValueError('missing or duplicate feature columns')
+    _utc_columns(frame, ['feature_open_time', 'decision_time', 'feature_available_time'],
+                 nullable=('feature_available_time',))
+    decision = frame.decision_time
+    valid = frame.feature_valid
+    if not pd.api.types.is_bool_dtype(valid.dtype):
+        raise ValueError('feature_valid must be boolean')
+    finite = np.isfinite(frame.loc[:, ALL_FEATURE_NAMES].to_numpy(dtype=float)).all(axis=1)
+    available = frame.feature_available_time == decision
+    # invalid_reason is evidence to validate, never an input that can disable an
+    # otherwise available decision. Infer validity independently of that text.
+    expected = available & (frame.history_count >= 744) & finite
+    empty_price_features = frame.loc[:, ALL_FEATURE_NAMES[:9]].isna().all(axis=1)
+    no_history = frame.history_count == 0
+    unavailable = ~available & no_history & empty_price_features
+    reason_conditions = {
+        '': expected,
+        'insufficient_history': available & frame.history_count.between(1, 743),
+        'non_finite_feature': available & (frame.history_count >= 744) & ~finite,
+        'unavailable_close': unavailable,
+        'halt': unavailable & frame.feature_available_time.isna(),
+        'no_trade': no_history & empty_price_features,
+        'boundary': unavailable & frame.feature_available_time.isna() & (decision == decision.iloc[-1]),
+    }
+    reasons_match = pd.Series(False, index=frame.index)
+    for reason, condition in reason_conditions.items():
+        reasons_match |= (frame.invalid_reason == reason) & condition
+    if (frame.empty or not (frame.symbol == symbol).all() or len(frame) != metadata['rows']
+            or not decision.is_unique or not decision.is_monotonic_increasing
+            or not (decision == decision.dt.floor('h')).all()
+            or not pd.DatetimeIndex(decision).equals(pd.date_range(decision.iloc[0], decision.iloc[-1], freq='h'))
+            or not (frame.feature_open_time + pd.Timedelta(1, unit='h') == decision).all()
+            or (frame.feature_available_time > decision).any()
+            or not (valid == expected).all()
+            or not pd.api.types.is_integer_dtype(frame.history_count.dtype)
+            or (frame.history_count < 0).any() or not reasons_match.all()
+            or int(valid.sum()) != metadata['feature_valid_count']
+            or decision.min() != pd.Timestamp(metadata['min_decision_utc'])
+            or decision.max() != pd.Timestamp(metadata['max_decision_utc'])
+            or decision.max() > pd.Timestamp('2025-01-01T01:00:00+00:00')):
+        raise ValueError('invalid features: symbol, counts, availability or time boundary')
+    return frame
+
+
+def _read_features(root, folder, manifest, symbol):
+    if symbol not in manifest['features']:
+        raise ValueError('unknown research symbol')
+    meta = manifest['features'][symbol]
+    path = bound_metadata_file(root, folder, manifest, meta)
+    return _validate_feature_frame(pd.read_parquet(path), symbol, meta)
+
+
+def load_research_samples(root, prepared_id, window, label_policy, symbol, research_cfg=None):
     """加载指定 window 和 label_policy 下用于训练的样本集。"""
     root = Path(root).resolve()
     exp_dir = root / 'artifacts/experiments' / experiment_id(prepared_id)
-    sample_file = exp_dir / 'samples' / label_policy / f'{symbol}.parquet'
-    if not sample_file.exists():
-        raise ValueError(f'research sample file not found: {sample_file}')
-    
-    df = pd.read_parquet(sample_file)
     if window not in RESEARCH_WINDOWS:
         raise ValueError(f'unknown research window: {window}')
+    manifest, _ = verify_prepared(root, prepared_id, research_cfg)
+    if label_policy not in manifest['samples'] or symbol not in manifest['samples'][label_policy]:
+        raise ValueError('unknown research label policy or symbol')
+    meta = manifest['samples'][label_policy][symbol]
+    sample_file = bound_metadata_file(root, exp_dir, manifest, meta)
+    df = pd.read_parquet(sample_file)
+    required = METADATA + ALL_FEATURE_NAMES + ['label_start', 'label_end', 'label_return', 'label_net_return_text', 'label']
+    if df.columns.duplicated().any() or not set(required) <= set(df):
+        raise ValueError('missing or duplicate research sample columns')
+    _utc_columns(df, ['decision_time', 'feature_open_time', 'feature_available_time', 'label_start', 'label_end'])
+    decision = df.decision_time
+    if (df.empty or len(df) != meta['total_samples'] or not (df.symbol == symbol).all()
+            or not decision.is_unique or not decision.is_monotonic_increasing
+            or not (decision == decision.dt.floor('4h')).all()
+            or not (df.feature_open_time + pd.Timedelta(1, unit='h') == decision).all()
+            or not (df.feature_available_time <= decision).all()
+            or not (df.label_start == decision).all()
+            or not (df.label_end == decision + pd.Timedelta(4, unit='h')).all()
+            or (decision < pd.Timestamp(RESEARCH_WINDOWS['W1'].fit_start)).any()
+            or (df.label_end >= pd.Timestamp(RESEARCH_WINDOWS['R2025'].fit_end)).any()
+            or not (df.history_count >= 744).all()
+            or not df.label.isin([0, 1]).all()
+            or int((df.label == 1).sum()) != meta['label_1']
+            or int((df.label == 0).sum()) != meta['label_0']
+            or not np.isfinite(df[ALL_FEATURE_NAMES].to_numpy(dtype=float)).all()
+            or not np.isfinite(df.label_return.to_numpy(dtype=float)).all()
+            or (df.label_return <= -1).any()):
+        raise ValueError('invalid research sample counts, labels, availability or time boundary')
+    if label_policy == GROSS_POLICY:
+        if not df.label_net_return_text.isna().all() or not (df.label == (df.label_return > 0).astype(int)).all():
+            raise ValueError('gross label semantic mismatch')
+    else:
+        try:
+            if not df.label_net_return_text.map(lambda x: isinstance(x, str)).all():
+                raise ValueError('net labels require decimal text')
+            net = df.label_net_return_text.map(Decimal)
+            if not net.map(lambda x: x.is_finite()).all() or not (df.label == net.map(lambda x: int(x > 0))).all():
+                raise ValueError('net label semantic mismatch')
+            # Exact decimal text controls the class; floats only reconcile the saved gross diagnostic.
+            expected = (1 + df.label_return) * (1 - .001) ** 2 * (1 - .0005) / (1 + .0005) - 1
+            if not np.allclose(net.to_numpy(dtype=float), expected, rtol=0, atol=1e-14):
+                raise ValueError('net label cost semantics mismatch')
+        except (InvalidOperation, TypeError) as exc:
+            raise ValueError('invalid net label decimal text') from exc
+    features = _read_features(root, exp_dir, manifest, symbol).set_index('decision_time')
+    matched = features.reindex(decision)
+    if (not matched.feature_valid.fillna(False).all()
+            or not np.allclose(matched[ALL_FEATURE_NAMES].to_numpy(dtype=float),
+                               df[ALL_FEATURE_NAMES].to_numpy(dtype=float), rtol=0, atol=1e-12)):
+        raise ValueError('samples do not match available prepared features')
+    for key, win_name in [('w1', 'W1'), ('w2', 'W2')]:
+        window_meta = RESEARCH_WINDOWS[win_name]
+        selected = (decision >= window_meta.fit_start) & (df.label_end < window_meta.fit_end)
+        if int(selected.sum()) != meta[key + '_samples'] or int(df.loc[selected, 'label'].sum()) != meta[key + '_label_1']:
+            raise ValueError('research window sample counts mismatch')
     win = RESEARCH_WINDOWS[window]
     
     # Filter training samples: decision_time >= fit_start and label_end < fit_end
@@ -435,22 +554,12 @@ def load_research_features(root, prepared_id, target):
     """加载指定 prepared_id 下决策特征集。若 target 为 str 则返回单个 DataFrame；若为 Config 则返回 (frames_dict, manifest)。"""
     root = Path(root).resolve()
     exp_dir = root / 'artifacts/experiments' / experiment_id(prepared_id)
+    prep_manifest, _ = verify_prepared(root, prepared_id, target if hasattr(target, 'research_config_hash') else None)
     if isinstance(target, str):
-        feature_file = exp_dir / 'features' / f'{target}.parquet'
-        if not feature_file.exists():
-            raise ValueError(f'research feature file not found: {feature_file}')
-        return pd.read_parquet(feature_file)
-    
-    prep_manifest_path = exp_dir / 'prepared_manifest.json'
-    if not prep_manifest_path.exists():
-        raise ValueError(f'prepared manifest not found: {prep_manifest_path}')
-    prep_manifest = json.loads(prep_manifest_path.read_text('utf-8'))
+        return _read_features(root, exp_dir, prep_manifest, target)
     
     symbols = target.execution_config.symbols if hasattr(target, 'execution_config') else target.symbols
     feature_frames = {}
     for s in symbols:
-        feature_file = exp_dir / 'features' / f'{s}.parquet'
-        if not feature_file.exists():
-            raise ValueError(f'research feature file not found: {feature_file}')
-        feature_frames[s] = pd.read_parquet(feature_file)
+        feature_frames[s] = _read_features(root, exp_dir, prep_manifest, s)
     return feature_frames, prep_manifest

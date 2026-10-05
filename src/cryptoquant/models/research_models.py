@@ -12,6 +12,9 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import brier_score_loss, roc_auc_score
 
 from cryptoquant.baselines.io import experiment_id
@@ -29,25 +32,22 @@ from cryptoquant.models.research_data import (
     load_research_samples, load_research_features
 )
 from cryptoquant.models.training import (
-    fit_model, predict_probabilities, feature_matrix
+    fit_model, predict_probabilities, feature_matrix, MODEL_PARAMETERS
 )
+from cryptoquant.models.research_integrity import (
+    verify_completed_experiment, verify_prepared, verify_config_binding, bound_metadata_file, SYMBOLS
+)
+from cryptoquant.models.research_data import _utc_columns
 
 
-def train_research_window(root, prepared_id, window, label_policy, research_cfg, out_dir):
+def train_research_window(root, prepared_id, window, label_policy, research_cfg, out_dir, selection_experiment_id=None):
     """为指定窗口和标签政策拟合三币独立的 C=0.1 逻辑回归模型。"""
     root = Path(root).resolve()
+    from cryptoquant.models.research_gates import authorize_research
+    authorize_research(root, research_cfg, prepared_id, window, label_policy,
+                       selection_id=selection_experiment_id, training=True)
     prep_dir = root / 'artifacts/experiments' / experiment_id(prepared_id)
-    prep_manifest_path = prep_dir / 'prepared_manifest.json'
-    if not prep_manifest_path.exists():
-        raise ValueError(f'prepared manifest not found: {prep_manifest_path}')
-    prep_manifest = json.loads(prep_manifest_path.read_text('utf-8'))
-    
-    if prep_manifest.get('type') != 'research_samples' or prep_manifest.get('status') != 'complete':
-        raise ValueError('prepared experiment is not completed research_samples')
-    if prep_manifest.get('execution_config_hash') != research_cfg.execution_config_hash:
-        raise ValueError('execution config hash mismatch with prepared experiment')
-    if prep_manifest.get('research_config_hash') != research_cfg.research_config_hash:
-        raise ValueError('research config hash mismatch with prepared experiment')
+    prep_manifest, _ = verify_prepared(root, prepared_id, research_cfg)
     
     if window not in RESEARCH_WINDOWS:
         raise ValueError(f'unknown research window: {window}')
@@ -71,7 +71,7 @@ def train_research_window(root, prepared_id, window, label_policy, research_cfg,
     artifacts_dict = {}
     
     for symbol in research_cfg.execution_config.symbols:
-        samples_df = load_research_samples(root, prepared_id, window, label_policy, symbol)
+        samples_df = load_research_samples(root, prepared_id, window, label_policy, symbol, research_cfg)
         if len(samples_df) == 0:
             raise ValueError(f'no training samples for {symbol} in window {window}')
         
@@ -179,6 +179,9 @@ def execute_research_train(args, root):
     """执行 Task 4 研究模型训练 CLI 入口。"""
     root = Path(root).resolve()
     cfg = load_research_config(args.research_config, root)
+    from cryptoquant.models.research_gates import authorize_research
+    qualification = authorize_research(root, cfg, args.prepared_experiment_id, args.window, args.label_policy,
+                                      selection_id=getattr(args, 'selection_experiment_id', None), training=True)
     out_dir = root / 'artifacts/experiments' / experiment_id(args.experiment_id)
     if out_dir.exists():
         raise ValueError('experiment directory already exists; refusing overwrite')
@@ -194,6 +197,7 @@ def execute_research_train(args, root):
         window=args.window,
         label_policy=args.label_policy,
         C=0.1,
+        **qualification,
         research_config_path=str(args.research_config),
         research_config_hash=cfg.research_config_hash,
         execution_config_hash=cfg.execution_config_hash,
@@ -205,6 +209,9 @@ def execute_research_train(args, root):
                  '--label-policy', args.label_policy,
                  '--experiment-id', args.experiment_id]
     )
+    selection_id = getattr(args, 'selection_experiment_id', None)
+    if selection_id is not None:
+        manifest['command'].extend(['--selection-experiment-id', selection_id])
     write_json(out_dir / 'run_manifest.json', manifest)
     
     try:
@@ -213,7 +220,8 @@ def execute_research_train(args, root):
         
         # Fit models
         models_meta, artifacts_dict, label_card = train_research_window(
-            root, args.prepared_experiment_id, args.window, args.label_policy, cfg, out_dir
+            root, args.prepared_experiment_id, args.window, args.label_policy, cfg, out_dir,
+            selection_experiment_id=getattr(args, 'selection_experiment_id', None)
         )
         
         # Copy configs
@@ -231,6 +239,7 @@ def execute_research_train(args, root):
             started_at_utc=start_time,
             ended_at_utc=datetime.now(timezone.utc).isoformat(),
             prepared_experiment_id=args.prepared_experiment_id,
+            prepared_manifest_sha256=sha_file(root / 'artifacts/experiments' / experiment_id(args.prepared_experiment_id) / 'prepared_manifest.json'),
             window=args.window,
             fit_start_utc=win.fit_start.isoformat(),
             fit_end_utc=win.fit_end.isoformat(),
@@ -239,6 +248,7 @@ def execute_research_train(args, root):
             C=0.1,
             model_family='logistic_regression',
             feature_names=ALL_FEATURE_NAMES,
+            **qualification,
             execution_config_hash=cfg.execution_config_hash,
             research_config_hash=cfg.research_config_hash,
             symbols=models_meta,
@@ -313,33 +323,145 @@ def generate_train_report(manifest, cfg):
 def load_research_models(root, training_id, research_cfg, expected_window=None, expected_policy=None):
     """加载并核验已训练好的三币研究模型。"""
     root = Path(root).resolve()
-    t_dir = root / 'artifacts/experiments' / experiment_id(training_id)
-    manifest_path = t_dir / 'train_manifest.json'
-    if not manifest_path.exists():
-        raise ValueError(f'train manifest not found in {training_id}')
-    manifest = json.loads(manifest_path.read_text('utf-8'))
-    
-    if manifest.get('type') != 'research_training' or manifest.get('status') != 'complete':
-        raise ValueError('training experiment is not completed research_training')
-    validate_label_metadata(manifest, expected_policy=expected_policy)
+    t_dir, run = verify_completed_experiment(root, training_id, 'research_training')
+    manifest = json.loads((t_dir / 'train_manifest.json').read_text('utf-8'))
+    current_environment = environment()
+    recorded = run['environment']
+    necessary = ('numpy', 'pandas', 'pyarrow', 'scikit-learn', 'scipy', 'joblib', 'threadpoolctl')
+    if (recorded.get('python') != current_environment['python']
+            or any(recorded.get('packages', {}).get(name) != current_environment['packages'][name] for name in necessary)):
+        raise ValueError('model environment Python or required package version mismatch')
+    compatibility = verify_config_binding(root, t_dir, manifest, run, research_cfg)
+    card = validate_label_metadata(manifest, expected_policy=expected_policy)
+    if manifest.get('label_card') != card:
+        raise ValueError('training label card mismatch')
+    window, policy = manifest.get('window'), manifest.get('label_policy')
+    if window not in RESEARCH_WINDOWS or policy not in research_cfg.label_policies:
+        raise ValueError('training window or policy outside requested research scope')
+    win = RESEARCH_WINDOWS[window]
+    if (manifest.get('feature_names') != ALL_FEATURE_NAMES or manifest.get('C') != .1
+            or manifest.get('model_family') != 'logistic_regression'
+            or manifest.get('fit_start_utc') != win.fit_start.isoformat()
+            or manifest.get('fit_end_utc') != win.fit_end.isoformat()
+            or set(manifest.get('symbols', {})) != set(SYMBOLS)
+            or tuple(research_cfg.execution_config.symbols) != SYMBOLS
+            or any(manifest.get(key) != run.get(key) for key in ['window', 'label_policy', 'C', 'prepared_experiment_id'])):
+        raise ValueError('training configuration, symbols or fit boundary mismatch')
     if expected_window is not None and manifest.get('window') != expected_window:
         raise ValueError(f'window mismatch: expected {expected_window}, got {manifest.get("window")}')
     if expected_policy is not None and manifest.get('label_policy') != expected_policy:
         raise ValueError(f'label policy mismatch: expected {expected_policy}, got {manifest.get("label_policy")}')
     
+    prepared_id = manifest.get('prepared_experiment_id')
+    prepared, prep_run = verify_prepared(root, prepared_id, research_cfg)
+    prepared_dir = root / 'artifacts/experiments' / experiment_id(prepared_id)
+    parent_compatibility = verify_config_binding(root, prepared_dir, prepared, prep_run, research_cfg)
+    parent_profile_matches = prepared['research_config_hash'] == manifest['research_config_hash']
+    # A new sixth-profile fit may consume fifth-profile prepared samples, but
+    # both profiles must independently bind to their real snapshots and the
+    # same frozen training signature. The reverse direction is not authorized.
+    if not parent_profile_matches and not (
+            compatibility['mode'] == 'exact'
+            and parent_compatibility['mode'] == 'fifth_to_sixth_training_signature'):
+        raise ValueError('training parent prepared research profile mismatch')
+    if (prepared['execution_config_hash'] != manifest['execution_config_hash']
+            or prepared['label_policies'][policy] != card):
+        raise ValueError('training parent prepared config or policy mismatch')
+    parent_sha = prep_run['prepared_manifest_sha256']
+    declared_parent_sha = manifest.get('prepared_manifest_sha256')
+    legacy_ids = {'EXP-064', 'EXP-065', 'EXP-066', 'EXP-067', 'EXP-093', 'EXP-094'}
+    if declared_parent_sha != parent_sha:
+        if declared_parent_sha is not None or training_id not in legacy_ids or prepared_id != 'EXP-063':
+            raise ValueError('training prepared manifest SHA mismatch or missing')
+        compatibility['prepared_binding'] = 'legacy_fifth_verified_parent'
+    else:
+        compatibility['prepared_binding'] = 'sha256'
+    compatibility.update(prepared_experiment_id=prepared_id, prepared_manifest_sha256=parent_sha,
+                         training_experiment_id=training_id,
+                         prepared_research_config_hash=prepared['research_config_hash'],
+                         prepared_training_compatibility='exact' if parent_profile_matches else parent_compatibility['mode'])
+
+    # All three metadata/file/table checks finish before the first deserialization.
+    checked = {}
+    for symbol, info in manifest['symbols'].items():
+        files = {}
+        for kind in ('model', 'card', 'probabilities', 'labels'):
+            files[kind] = bound_metadata_file(root, t_dir, manifest, info, kind + '_path', kind + '_sha256')
+        params = json.loads(files['card'].read_text('utf-8'))
+        samples = load_research_samples(root, prepared_id, window, policy, symbol, research_cfg)
+        n = len(samples)
+        if (n == 0 or info.get('training_samples') != n or info.get('label_1') != int(samples.label.sum())
+                or info.get('label_0') != int((samples.label == 0).sum())
+                or params.get('symbol') != symbol or params.get('window') != window
+                or params.get('label_policy') != policy or params.get('C') != .1
+                or params.get('solver') != MODEL_PARAMETERS['solver']
+                or params.get('max_iter') != MODEL_PARAMETERS['max_iter']
+                or params.get('classes') != [0, 1] or params.get('feature_names') != ALL_FEATURE_NAMES
+                or params.get('training_samples') != n
+                or params.get('training_label_1') != info['label_1'] or params.get('training_label_0') != info['label_0']
+                or params.get('fit_start_utc') != samples.decision_time.min().isoformat()
+                or params.get('last_decision_utc') != samples.decision_time.max().isoformat()
+                or params.get('last_label_end_utc') != samples.label_end.max().isoformat()
+                or samples.label_end.max() >= pd.Timestamp(win.fit_end)):
+            raise ValueError(f'model parameter card or training sample boundary mismatch: {symbol}')
+        probability = pd.read_csv(files['probabilities'])
+        labels = pd.read_csv(files['labels'], dtype={'label_net_return_text': 'object'})
+        if list(probability) != ['symbol', 'decision_time', 'probability'] or list(labels) != [
+                'symbol', 'decision_time', 'label_end', 'label_return', 'label_net_return_text', 'label']:
+            raise ValueError('training probability or label table column mismatch')
+        for table, time_names in [(probability, ['decision_time']), (labels, ['decision_time', 'label_end'])]:
+            try:
+                for time_name in time_names:
+                    table[time_name] = pd.to_datetime(table[time_name])
+            except (ValueError, TypeError) as exc:
+                raise ValueError('invalid saved training table UTC') from exc
+            _utc_columns(table, time_names)
+            if len(table) != n or not (table.symbol == symbol).all() or not table.decision_time.equals(samples.decision_time):
+                raise ValueError('training table symbols, count or decision boundary mismatch')
+        if (not labels.label_end.equals(samples.label_end) or not labels.label.equals(samples.label)
+                or not np.allclose(labels.label_return, samples.label_return, rtol=0, atol=1e-14)
+                or not np.isfinite(probability.probability).all()
+                or not probability.probability.between(0, 1).all()):
+            raise ValueError('saved training labels or probability mismatch')
+        if policy == GROSS_POLICY:
+            if not labels.label_net_return_text.isna().all():
+                raise ValueError('gross saved labels carry net returns')
+        elif not labels.label_net_return_text.equals(samples.label_net_return_text):
+            raise ValueError('saved training net labels mismatch')
+        checked[symbol] = (files, params, samples, probability)
     models = {}
-    for symbol in research_cfg.execution_config.symbols:
-        s_info = manifest['symbols'].get(symbol)
-        if not s_info:
-            raise ValueError(f'symbol {symbol} missing in training manifest')
-        m_path = Path(s_info['model_path'])
-        if not m_path.is_absolute():
-            m_path = root / m_path
-        if not m_path.exists():
-            raise ValueError(f'model file {m_path} not found')
-        actual_sha = sha_file(m_path)
-        if actual_sha != s_info['model_sha256']:
-            raise ValueError(f'model SHA mismatch for {symbol}')
-        models[symbol] = joblib.load(m_path)
-        
+    for symbol, (files, params, samples, probability) in checked.items():
+        model = joblib.load(files['model'])
+        if (not isinstance(model, Pipeline) or list(model.named_steps) != ['scaler', 'classifier']
+                or not isinstance(model.named_steps['scaler'], StandardScaler)
+                or not isinstance(model.named_steps['classifier'], LogisticRegression)
+                or list(model.feature_names_in_) != ALL_FEATURE_NAMES or list(model.classes_) != [0, 1]):
+            raise ValueError('model pipeline, features or classes mismatch')
+        scaler, classifier = model.named_steps['scaler'], model.named_steps['classifier']
+        x = feature_matrix(samples, ALL_FEATURE_NAMES).to_numpy()
+        variance, mean = x.var(axis=0), x.mean(axis=0)
+        # StandardScaler treats variance below its floating error bound as constant.
+        eps, n = np.finfo(np.float64).eps, len(samples)
+        expected_scale = np.sqrt(variance)
+        expected_scale[variance <= n * eps * variance + (n * mean * eps) ** 2] = 1
+        if (not np.all(np.asarray(scaler.n_samples_seen_) == len(samples)) or scaler.n_features_in_ != 12
+                or not scaler.with_mean or not scaler.with_std
+                or list(scaler.feature_names_in_) != ALL_FEATURE_NAMES
+                or not np.allclose(scaler.mean_, x.mean(axis=0), rtol=0, atol=1e-12)
+                or not np.allclose(scaler.var_, x.var(axis=0), rtol=1e-12, atol=1e-15)
+                or not np.allclose(scaler.scale_, expected_scale, rtol=1e-12, atol=1e-15)
+                or not np.allclose(scaler.mean_, params['scaler_mean'], rtol=0, atol=1e-12)
+                or not np.allclose(scaler.scale_, params['scaler_scale'], rtol=0, atol=1e-12)
+                or classifier.C != .1
+                or any(classifier.get_params().get(k) != v for k, v in MODEL_PARAMETERS.items())
+                or list(classifier.classes_) != [0, 1]
+                or not np.allclose(classifier.coef_[0], params['coefficients'], rtol=0, atol=1e-12)
+                or not np.allclose(classifier.intercept_[0], params['intercept'], rtol=0, atol=1e-12)
+                or np.any(classifier.n_iter_ >= MODEL_PARAMETERS['max_iter'])):
+            raise ValueError('model scaler training provenance or classifier parameters mismatch')
+        if not np.allclose(predict_probabilities(model, samples), probability.probability, rtol=0, atol=1e-12):
+            raise ValueError('reloaded model training probability mismatch')
+        models[symbol] = model
+    # Return a copy with verified provenance; never rewrite a frozen manifest.
+    manifest = dict(manifest, verified_source=compatibility)
     return models, manifest

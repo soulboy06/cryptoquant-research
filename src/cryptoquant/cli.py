@@ -125,6 +125,7 @@ def main(argv=None):
     research_train.add_argument('--prepared-experiment-id', required=True)
     research_train.add_argument('--window', choices=['W1', 'W2', 'R2025'], required=True)
     research_train.add_argument('--label-policy', choices=['gross_direction_v1', 'net_positive_base_v1'], required=True)
+    research_train.add_argument('--selection-experiment-id')
     research_eval = subcommands.add_parser('research-evaluate')
     research_eval.add_argument('--research-config', type=Path, required=True)
     research_eval.add_argument('--experiment-id', required=True)
@@ -136,6 +137,7 @@ def main(argv=None):
     research_eval.add_argument('--cost', choices=['base', 'higher_execution', 'strict'], default='base')
     research_eval.add_argument('--exit-variant', choices=['C0', 'C1', 'C2', 'C3'], default='C0')
     research_eval.add_argument('--data-experiment-id', default='EXP-003')
+    research_eval.add_argument('--selection-experiment-id')
     research_sel = subcommands.add_parser('research-select')
     research_sel.add_argument('--research-config', type=Path, required=True)
     research_sel.add_argument('--experiment-id', required=True)
@@ -146,8 +148,50 @@ def main(argv=None):
     research_comp.add_argument('--experiment-id', required=True)
     research_comp.add_argument('--selection-experiment-id', required=True)
     research_comp.add_argument('--evaluated-experiment-ids', required=True)
+    for action in ('prepare', 'evaluate', 'select', 'compare'):
+        regime = subcommands.add_parser('regime-' + action)
+        regime.add_argument('--research-config', type=Path, required=True)
+        regime.add_argument('--experiment-id', required=True)
+        if action == 'prepare':
+            regime.add_argument('--data-experiment-id', required=True)
+            regime.add_argument('--prepared-experiment-id', required=True)
+        else:
+            regime.add_argument('--state-experiment-id', required=True)
+        if action == 'evaluate':
+            regime.add_argument('--window', choices=['W1', 'W2', 'R2025'], required=True)
+            regime.add_argument('--cost', choices=['base', 'higher_execution', 'strict'], default='base')
+            regime.add_argument('--selection-experiment-id')
+        if action == 'select':
+            regime.add_argument('--base-experiment-ids', required=True)
+        if action == 'compare':
+            regime.add_argument('--selection-experiment-id', required=True)
+            regime.add_argument('--evaluated-experiment-ids', required=True)
+    for action in ('evaluate', 'select', 'compare'):
+        dynamic = subcommands.add_parser('dynamic-' + action)
+        dynamic.add_argument('--research-config', type=Path, required=True)
+        dynamic.add_argument('--experiment-id', required=True)
+        dynamic.add_argument('--state-experiment-id', required=True)
+        if action == 'evaluate':
+            dynamic.add_argument('--variant', choices=['R2', 'R3', 'R4'], required=True)
+            dynamic.add_argument('--window', choices=['W1', 'W2', 'R2025'], required=True)
+            dynamic.add_argument('--cost', choices=['base', 'higher_execution', 'strict'], default='base')
+            dynamic.add_argument('--selection-experiment-id')
+        if action == 'select':
+            dynamic.add_argument('--base-experiment-ids', required=True)
+        if action == 'compare':
+            dynamic.add_argument('--selection-experiment-id', required=True)
+            dynamic.add_argument('--evaluated-experiment-ids', required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command.startswith('dynamic-'):
+            from cryptoquant.models import dynamic_workflow
+            return getattr(dynamic_workflow, 'execute_' + args.command.replace('-', '_'))(args, Path.cwd())
+        if args.command.startswith('regime-'):
+            from cryptoquant.models import regime_workflow
+            for field in ('base_experiment_ids', 'evaluated_experiment_ids'):
+                if hasattr(args, field):
+                    setattr(args, field, [item.strip() for item in getattr(args, field).split(',') if item.strip()])
+            return getattr(regime_workflow, 'execute_' + args.command.replace('-', '_'))(args, Path.cwd())
         if args.command == 'research-prepare':
             from cryptoquant.models.research_data import execute_research_prepare
             return execute_research_prepare(args, Path.cwd())

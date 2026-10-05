@@ -144,6 +144,8 @@ probability = predict_probabilities(model, features)
 ```
 核验EXP-003与EXP-021数据源，截断资金费率至2025-12-31 20:00:00，从连续历史重算12特征并校验一致性，生成 `gross_direction_v1`（上涨方向）与 `net_positive_base_v1`（覆盖基础摩擦净盈利）两套样本及决策特征库。
 
+2026-10-05修复后，后续样本准备仅复用并核验EXP-063已截断资金费率副本，不再打开含2026的完整资金档。恢复研究环境需保留EXP-003／021／063及各自冻结清单；不能删掉EXP-063后用原始完整资金档替换。新的准备配置即使只研究净标签，prepared仍包含两套冻结政策，训练／评价按当前政策范围执行。
+
 ### 2. 受控窗口模型训练
 ```powershell
 & .\.venv\Scripts\python.exe -m cryptoquant research-train --research-config configs/fifth_experiment.toml --prepared-experiment-id EXP-063 --window W1 --label-policy gross_direction_v1 --experiment-id EXP-064
@@ -152,19 +154,25 @@ probability = predict_probabilities(model, features)
 
 ### 3. 受控窗口账户回测与周统计
 ```powershell
-& .\.venv\Scripts\python.exe -m cryptoquant research-evaluate --research-config configs/fifth_experiment.toml --training-experiment-id EXP-064 --window W1 --threshold 0.40 --cost base --experiment-id EXP-068
+& .\.venv\Scripts\python.exe -m cryptoquant research-evaluate --research-config configs/fifth_experiment.toml --prepared-experiment-id EXP-063 --training-experiment-id EXP-064 --window W1 --label-policy gross_direction_v1 --threshold 0.40 --cost base --experiment-id EXP-068
 ```
 基于受控历史窗口执行独立100 USDT账户回测，并严格按照 initial->close->terminal 口径计算周收益与几何周复合增长率 $g_{week}$。
 
 ### 4. 滚动选择与参数冻结
 ```powershell
-& .\.venv\Scripts\python.exe -m cryptoquant research-select --research-config configs/fifth_experiment.toml --experiment-id EXP-084
+& .\.venv\Scripts\python.exe -m cryptoquant research-select --research-config configs/fifth_experiment.toml --prepared-experiment-id EXP-063 --base-experiment-ids EXP-068,EXP-069,EXP-070,EXP-071,EXP-072,EXP-073,EXP-074,EXP-075,EXP-076,EXP-077,EXP-078,EXP-079,EXP-080,EXP-081,EXP-082,EXP-083 --experiment-id EXP-084
 ```
-聚合两窗16组base候选，执行四项硬性门槛过滤与排序，冻结胜出参数并判定R2025盲测执行资格。
+聚合两窗16组base候选，执行四项硬性门槛过滤与排序，冻结胜出参数并判定已查看2025研究比较的执行资格。
+
+上面编号均为已存在的历史实验示例，不能重复运行或覆盖；新实验先核对登记表和预算。2025已多次参与研究，不再是新盲测。来源与入口验收进度见[STATUS](STATUS.md)和[验收计划](docs/superpowers/plans/2026-10-05-research-integrity-acceptance.md)。
+
+当前 `research-train` 与 `research-evaluate` 均支持 `--selection-experiment-id`：R2025训练、R2025评价和压力评价必须指定有效选择；第六轮base消融也必须绑定第五轮选择（历史为EXP-084），第六轮压力绑定消融选择（历史为EXP-114）。门禁重新核对选择输入与冻结参数，不仅检查选择文件是否存在。第五轮W1／W2的base网格不需要选择。未合格的旧gross 0.64只可作明确失败对照，不能当作盈利候选。
+
+固定第五轮账户预算30次、第六轮18次，目前保留清单已分别用满30／30和18／18；失败及运行中尝试计数，改文件名、prepared编号或重复候选不能重置预算。上述旧配置不允许再追加账户。第七轮[方案](docs/superpowers/specs/2026-10-05-market-regime-filter-design.md)与[实施计划](docs/superpowers/plans/2026-10-05-market-regime-filter-implementation.md)正在执行，专用配置、状态模块及准备函数已实现；BUY许可、独立CLI及研究入口均已通过有限检查和两阶段审查，不能用第五／六轮命令冒充第七轮运行。
 
 ### 5. 多窗口多成本综合对比评估
 ```powershell
-& .\.venv\Scripts\python.exe -m cryptoquant research-compare --research-config configs/fifth_experiment.toml --selection-experiment-id EXP-084 --experiment-id EXP-101
+& .\.venv\Scripts\python.exe -m cryptoquant research-compare --research-config configs/fifth_experiment.toml --selection-experiment-id EXP-084 --evaluated-experiment-ids EXP-071,EXP-079,EXP-073,EXP-081,EXP-085,EXP-086,EXP-087,EXP-088,EXP-089,EXP-090,EXP-091,EXP-092,EXP-095,EXP-096,EXP-097,EXP-098,EXP-099,EXP-100 --experiment-id EXP-101
 ```
 对比双政策在三窗口、三档摩擦成本下的表现，生成综合对账表与三层结论最终评定。详细结果见[EXP-101报告](artifacts/experiments/EXP-101/report.md)。
 
@@ -174,6 +182,9 @@ probability = predict_probabilities(model, features)
 - [labels.py](src/cryptoquant/models/labels.py)的`label_values`输入十进制入口／出口价格，返回毛收益、净收益文本及0／1标签。`gross_direction_v1`判断上涨，`net_positive_base_v1`判断是否覆盖固定base理想成本；实际账户仍按原账本扣费。
 - [windows.py](src/cryptoquant/baselines/windows.py)的`window_frames`构造固定W1／W2／R2025执行视图；`select_window_features`截取原连续历史预计算特征。[predictions.py](src/cryptoquant/models/predictions.py)的`build_window_probabilities`据此生成完整4小时概率表。
 - [research_data.py](src/cryptoquant/models/research_data.py)、[research_models.py](src/cryptoquant/models/research_models.py)、[research_reporting.py](src/cryptoquant/models/research_reporting.py)与[research_workflow.py](src/cryptoquant/models/research_workflow.py)实现了第五轮完整的研究管道。
+- [research_integrity.py](src/cryptoquant/models/research_integrity.py)集中核对产物SHA、路径、配置、prepared及源码／环境；[research_gates.py](src/cryptoquant/models/research_gates.py)复核选择资格、完整输入矩阵与账户预算。EXP-114／121的历史源码／环境缺证仍明确保留，不因适配就称证据齐全。
+
+- [regime.py](src/cryptoquant/models/regime.py)从已闭合BTC小时OHLC生成ADX14、EMA72与24h斜率的独立状态表，连续744小时后有效；状态没有加入模型12项特征。第七轮固定值见[seventh_experiment.toml](configs/seventh_experiment.toml)。[engine.py](src/cryptoquant/baselines/engine.py)的`buy_permission`仅限制BUY（含补仓），保留原SELL／风险退出；`None`唯一关闭入口，空表或不完整UTC决策网格失败。独立CLI已验收；正式准备与研究结果进度看STATUS。
 
 ### 已有结果交易诊断
 
@@ -202,3 +213,62 @@ EXP-062只分析EXP-049的冻结2025产物，不读行情分区、拟合模型�
 当前规则快照用于历史模拟，不能还原每天的规则；市价名义金额只能以模拟成交价近似，不能恢复交易所参考价或分钟加权均价。完整实施顺序见 [实施计划](docs/superpowers/plans/2026-10-04-data-and-baseline-implementation.md)，实际进度见 [STATUS.md](STATUS.md)。
 
 数据依据：[币安公开归档](https://github.com/binance/binance-public-data#readme)、[公开行情接口](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/market_data_only.md)、[交易过滤器](https://github.com/binance/binance-spot-api-docs/blob/master/filters.md)。
+
+## 第七轮市场状态过滤入口
+
+先在EXPERIMENTS登记唯一新编号；账户启动后失败保留且占9账户／12总尝试预算。下列为本轮已完成的准备和首个base历史命令，结果与状态看STATUS；这些编号不可重复运行或覆盖。其余两窗按登记EXP-124／125使用W2／R2025；不fit、不读2026、不重跑R0。
+
+```powershell
+& .\.venv\Scripts\python.exe -m cryptoquant regime-prepare --research-config configs/seventh_experiment.toml --data-experiment-id EXP-003 --prepared-experiment-id EXP-063 --experiment-id EXP-122
+& .venv/Scripts/python.exe -m cryptoquant regime-evaluate --research-config configs/seventh_experiment.toml --state-experiment-id EXP-122 --window W1 --cost base --experiment-id EXP-123
+& .venv/Scripts/python.exe -m cryptoquant regime-evaluate --research-config configs/seventh_experiment.toml --state-experiment-id EXP-122 --window W2 --cost base --experiment-id EXP-124
+& .venv/Scripts/python.exe -m cryptoquant regime-evaluate --research-config configs/seventh_experiment.toml --state-experiment-id EXP-122 --window R2025 --cost base --experiment-id EXP-125
+```
+
+来源复用需要保留`.cache/c2-execution-source-before-regime.json`、`regime-execution-equivalence-20261005.json`和`engine-before-regime.py`；新账户／报告会保存它们的副本与SHA。关闭过滤的16h三成本逐笔等价不是九个旧全年账户的重跑。压力账户必须绑定实际合格的regime-select选择，基础不合格就停止；不能用旧research-evaluate绕过。
+
+
+本轮完整基础选择EXP-126已运行且R1失格，以下历史命令不可复用：
+
+```powershell
+& .venv/Scripts/python.exe -m cryptoquant regime-select --research-config configs/seventh_experiment.toml --state-experiment-id EXP-122 --base-experiment-ids EXP-123,EXP-124,EXP-125 --experiment-id EXP-126
+```
+
+
+基础失格只比较三base，保留失败、不执行压力。本轮EXP-127已完成，以下历史命令不可复用：
+
+```powershell
+& .venv/Scripts/python.exe -m cryptoquant regime-compare --research-config configs/seventh_experiment.toml --state-experiment-id EXP-122 --selection-experiment-id EXP-126 --evaluated-experiment-ids EXP-123,EXP-124,EXP-125 --experiment-id EXP-127
+```
+
+
+实际结果：R1 W1／W2／2025净收益+0.17%／+7.35%／-6.42%，周期18／17／52；基础失格，压力未运行。与R0相比减亏但上涨年份收益下降，合成周收益约0.00394%，1.5%目标未达。精确结果见[EXP-127](artifacts/experiments/EXP-127/comparison.json)、[交接STATUS](STATUS.md)。新一轮先诊断已有信号与过滤代价，再冻结新规则／预算；不以本轮接口通过宣称稳定盈利。
+
+## 第八轮动态阈值调节与自适应仓位响应入口
+
+第八轮配置见 [configs/eighth_experiment.toml](configs/eighth_experiment.toml)。核心代码见 [dynamic_regime.py](src/cryptoquant/models/dynamic_regime.py) 与 [dynamic_workflow.py](src/cryptoquant/models/dynamic_workflow.py)。
+
+下列为已完成的 9 组 Base 基础回测（EXP-130~EXP-138）、基础筛选（EXP-139）与全景对比评估（EXP-140）命令（EXP-129 为格式异常留存）：
+
+```powershell
+# 1. Base 基础回测（R2/R3/R4 跨三窗口，各独立 100 USDT 虚拟本金与 50 USDT 硬底线）
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R2 --window W1 --cost base --experiment-id EXP-130
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R2 --window W2 --cost base --experiment-id EXP-131
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R2 --window R2025 --cost base --experiment-id EXP-132
+
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R3 --window W1 --cost base --experiment-id EXP-133
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R3 --window W2 --cost base --experiment-id EXP-134
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R3 --window R2025 --cost base --experiment-id EXP-135
+
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R4 --window W1 --cost base --experiment-id EXP-136
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R4 --window W2 --cost base --experiment-id EXP-137
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-evaluate --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --variant R4 --window R2025 --cost base --experiment-id EXP-138
+
+# 2. 基础筛选决选（EXP-139 判定全候选失格，坚决停止压力测试）
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-select --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --base-experiment-ids EXP-130,EXP-131,EXP-132,EXP-133,EXP-134,EXP-135,EXP-136,EXP-137,EXP-138 --experiment-id EXP-139
+
+# 3. 全景对比评估（EXP-140）
+& .\.venv\Scripts\python.exe -m cryptoquant dynamic-compare --research-config configs/eighth_experiment.toml --state-experiment-id EXP-122 --selection-experiment-id EXP-139 --evaluated-experiment-ids EXP-130,EXP-131,EXP-132,EXP-133,EXP-134,EXP-135,EXP-136,EXP-137,EXP-138 --experiment-id EXP-140
+```
+
+实际结果与全景对账见 [EXP-140报告](artifacts/experiments/EXP-140/report.md) 与 [STATUS.md](STATUS.md)。R3（自适应降仓）表现最优（2024牛市抓取55笔主升浪+13.66%，2025减亏+5.24U），但因W1微差1笔达到30笔门槛及W2收益微差1.34%达标15%而失格；按计划规则停止压力测试，2026测试集继续严格封存。

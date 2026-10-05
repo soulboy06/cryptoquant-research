@@ -171,6 +171,10 @@ def evaluate_research_candidates(base_summaries, research_cfg):
     base_summaries 格式：
       dict[ (policy, window, threshold) -> summary_dict ]
     """
+    expected = {(p, w, float(t)) for p in research_cfg.label_policies
+                for w in ('W1', 'W2') for t in research_cfg.thresholds}
+    if set(base_summaries) != expected:
+        raise ValueError('candidate selection requires complete unique matrix')
     results = {}
     
     for policy in research_cfg.label_policies:
@@ -185,8 +189,13 @@ def evaluate_research_candidates(base_summaries, research_cfg):
                     base_summaries.get((policy, 'W2', str(threshold))))
             
             if not s_w1 or not s_w2:
-                continue
+                raise ValueError('candidate selection missing window')
             if s_w1.get('status') != 'complete' or s_w2.get('status') != 'complete':
+                candidates.append(dict(policy=policy, threshold=thresh_float, qualified=False,
+                                       status='failed_candidate', w1_status=s_w1.get('status'),
+                                       w2_status=s_w2.get('status'),
+                                       w1_experiment_id=s_w1['experiment_id'], w2_experiment_id=s_w2['experiment_id'],
+                                       errors=[s.get('error') for s in (s_w1, s_w2) if s.get('status') != 'complete']))
                 continue
             
             # 检查四项门槛
@@ -273,11 +282,15 @@ def evaluate_research_candidates(base_summaries, research_cfg):
     return results
 
 
-def evaluate_three_tier_conclusions(selection_result, stress_results=None, r2025_results=None):
+def evaluate_three_tier_conclusions(selection_result, stress_results=None, r2025_results=None, method_evidence=None):
     """根据三层标准评估研究结论：方法有效性、相对改善、每周 1.5% 目标。"""
     # 1. 方法有效性：无未来信息泄漏、数据/标签语义完整
-    method_valid = True
-    method_valid_details = "数据完整性、时间隔离、无未来特征对齐及独立账本检查全部通过。"
+    required_checks = ('data_integrity', 'time_isolation', 'label_semantics', 'account_behavior')
+    method_valid = bool(method_evidence and all(
+        isinstance(method_evidence.get(k), dict) and method_evidence[k].get('passed') is True
+        and method_evidence[k].get('evidence_path') for k in required_checks))
+    method_valid_details = ("独立数据、时间隔离、标签及账户行为验收证据齐备。" if method_valid
+                            else "方法未验收：缺少完整独立行为证据；文件SHA一致不代表账户方法有效。")
     
     # 2. 观察到相对改善
     net_selection = selection_result.get(NET_POLICY, {})
@@ -291,7 +304,7 @@ def evaluate_three_tier_conclusions(selection_result, stress_results=None, r2025
     else:
         net_cand = net_selection['best_candidate']
         gross_cand = gross_selection.get('best_candidate')
-        if not gross_cand:
+        if not gross_cand or gross_cand.get('status') == 'failed_candidate':
             improvement_reasons.append("缺少 gross_direction_v1 对照基准。")
         else:
             w1_g_better = (net_cand['w1_g_week'] > gross_cand['w1_g_week'])
@@ -307,11 +320,28 @@ def evaluate_three_tier_conclusions(selection_result, stress_results=None, r2025
                     improvement_reasons.append("新标签未能两窗口同时超越旧标签的周收益。")
                 if not (w1_dd_better and w2_dd_better):
                     improvement_reasons.append("新标签部分窗口最大回撤大于旧标签。")
+    if relative_improvement:
+        net_r = (r2025_results or {}).get((NET_POLICY, 'R2025', 'base'))
+        gross_r = (r2025_results or {}).get((GROSS_POLICY, 'R2025', 'base'))
+        if not net_r or not gross_r:
+            relative_improvement = False
+            improvement_reasons.append("缺少完整R2025两政策base比较，尚不能判定三个窗口一致改善。")
+        elif not (float(net_r['g_week']) > float(gross_r['g_week']) and
+                  float(net_r['max_drawdown']) <= float(gross_r['max_drawdown'])):
+            relative_improvement = False
+            improvement_reasons.append("R2025未同时满足新标签周收益更高、回撤不更大的标准。")
+    strict_loss = any(float(row['net_return']) <= 0 for key, row in
+                      list((stress_results or {}).items()) + list((r2025_results or {}).items())
+                      if key[0] == NET_POLICY and key[2] == 'strict')
+    if strict_loss:
+        improvement_reasons.append("strict至少一窗口亏损，成本优势不足。")
     
     # 3. 达到用户研究目标（每周 1.5%）
     # 要求：新模型三个窗口各自 base g_week >= 0.015、strict 收益 > 0、base 回撤 <= 25%、>= 30 周期且底线 0
     target_achieved = False
     target_reasons = []
+    if not method_valid:
+        target_reasons.append("方法未验收，不能宣称收益目标已达到。")
     
     if not relative_improvement:
         target_reasons.append("前置相对改善未达成。")
@@ -346,8 +376,11 @@ def evaluate_three_tier_conclusions(selection_result, stress_results=None, r2025
                 target_reasons.append(f"R2025 base 周收益未达 1.5%（实际 {r_g*100:.3f}%）。")
             if r_strict_ret <= 0:
                 target_reasons.append("R2025 strict 收益未能维持为正。")
+            if (float(r_base.get('max_drawdown', 1)) > .25 or r_base.get('closed_cycles', 0) < 30
+                    or r_base.get('floor_triggers', 1) != 0):
+                target_reasons.append("R2025 base风险／交易周期门槛未满足。")
         else:
-            target_reasons.append("缺少 R2025 盲测检验结果。")
+            target_reasons.append("缺少已查看 R2025 研究比较结果。")
             
         if not target_reasons:
             target_achieved = True
