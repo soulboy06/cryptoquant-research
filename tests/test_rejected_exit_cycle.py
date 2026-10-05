@@ -23,7 +23,8 @@ def test_rejected_exit_keeps_live_cycle_until_real_exit(symbol, reason):
     book = Portfolio('100', [symbol])
     book.apply_fill('BUY', symbol, '1.04', '10', COST.fee)
     risk = RiskState([symbol], D('50'), D('.08'), 4,
-                     breakeven_activation=D('.012'), breakeven_ratio=D('.0025'))
+                     breakeven_activation=D('.012'), breakeven_ratio=D('.0025'),
+                     dust_policy='writeoff_zero_recovery')
     risk.register_buy(symbol, book, D('10'), limits, COST, NOW)
     risk.observe(book, {symbol: D('11')}, {symbol}, NOW + timedelta(hours=1))
     quantity, basis = book.positions[symbol].quantity, book.positions[symbol].average_cost
@@ -95,7 +96,8 @@ def test_engine_retry_blocks_reentry_and_report_includes_dust_loss(symbol):
         for h in [0, 4, 8] for s in config.symbols
     ])
     result = run_backtest(frames, rules, config, 'logistic_regression', 'base',
-                          decision_targets=targets, exit_variant='C2')
+                          decision_targets=targets, exit_variant='C2',
+                          dust_policy='writeoff_zero_recovery')
     assert [f['side'] for f in result.fills] == ['BUY', 'SELL']
     assert result.fills[-1]['time'] == start + pd.Timedelta(6, unit='h')
     assert result.fills[-1]['intent_reason'] == 'stop_loss'

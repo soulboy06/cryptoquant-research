@@ -23,7 +23,11 @@ class SymbolState:
 
 class RiskState:
     def __init__(self, symbols, floor, stop_loss, cooldown_hours, *,
-                 max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None):
+                 max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None,
+                 dust_policy='retain_mark_to_market'):
+        if dust_policy not in {'writeoff_zero_recovery', 'post_exit_sub_step_writeoff_v1', 'retain_mark_to_market'}:
+            raise ValueError(f'unsupported dust policy: {dust_policy}')
+        self.dust_policy = 'writeoff_zero_recovery' if dust_policy == 'post_exit_sub_step_writeoff_v1' else dust_policy
         self.states = {symbol: SymbolState() for symbol in sorted(symbols)}
         self.floor = amount(floor)
         self.stop_loss = amount(stop_loss)
@@ -122,9 +126,18 @@ class RiskState:
         if quantity > ZERO:
             if not state.had_exit_fill or quantity >= rules.step_size:
                 return False
-            dust = portfolio.write_off_precision_dust(symbol, rules.step_size, open_quote['open'])
-            self.emit('dust_written_off', timestamp, symbol=symbol,
-                      policy='post_exit_sub_step_writeoff_v1', quantity_step=rules.step_size, **dust)
+            if self.dust_policy in {'writeoff_zero_recovery', 'post_exit_sub_step_writeoff_v1'}:
+                dust = portfolio.write_off_precision_dust(symbol, rules.step_size, open_quote['open'])
+                self.emit('dust_written_off', timestamp, symbol=symbol,
+                          policy='post_exit_sub_step_writeoff_v1', quantity_step=rules.step_size, **dust)
+            elif self.dust_policy == 'retain_mark_to_market':
+                dust_cost = quantity * portfolio.positions[symbol].average_cost
+                dust_val = quantity * amount(open_quote['open'])
+                self.emit('dust_retained', timestamp, symbol=symbol,
+                          policy='retain_mark_to_market', quantity=quantity, cost_usdt=dust_cost,
+                          value_usdt=dust_val, quantity_step=rules.step_size)
+            else:
+                raise ValueError(f'unsupported dust policy: {self.dust_policy}')
         if state.cycle_open and state.had_exit_fill:
             self.closed_cycles += 1
             self.emit('cycle_closed', timestamp, symbol=symbol)

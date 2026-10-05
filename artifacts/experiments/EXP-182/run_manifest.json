@@ -20,19 +20,19 @@
       "cloudpickle": "3.1.2"
     }
   },
-  "started_at_utc": "2026-10-05T08:57:40.826386+00:00",
-  "research_config_sha256": "f0815e2122fe7535c7c589d736514063722c3e4dadcaa8c55451a0998c5e4127",
-  "allocation_source_sha256": "915ec0f8c66b3ec51453336c34eb9ddff2ff96ddacc48321542409241c91e57c",
-  "runner_sha256": "a7aec496d717ebee193eefd35816f9a53746121f5bf3422f79d1c11bcd414748",
-  "phase_a_comparison_sha256": "afbd4bbe7fefe358ffad067bdb89581fb20743f817d906e744e90ab6f18600ae",
+  "started_at_utc": "2026-10-05T10:21:21.225142+00:00",
+  "research_config_sha256": "3e4ff9d8de49540a3a739c4fb7780d6d5d30aa00bb3f4c18d353a91dd614932d",
+  "allocation_source_sha256": "a0da1a48c33371242aa2cf2f72fb33b826d9ad70bbcb57c8f0e721423fd0e611",
+  "runner_sha256": "edae42cc24599201e2c1e55119c225bdd82d2d98f6a30955b613fb4b1a6b398b",
+  "phase_a_comparison_sha256": "43c00a83001e8a20b6e90c765187f930b29a17b7f1989371079fa44e737aea88",
   "holdout_read": false,
   "parent_variant": "R6",
   "variant": "R10",
   "window": "W1",
   "cost": "base",
-  "source_hash": "991e252b2fb424a90142d9104b70d9896796273b4956c309653ba1d1d0a4f372",
+  "source_hash": "8956f43ba44e0ba9e5236faa8a71c4763994d3977814afbc08914b63d7fd39ba",
   "input_hashes": {
-    "C:\\Users\\yyy\\.codex\\worktrees\\4df6\\量化\\artifacts\\experiments\\EXP-168\\targets.parquet": "587aaf3e1518b9c3675171eaa488b69c9b31efe4685c0801315052cd0193c71a",
+    "D:\\量化\\artifacts\\experiments\\EXP-168\\targets.parquet": "587aaf3e1518b9c3675171eaa488b69c9b31efe4685c0801315052cd0193c71a",
     "D:\\量化\\artifacts\\experiments\\EXP-122\\state_W1.parquet": "a1a137421c664706f2b76688f0a7439f1f7ad25038f544116e3118a51e8f8fa5",
     "state_manifest.json": "a8c06a53ba8d43377d38aac5a7677263364b0e07292b71a5cea0eefc39b16c62"
   },
@@ -69,22 +69,22 @@
     }
   },
   "promoted_decisions": 7,
-  "finished_at_utc": "2026-10-05T08:57:45.127453+00:00",
+  "finished_at_utc": "2026-10-05T10:21:25.359482+00:00",
   "artifacts": {
-    "closed_cycles.csv": "667e1d82a18f13a1b173af3edda69f56573c078b4f7d96b0a0bce3633de2c337",
+    "closed_cycles.csv": "fff562cc7dae540616cc482795d1b89a7529c919df00ce36d5c320a6fd83f3d2",
     "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
-    "cycle_distributions.json": "c28beeb74dc2ab90ea924f8100142d9fe6b41bc1a1a67fb08dbd3e6082f02c10",
-    "research_config.json": "f0815e2122fe7535c7c589d736514063722c3e4dadcaa8c55451a0998c5e4127",
-    "source_manifest.json": "8ab920e44618e23bda63d7ef1a10f1ff6512e8f79362f3e84ef559c29ef5a228",
-    "summary.json": "333aa15534d1bedd2483238429f9686fc9a3a17516b40b1be31ccedea9f54637",
+    "cycle_distributions.json": "88bef979f42e1cde4e80fe49fb086b53a0ea61c583d991ebddeba73e688f44de",
+    "research_config.json": "3e4ff9d8de49540a3a739c4fb7780d6d5d30aa00bb3f4c18d353a91dd614932d",
+    "source_manifest.json": "6511768e75810e65a60db0af95a32196e0f6c2dc41a4d38d907a29509ac3bf8e",
+    "summary.json": "2b79d6d432433b8f8bcc26febf0f1399614aebfe9f15bb754eadc8615166ec7c",
     "targets.parquet": "011f6d1cd85b4ca20c7868af86b22e7a16c15284f8e5ecae2679e6612fb85add",
     "targets_audit.csv": "34d984987de1eb8d22bcc3188041814e7d7e0606dbc542f05a40377c6f601cb3",
-    "account/annual.json": "2acc81c24e32836776ceb55e8740723841834a988e5b6e5215ebc5d294ae05fe",
-    "account/equity.csv": "0fa8ba85ce6684ab0b4a0656bdcd3339a498928ef8a6637cbb31d3f4962709c5",
-    "account/events.json": "64f87baea44e8f777f0012fff8159584f4c725bda525445d6209c4f25ec46b77",
-    "account/fills.csv": "dfab35f55ac8c9bc3deba1e0505e252ba4acb1048c371356f79cc656b46276fc",
-    "account/orders.csv": "b955f16a66c42c654e39748156e6044c53f6913211a276f3107f3e96340e8e31",
-    "account/summary.json": "0e7a8e09bcde0db73c46f5ba6658c1083eabc9ecd9fb5257d61af6a857135d75",
-    "account/weekly.csv": "e90b9f4d23150b73312e0508afc06a22402e87fe5db5335d41ba3cb57528b2ac"
+    "account/annual.json": "1501598041dff8284e1653c130754f72ed507f5b8a1e12d4537dc07284605117",
+    "account/equity.csv": "988c24dd186d53aae5c109e45fb4858c780c23acf671d0673656d653957cb436",
+    "account/events.json": "2865ecb26d0e9d7da5d909eeda11f1d298024719becfce702c584a9669ccd7c9",
+    "account/fills.csv": "3eac0d7a8e366f874774321ba23c24af8c9c5045abafc6def6e6471d045a6c3a",
+    "account/orders.csv": "f9bb91844d616f5d321b0252bff94aa18da703b643cb2038e8435dbeb47f81b0",
+    "account/summary.json": "ee7d04e5f25487c6d2dabd8f8a2a35342aa4621f88dfac1e86a7d3bef890da82",
+    "account/weekly.csv": "a3c1f27ebc96b5e9e9c6375976eb59d72e0cc2fbe27bbbe25559ab217e51f39e"
   }
 }

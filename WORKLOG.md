@@ -706,6 +706,45 @@
 - STATUS记录上传完成和PR，保留旧失败、实验SHA及三候选失格；没有后台账户、实盘、新参数或2026测试读取。本轮任务完成，后续研究按附件先向用户汇报，不自动启动。
 - 大型events.json与既有CSV／Parquet一样通过完整证据包交付，追加精确忽略规则避免重复散装提交；本地原文件与冻结SHA保留，未删除或改写。
 
+## WL-050：状态机修复与Dust核销归因消融研究（2026-10-05，Asia/Shanghai）
+
+- 用户要求：对PR #1（codex/cycle-state-integrity分支）中“状态机修复”与“dust零头核销政策”做严格可比的归因拆分研究；不调策略/模型/仓位，不启动第十一轮，不触碰2026封存数据；查证真实Binance现货规则，给出明确拆解与基线建议。
+- 代码实现：
+  - 在`src/cryptoquant/trading/risk.py`实现可配置`dust_policy`（`'retain_mark_to_market'`与`'writeoff_zero_recovery'`）；尾差核销分支与尾差资产保留分支严格解耦，增加`dust_retained`审计事件。
+  - 在`src/cryptoquant/baselines/engine.py`接入`dust_policy`配置；修复引擎对已关闭周期的sub-step残留资产误触发`pending='strategy_exit'`导致锁仓的bug；默认采用`'retain_mark_to_market'`。
+  - 在`src/cryptoquant/baselines/reporting.py`动态上报不同执行政策的dust成本与估值。
+  - 新增`tests/test_dust_policy_execution.py`覆盖两种政策的独立测试；通过`pytest tests/test_dust_policy_execution.py tests/test_rejected_exit_cycle.py tests/test_research_windows.py`共16项检查通过（20.10s）。
+- 归因实验与结果：
+  - 构建3个严格可比执行版本：Legacy（原引擎复现）、Cycle Fix Only（仅状态机修复+保留市价估值）、Cycle Fix + Writeoff（PR #1当前极端保守核销）。
+  - 完成代表性3账户及全量9账户（R0/R5/R6在W1/W2/R2025）的27次回测重放与归因分解，产物保存于`artifacts/research/dust_and_bug_attribution.json`。
+  - **核心结论**：Bug Fix Effect在全量9账户中仅为**0.00%至-0.20%**，状态机修复本身对收益影响极微；收益崩塌**98%～100%源于`post_exit_sub_step_writeoff_v1`**（导致-2.29%至-37.82%的净值暴跌，最大单账户累计核销41.57 USDT本金）。
+  - 在Cycle Fix Only下，R0 W2保持+26.62%，R5 W2为+13.66%，R6 W2为+13.70%，R6 W1为+5.06%，策略相对优势与旧版完全一致。
+  - 真实Binance现货规则核验：小于stepSize或minNotional的余额始终保存在现货钱包，受法律与密码学保护，绝不被没收；每小时可一键按2%手续费闪兑BNB，且可在后续加仓时与新买入合并卖出。将100%成本直接计为realized loss属于严重脱离真实交易所机制的超保守假设。
+- 边界保持：2026测试数据继续物理封存（0读取）；未开展策略搜参或第十一轮；PR #1中R8/R9/R10失格事实保留。
+
+## WL-051：修改PR #1执行基线并重评第十轮（2026-10-05，Asia/Shanghai）
+
+- 用户要求：修改PR #1，使`retain_mark_to_market`成为正式baseline、`writeoff_zero_recovery`仅作为压力测试；在不修改任何R8/R9/R10参数前提下，基于新baseline重新执行第十轮并重新筛选；2026继续物理封存。
+- 代码修改：
+  - `src/cryptoquant/trading/risk.py`与`src/cryptoquant/baselines/engine.py`默认`dust_policy='retain_mark_to_market'`。
+  - `configs/tenth_experiment.json`与`scripts/run_tenth_research.py`配置冻结参数`dust_policy='retain_mark_to_market'`。
+  - 修复`cycle_distributions`以复用账本单笔成交真实已实现盈亏，确保逐周期PnL与Portfolio已实现损益数学上严格守恒（误差<1e-18）。
+- Phase A基线重建：
+  - 运行`python scripts/verify_cycle_repair.py --source-root D:/量化 --output-root . --replacement-first-id 175`。
+  - EXP-160～173及EXP-175共15组配对回测在新baseline下完成，EXP-174完成基线汇总，无holdout读取。
+  - 父策略选择：修复后R5三窗合成周收益+0.095110%，R6为+0.097859%，R6更高，确定父策略仍为R6。
+- 第十轮重跑与统一筛选：
+  - 运行`python scripts/run_tenth_research.py --source-root D:/量化`。
+  - R8（Top-1 30%）：W1=+5.9562%（30周期），W2=+14.0286%（62周期），2025=-2.8637%（11.24%回撤），合成周收益+0.102308%。
+  - R9（24h动量正30%）：W1=+5.0643%（30周期），W2=+13.7029%（62周期），2025=-2.7618%（11.20%回撤），合成周收益+0.095745%。
+  - R10（自身因果预测>80分位数30%）：W1=+5.9562%（30周期），W2=+14.0286%（62周期），2025=-2.8750%（11.24%回撤），合成周收益+0.102234%。
+  - 筛选门禁（EXP-185）：三候选均未突破W2收益15%门槛（最高+14.03%），且2025净收益均劣于父策略R6（-2.44% vs 候选-2.86%～-2.76%），因此全部失格。基础筛选胜出：None；描述性收益最高：R8；最终候选：None；未达每周1.5%目标。EXP-186～191压力回测按规则跳过。
+- 完整性验收：
+  - `pytest tests/test_dust_policy_execution.py tests/test_rejected_exit_cycle.py tests/test_research_windows.py tests/test_tenth_research_budget.py tests/test_leader_allocation.py`共23项检查全部通过（20.40s）。
+  - `summarize_cycle_research.py`验证2884项产物与源码SHA一致通过。
+  - `package_cycle_evidence.py`重新打包4558文件，证据包56.11 MiB，SHA校验通过。
+  - 2026测试数据物理封存（0读取）。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

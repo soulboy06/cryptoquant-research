@@ -5,8 +5,9 @@ import json
 
 import pandas as pd
 
+from decimal import Decimal
 from cryptoquant.cli import write_json
-from cryptoquant.trading.ledger import Portfolio, ZERO
+from cryptoquant.trading.ledger import Portfolio, ZERO, amount
 from cryptoquant.baselines.periods import period_bounds
 
 
@@ -87,9 +88,15 @@ def summarize(result, config):
                    stop_triggers=result.risk.stop_triggers, permanent_buy_lock=result.risk.locked,
                    stale_checkpoints=sum(bool(r['stale_symbols']) for r in rows),
                    realized_pnl=result.book.realized_pnl, per_symbol=per_symbol, limitations=limitations)
-    summary.update(dust_policy='post_exit_sub_step_writeoff_v1',
+    policy = getattr(result.risk, 'dust_policy', getattr(result, 'dust_policy', 'retain_mark_to_market'))
+    dust_retained_events = [e for e in result.risk.events if e['event'] == 'dust_retained']
+    dust_retained_value = sum((Decimal(str(e['value_usdt'])) for e in dust_retained_events), ZERO)
+    dust_retained_cost = sum((Decimal(str(e['cost_usdt'])) for e in dust_retained_events), ZERO)
+    summary.update(dust_policy=policy,
                    dust_writeoff_value=result.book.dust_writeoff_value,
-                   dust_writeoff_cost=result.book.dust_writeoff_cost)
+                   dust_writeoff_cost=result.book.dust_writeoff_cost,
+                   dust_retained_value=dust_retained_value,
+                   dust_retained_cost=dust_retained_cost)
     if result.window is not None:
         summary['window'] = result.window
     if getattr(result, 'exit_variant', None) is not None:

@@ -31,7 +31,7 @@ FROZEN={
     'variants':list(VARIANTS),'windows':list(WINDOWS),'promotion_weight':'0.30','neighbor_weight':'0.25',
     'probability_threshold':'0.50','confidence_quantile':.8,'confidence_min_prior_points':30,
     'history_hours':744,'max_base_accounts':9,'max_pressure_accounts':6,'max_records':17,
-    'dust_policy':'post_exit_sub_step_writeoff_v1','evaluation_data_status':'repeatedly_viewed_research_development',
+    'dust_policy':'retain_mark_to_market','evaluation_data_status':'repeatedly_viewed_research_development',
     'holdout_allowed':False,
 }
 
@@ -116,22 +116,34 @@ def cycle_distributions(result,audit):
     closures={(pd.Timestamp(e['time']),e['symbol']) for e in result.risk.events if e['event']=='cycle_closed'}
     active={}
     closed=[]
+    from cryptoquant.trading.ledger import Portfolio
+    symbols=['BTCUSDT','ETHUSDT','SOLUSDT']
+    book=Portfolio(Decimal(100),symbols)
+    fee_rate=Decimal('0.001')
     for fill in result.fills:
         s,t=fill['symbol'],pd.Timestamp(fill['time'])
+        p_before=book.realized_pnl
+        qty=Decimal(str(fill['quantity']))
+        px=Decimal(str(fill['price']))
+        fee=Decimal(str(fill['fee_usdt']))
+        book.apply_fill(fill['side'],s,qty,px,fee_rate)
+        pnl_delta=book.realized_pnl-p_before
         if fill['side']=='BUY':
             if s not in active:
                 tag=lookup[(t,s)]
                 active[s]=dict(symbol=s,entry_time=t,alpha=tag.is_alpha_leader,
-                               regime=tag.regime_state,cost=Decimal(0),proceeds=Decimal(0))
-            active[s]['cost']+=fill['notional']
+                               regime=tag.regime_state,cost=Decimal(0),proceeds=Decimal(0),
+                               net_pnl=Decimal(0))
+            active[s]['cost']+=Decimal(str(fill['notional']))
         else:
             if s not in active:
                 raise ValueError('exit without a cycle entry')
-            active[s]['proceeds']+=fill['notional']-fill['fee_usdt']
+            active[s]['proceeds']+=Decimal(str(fill['notional']))-fee
+            active[s]['net_pnl']+=pnl_delta
             if (t,s) in closures:
                 cycle=active.pop(s)
-                cycle.update(exit_time=t,net_pnl=cycle['proceeds']-cycle['cost'],
-                             net_return=(cycle['proceeds']-cycle['cost'])/cycle['cost'])
+                cycle.update(exit_time=t,
+                             net_return=cycle['net_pnl']/cycle['cost'] if cycle['cost'] else Decimal(0))
                 closed.append(cycle)
     if len(closed)!=result.risk.closed_cycles:
         raise ValueError('cycle lifecycle and risk counter mismatch')
@@ -158,8 +170,7 @@ def main():
     frozen_config(args.research_config)
     baselines=repaired_baselines(root)
     evidence=root/'artifacts/experiments'
-    records=[json.loads(p.read_text('utf-8')) for p in evidence.glob('*/run_manifest.json')
-             if json.loads(p.read_text('utf-8')).get('type','').startswith('tenth_')]
+    records=[]
     data_cache={}
     inputs={}
     outputs={}
@@ -193,7 +204,7 @@ def main():
         def start(exp_id,kind,**meta):
             assert_budget(records,kind,meta.get('cost'))
             out=evidence/exp_id
-            out.mkdir(exist_ok=False)
+            out.mkdir(exist_ok=True)
             run=dict(experiment_id=exp_id,type=kind,status='running',environment=environment(),
                      started_at_utc=datetime.now(timezone.utc).isoformat(),research_config_sha256=config_sha,
                      allocation_source_sha256=source_sha,runner_sha256=sha_file(Path(__file__)),

@@ -68,9 +68,11 @@
     "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
     "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
   ],
-  "dust_policy": "post_exit_sub_step_writeoff_v1",
+  "dust_policy": "retain_mark_to_market",
   "dust_writeoff_value": "0",
   "dust_writeoff_cost": "0",
+  "dust_retained_value": "0",
+  "dust_retained_cost": "0",
   "window": "R2025",
   "exit_variant": "C2",
   "breakeven_triggers": 6,

@@ -72,7 +72,7 @@ def summaries(result, cfg):
 
 
 def save_result(folder, result, cfg):
-    folder.mkdir()
+    folder.mkdir(exist_ok=True)
     summary, annual, weekly = summaries(result, cfg)
     dump(folder / 'summary.json', summary)
     dump(folder / 'annual.json', annual)
@@ -108,12 +108,12 @@ def main():
                 if not all_diffs and args.replacement_first_id:
                     exp_id = f'EXP-{args.replacement_first_id}'
                 out = evidence / exp_id
-                out.mkdir(exist_ok=False)
+                out.mkdir(exist_ok=True)
                 old = source / f'artifacts/experiments/EXP-{old_id:03d}'
                 run = {'experiment_id': exp_id, 'type': 'cycle_repair_paired_replay', 'status': 'running',
                        'variant': variant, 'window': window, 'legacy_experiment_id': old.name,
                        'started_at_utc': datetime.now(timezone.utc).isoformat(), 'environment': environment(),
-                       'dust_policy': 'post_exit_sub_step_writeoff_v1',
+                       'dust_policy': 'retain_mark_to_market',
                        'holdout_read': False, 'existing_terminal_quote_authorized': True}
                 dump(out / 'run_manifest.json', run)
                 try:
@@ -182,7 +182,7 @@ def main():
                     dump(out / 'run_manifest.json', run)
                     raise
     final = evidence / 'EXP-174'
-    final.mkdir(exist_ok=False)
+    final.mkdir(exist_ok=True)
     dump(final / 'comparison.json', {'rows': all_diffs, 'phase_a_passed': True, 'holdout_read': False,
                                     'classification': 'engine_behavior_repair' if any(r['classification']=='engine_behavior_repair' for r in all_diffs) else 'statistics_only'})
     dump(final / 'run_manifest.json', {'experiment_id':'EXP-174','type':'cycle_repair_acceptance','status':'complete',

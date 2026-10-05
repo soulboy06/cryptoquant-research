@@ -14,7 +14,7 @@
   "max_base_accounts": 9,
   "max_pressure_accounts": 6,
   "max_records": 17,
-  "dust_policy": "post_exit_sub_step_writeoff_v1",
+  "dust_policy": "retain_mark_to_market",
   "evaluation_data_status": "repeatedly_viewed_research_development",
   "holdout_allowed": false
 }

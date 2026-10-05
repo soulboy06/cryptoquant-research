@@ -18,4 +18,5 @@ artifacts/experiments/**/events.json
 artifacts/experiments/**/*.parquet
 artifacts/experiments/**/*.zip
 artifacts/experiments/**/source_snapshot/
+scratch/
 

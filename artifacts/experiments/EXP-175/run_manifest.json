@@ -5,7 +5,7 @@
   "variant": "R0",
   "window": "W1",
   "legacy_experiment_id": "EXP-108",
-  "started_at_utc": "2026-10-05T08:35:02.123942+00:00",
+  "started_at_utc": "2026-10-05T10:16:36.496608+00:00",
   "environment": {
     "python": "3.12.10",
     "platform": "Windows-11-10.0.22631-SP0",
@@ -24,7 +24,7 @@
       "cloudpickle": "3.1.2"
     }
   },
-  "dust_policy": "post_exit_sub_step_writeoff_v1",
+  "dust_policy": "retain_mark_to_market",
   "holdout_read": false,
   "existing_terminal_quote_authorized": true,
   "data_info": {
@@ -59,7 +59,7 @@
       }
     }
   },
-  "source_hash": "629635de31d0fe19eaf8415db976299a1689cca9601e0b413a3fbf7c1e558e75",
+  "source_hash": "8956f43ba44e0ba9e5236faa8a71c4763994d3977814afbc08914b63d7fd39ba",
   "input_hashes": {
     "D:\\量化\\artifacts\\experiments\\EXP-108\\config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
     "D:\\量化\\artifacts\\experiments\\EXP-108\\summary.json": "f6d027d82ffd3a9b573fa878316491f0afb4a8c92ea6afcb1261e62de3ae48c4",
@@ -68,25 +68,25 @@
     "D:\\量化\\artifacts\\experiments\\EXP-108\\source_snapshot\\src\\cryptoquant\\trading\\risk.py": "0509c59fc8241c0cb5f43e492ad5a8908b9358e983cd50e88eebcabe36b1f661",
     "D:\\量化\\artifacts\\experiments\\EXP-108\\source_snapshot\\src\\cryptoquant\\baselines\\engine.py": "9923d5cffa0909b771053ebd6764a598847af13961df7ce98acfcafe78835864"
   },
-  "finished_at_utc": "2026-10-05T08:35:07.522376+00:00",
+  "finished_at_utc": "2026-10-05T10:16:42.194276+00:00",
   "artifacts": {
-    "comparison.json": "c026fb4fab961b83cab2fb47ce2c9d62652a90cabce1d6004d0093d195a6a543",
+    "comparison.json": "8f5e9436ad3954b00cc840c30658e191da98f85d4443457e042cb044e2429a3f",
     "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
-    "source_manifest.json": "a5e08837c4c0ed8592251db648ed5497cdaaadcacd9fd2158d4353c0136bdaad",
+    "source_manifest.json": "6511768e75810e65a60db0af95a32196e0f6c2dc41a4d38d907a29509ac3bf8e",
     "targets.parquet": "1224a0300246c5afd7e95dc779f421a325ff0a8fdb7a266ae59d36a862af04d6",
-    "after/annual.json": "200c83a15d0d183ced5f5b7b95d77ad85d650bbd38c98bf0412fcd29915b74b5",
-    "after/equity.csv": "91ab6b9cca4785fe34c09a4904cc83a0ddbd4870ec2ce6f01bf0932567409000",
-    "after/events.json": "620cb7b6aad406fa0b36e280196cb3454a8edb8a8afd556bcfc3c3820577f038",
-    "after/fills.csv": "c86a47444ee5c1ca0b4f5f8163523679cd01f17786f32cdf289c2cc954d24557",
-    "after/orders.csv": "a30784b2e85a5a6b4059c2ccba89f59094240990199fbc69f8cd121fdfe8a8fe",
-    "after/summary.json": "4699209eccadd79d5ffb64541c32a41a5610ae323e6df7503c523b38fd41ce70",
-    "after/weekly.csv": "a464c6de3c176bbb945cd3b0b31f84ac3aeeba5832ad95c83e281194cc9a4c0b",
+    "after/annual.json": "a0b2fdcf7f92be2b032d04957dbb62c7df7c047b61f99cbb2baa982491fee02e",
+    "after/equity.csv": "b74b29e36b528da87e9306b755afdee3badfe03527d15f43f7c3adbcb4c2032a",
+    "after/events.json": "042d931e23716d3721d07b292ceb48f32a809b494a803a42b57597b2229cc9c6",
+    "after/fills.csv": "65ab1bc063cbfb9b69303ec863d91036b86893dbe98297a9d441969daa70b4dc",
+    "after/orders.csv": "f7b680d43b1a69acd1ed9803b552a9ed48a7ecf5de83bb5df920293cf2f79701",
+    "after/summary.json": "3c9c4f57d6ad5f80c859dbc97cb7eb4063b3f12b8c39c8fb8766d8107b31bf89",
+    "after/weekly.csv": "aa7d374d8ddef5d76a4ab9ebaafea581ff2487b208c33d73b25aa01f901fd8a6",
     "before/annual.json": "a0b2fdcf7f92be2b032d04957dbb62c7df7c047b61f99cbb2baa982491fee02e",
     "before/equity.csv": "b74b29e36b528da87e9306b755afdee3badfe03527d15f43f7c3adbcb4c2032a",
     "before/events.json": "dd9717442da186382a345689f8fe90af91cff33f305e08b5124dfdb6badbc907",
     "before/fills.csv": "65ab1bc063cbfb9b69303ec863d91036b86893dbe98297a9d441969daa70b4dc",
     "before/orders.csv": "f7b680d43b1a69acd1ed9803b552a9ed48a7ecf5de83bb5df920293cf2f79701",
-    "before/summary.json": "6c0001c732c1c6b3e48b0fdc2b843359eab6b92811dd0884151f61443fa8d272",
+    "before/summary.json": "07cfda75b86dba3f8649ecfd995261d84a5dd0059c0204099bf389e83b2d8d50",
     "before/weekly.csv": "aa7d374d8ddef5d76a4ab9ebaafea581ff2487b208c33d73b25aa01f901fd8a6"
   }
 }
