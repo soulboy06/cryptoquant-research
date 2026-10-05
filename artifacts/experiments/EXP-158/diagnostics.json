@@ -1,0 +1,573 @@
+{
+  "w1_forensic": {
+    "variants": {
+      "EXP-133": {
+        "recorded_closed_cycles": 29,
+        "total_buy_fills": 30,
+        "total_sell_fills": 30,
+        "per_symbol": {
+          "BTCUSDT": {
+            "buys": 3,
+            "sells": 3
+          },
+          "ETHUSDT": {
+            "buys": 4,
+            "sells": 4
+          },
+          "SOLUSDT": {
+            "buys": 23,
+            "sells": 23
+          }
+        }
+      },
+      "EXP-141": {
+        "recorded_closed_cycles": 29,
+        "total_buy_fills": 30,
+        "total_sell_fills": 30,
+        "per_symbol": {
+          "BTCUSDT": {
+            "buys": 3,
+            "sells": 3
+          },
+          "ETHUSDT": {
+            "buys": 4,
+            "sells": 4
+          },
+          "SOLUSDT": {
+            "buys": 23,
+            "sells": 23
+          }
+        }
+      },
+      "EXP-144": {
+        "recorded_closed_cycles": 29,
+        "total_buy_fills": 30,
+        "total_sell_fills": 30,
+        "per_symbol": {
+          "BTCUSDT": {
+            "buys": 3,
+            "sells": 3
+          },
+          "ETHUSDT": {
+            "buys": 4,
+            "sells": 4
+          },
+          "SOLUSDT": {
+            "buys": 23,
+            "sells": 23
+          }
+        }
+      },
+      "EXP-147": {
+        "recorded_closed_cycles": 29,
+        "total_buy_fills": 30,
+        "total_sell_fills": 30,
+        "per_symbol": {
+          "BTCUSDT": {
+            "buys": 3,
+            "sells": 3
+          },
+          "ETHUSDT": {
+            "buys": 4,
+            "sells": 4
+          },
+          "SOLUSDT": {
+            "buys": 23,
+            "sells": 23
+          }
+        }
+      }
+    },
+    "dropped_trade_details": {
+      "buy_time": "2023-06-10 04:00:00+00:00",
+      "buy_qty": 0.634,
+      "buy_price": 16.298145,
+      "buy_notional": 10.33302393,
+      "stop_loss_trigger_time": "2023-06-10 05:00:00+00:00",
+      "stop_loss_quote_price": 14.57271,
+      "stop_loss_notional_value": 9.24059912913,
+      "rejection_reason": "zero_quantity (sellable_quantity returned 0 because 9.24 < 10.0 min_notional)",
+      "event_impact": "complete_exit_if_tail treated sub-10U as unmarketable tail and reset cycle_open=False while had_exit_fill was False",
+      "final_exit_time": "2023-06-11 20:00:00+00:00",
+      "final_exit_qty": 0.634,
+      "final_exit_price": 15.992,
+      "final_exit_notional": 10.138928,
+      "actual_trade_completed": true,
+      "uncounted_due_to_cycle_open_flag": true,
+      "factual_closed_cycles": 30
+    },
+    "conclusion": "W1 actually executed 30 complete round-trip trades. The 29 recorded count is a mechanical artifact of 10 USDT minimum notional rejection during a flash dip on 2023-06-10 followed by a clean subsequent exit."
+  },
+  "w2_comparison": {
+    "R0": {
+      "experiment_id": "EXP-109",
+      "net_return": 0.26622556163606,
+      "max_drawdown": 0.058739177530681634,
+      "closed_cycles": 68,
+      "fees_usdt": 4.44372505880515,
+      "exit_reasons": {
+        "strategy_exit": 62,
+        "breakeven_exit": 6
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 24,
+          "fifo_pnl": 1.4527031915542423,
+          "win_rate": 0.5833333333333334,
+          "avg_trade_pnl": 0.06052929964809343,
+          "ledger_realized_pnl": 1.1031701691598297
+        },
+        "ETHUSDT": {
+          "trades": 20,
+          "fifo_pnl": 4.618393450837492,
+          "win_rate": 0.6,
+          "avg_trade_pnl": 0.2309196725418746,
+          "ledger_realized_pnl": 4.619748763702965
+        },
+        "SOLUSDT": {
+          "trades": 24,
+          "fifo_pnl": 21.06206670835498,
+          "win_rate": 0.6666666666666666,
+          "avg_trade_pnl": 0.8775861128481242,
+          "ledger_realized_pnl": 20.868075071800536
+        }
+      }
+    },
+    "R3": {
+      "experiment_id": "EXP-134",
+      "net_return": 0.1366119568929865,
+      "max_drawdown": 0.027905620998953256,
+      "closed_cycles": 55,
+      "fees_usdt": 1.89663869789625,
+      "exit_reasons": {
+        "strategy_exit": 50,
+        "breakeven_exit": 7,
+        "rebalance": 1
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 16,
+          "fifo_pnl": 0.14647725817621016,
+          "win_rate": 0.75,
+          "avg_trade_pnl": 0.009154828636013135,
+          "ledger_realized_pnl": -0.015674747629011575
+        },
+        "ETHUSDT": {
+          "trades": 18,
+          "fifo_pnl": 4.021178909701513,
+          "win_rate": 0.5555555555555556,
+          "avg_trade_pnl": 0.22339882831675073,
+          "ledger_realized_pnl": 4.026030063031151
+        },
+        "SOLUSDT": {
+          "trades": 24,
+          "fifo_pnl": 9.734206975409993,
+          "win_rate": 0.7083333333333334,
+          "avg_trade_pnl": 0.4055919573087497,
+          "ledger_realized_pnl": 9.638529477578166
+        }
+      }
+    },
+    "R5": {
+      "experiment_id": "EXP-142",
+      "net_return": 0.138240739522886,
+      "max_drawdown": 0.02863830315200506,
+      "closed_cycles": 56,
+      "fees_usdt": 2.0363952584936,
+      "exit_reasons": {
+        "strategy_exit": 52,
+        "breakeven_exit": 6,
+        "rebalance": 1
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 16,
+          "fifo_pnl": 0.17212866816586736,
+          "win_rate": 0.75,
+          "avg_trade_pnl": 0.01075804176036671,
+          "ledger_realized_pnl": 0.01043815876209143
+        },
+        "ETHUSDT": {
+          "trades": 19,
+          "fifo_pnl": 3.8155363740944916,
+          "win_rate": 0.5789473684210527,
+          "avg_trade_pnl": 0.2008177038997101,
+          "ledger_realized_pnl": 3.816886269022561
+        },
+        "SOLUSDT": {
+          "trades": 24,
+          "fifo_pnl": 10.09236846317999,
+          "win_rate": 0.6666666666666666,
+          "avg_trade_pnl": 0.4205153526324996,
+          "ledger_realized_pnl": 9.99025385997597
+        }
+      }
+    },
+    "R6": {
+      "experiment_id": "EXP-145",
+      "net_return": 0.137368527102571,
+      "max_drawdown": 0.02975806061118977,
+      "closed_cycles": 59,
+      "fees_usdt": 2.1401844150712,
+      "exit_reasons": {
+        "strategy_exit": 54,
+        "breakeven_exit": 6,
+        "rebalance": 1
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 17,
+          "fifo_pnl": 0.06364653240826812,
+          "win_rate": 0.7058823529411765,
+          "avg_trade_pnl": 0.0037439136710745954,
+          "ledger_realized_pnl": -0.10271943210522441
+        },
+        "ETHUSDT": {
+          "trades": 20,
+          "fifo_pnl": 3.3566339023784924,
+          "win_rate": 0.6,
+          "avg_trade_pnl": 0.16783169511892462,
+          "ledger_realized_pnl": 3.3596437821326086
+        },
+        "SOLUSDT": {
+          "trades": 24,
+          "fifo_pnl": 10.560248056709993,
+          "win_rate": 0.6666666666666666,
+          "avg_trade_pnl": 0.4400103356962497,
+          "ledger_realized_pnl": 10.454791785130691
+        }
+      }
+    },
+    "R7": {
+      "experiment_id": "EXP-148",
+      "net_return": 0.135394670723227,
+      "max_drawdown": 0.02734986304363546,
+      "closed_cycles": 54,
+      "fees_usdt": 2.01268737592065,
+      "exit_reasons": {
+        "strategy_exit": 50,
+        "breakeven_exit": 6,
+        "rebalance": 1
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 14,
+          "fifo_pnl": 0.08439111751831624,
+          "win_rate": 0.7142857142857143,
+          "avg_trade_pnl": 0.006027936965594017,
+          "ledger_realized_pnl": -0.07412284544289728
+        },
+        "ETHUSDT": {
+          "trades": 19,
+          "fifo_pnl": 3.639223103438993,
+          "win_rate": 0.5789473684210527,
+          "avg_trade_pnl": 0.19153805807573646,
+          "ledger_realized_pnl": 3.6397008892177807
+        },
+        "SOLUSDT": {
+          "trades": 24,
+          "fifo_pnl": 10.049061029039997,
+          "win_rate": 0.6666666666666666,
+          "avg_trade_pnl": 0.41871087620999986,
+          "ledger_realized_pnl": 9.94349810087267
+        }
+      }
+    }
+  },
+  "r2025_comparison": {
+    "R0": {
+      "experiment_id": "EXP-110",
+      "net_return": -0.1291450066364125,
+      "max_drawdown": 0.1619516130266845,
+      "closed_cycles": 134,
+      "fees_usdt": 7.43271213481895,
+      "exit_reasons": {
+        "strategy_exit": 119,
+        "breakeven_exit": 9,
+        "stop_loss": 6
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 20,
+          "fifo_pnl": -1.6681838348617521,
+          "win_rate": 0.6,
+          "stops": 1,
+          "ledger_realized_pnl": -1.6357406085423076
+        },
+        "ETHUSDT": {
+          "trades": 75,
+          "fifo_pnl": -8.486577026090998,
+          "win_rate": 0.48,
+          "stops": 4,
+          "ledger_realized_pnl": -8.66538256118849
+        },
+        "SOLUSDT": {
+          "trades": 39,
+          "fifo_pnl": -2.9129308422599847,
+          "win_rate": 0.48717948717948717,
+          "stops": 1,
+          "ledger_realized_pnl": -2.6306953838216476
+        }
+      }
+    },
+    "R3": {
+      "experiment_id": "EXP-135",
+      "net_return": -0.0767666807547335,
+      "max_drawdown": 0.119213161614249,
+      "closed_cycles": 50,
+      "fees_usdt": 2.8483825681819,
+      "exit_reasons": {
+        "strategy_exit": 41,
+        "breakeven_exit": 5,
+        "stop_loss": 4,
+        "rebalance": 2
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 10,
+          "fifo_pnl": -0.2200676430397399,
+          "win_rate": 0.6,
+          "stops": 0,
+          "ledger_realized_pnl": -0.2098105093953756
+        },
+        "ETHUSDT": {
+          "trades": 28,
+          "fifo_pnl": 0.4740305891384782,
+          "win_rate": 0.5357142857142857,
+          "stops": 1,
+          "ledger_realized_pnl": 0.276086510405908
+        },
+        "SOLUSDT": {
+          "trades": 14,
+          "fifo_pnl": -7.6055377562849795,
+          "win_rate": 0.35714285714285715,
+          "stops": 3,
+          "ledger_realized_pnl": -7.666731828480199
+        }
+      }
+    },
+    "R5": {
+      "experiment_id": "EXP-143",
+      "net_return": -0.019183245292987,
+      "max_drawdown": 0.11100944183862257,
+      "closed_cycles": 57,
+      "fees_usdt": 3.26766076592485,
+      "exit_reasons": {
+        "strategy_exit": 51,
+        "breakeven_exit": 6,
+        "rebalance": 2,
+        "stop_loss": 2
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 11,
+          "fifo_pnl": 0.29830580211780333,
+          "win_rate": 0.7272727272727273,
+          "stops": 0,
+          "ledger_realized_pnl": 0.30862164496714656
+        },
+        "ETHUSDT": {
+          "trades": 33,
+          "fifo_pnl": -0.03216256528201655,
+          "win_rate": 0.48484848484848486,
+          "stops": 1,
+          "ledger_realized_pnl": -0.23170326191705456
+        },
+        "SOLUSDT": {
+          "trades": 17,
+          "fifo_pnl": -1.8743246376149858,
+          "win_rate": 0.47058823529411764,
+          "stops": 1,
+          "ledger_realized_pnl": -1.94906320896803
+        }
+      }
+    },
+    "R6": {
+      "experiment_id": "EXP-146",
+      "net_return": -0.0223665220434785,
+      "max_drawdown": 0.11213893135877644,
+      "closed_cycles": 57,
+      "fees_usdt": 3.33839883860385,
+      "exit_reasons": {
+        "strategy_exit": 51,
+        "breakeven_exit": 6,
+        "rebalance": 2,
+        "stop_loss": 2
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 11,
+          "fifo_pnl": 0.2983768012023057,
+          "win_rate": 0.7272727272727273,
+          "stops": 0,
+          "ledger_realized_pnl": 0.30863690478987793
+        },
+        "ETHUSDT": {
+          "trades": 33,
+          "fifo_pnl": -0.17764584283052254,
+          "win_rate": 0.48484848484848486,
+          "stops": 1,
+          "ledger_realized_pnl": -0.37384501990659447
+        },
+        "SOLUSDT": {
+          "trades": 17,
+          "fifo_pnl": -2.0575774125299895,
+          "win_rate": 0.47058823529411764,
+          "stops": 1,
+          "ledger_realized_pnl": -2.1306218322197212
+        }
+      }
+    },
+    "R7": {
+      "experiment_id": "EXP-149",
+      "net_return": -0.020125274585727,
+      "max_drawdown": 0.11132156880719939,
+      "closed_cycles": 57,
+      "fees_usdt": 3.24285973592535,
+      "exit_reasons": {
+        "strategy_exit": 51,
+        "breakeven_exit": 6,
+        "rebalance": 2,
+        "stop_loss": 2
+      },
+      "per_symbol": {
+        "BTCUSDT": {
+          "trades": 11,
+          "fifo_pnl": 0.29830580211780333,
+          "win_rate": 0.7272727272727273,
+          "stops": 0,
+          "ledger_realized_pnl": 0.30862164496714656
+        },
+        "ETHUSDT": {
+          "trades": 33,
+          "fifo_pnl": -0.06962756249251417,
+          "win_rate": 0.48484848484848486,
+          "stops": 1,
+          "ledger_realized_pnl": -0.2693654146327197
+        },
+        "SOLUSDT": {
+          "trades": 17,
+          "fifo_pnl": -1.9296590629049897,
+          "win_rate": 0.47058823529411764,
+          "stops": 1,
+          "ledger_realized_pnl": -2.0030154908152125
+        }
+      }
+    }
+  },
+  "probability_distributions": {
+    "W1": {
+      "BTCUSDT": {
+        "min": 0.1625219856406098,
+        "p25": 0.25988654872605366,
+        "median": 0.27908713137202174,
+        "p75": 0.30489653800628047,
+        "max": 0.7025278233279045,
+        "count_gt_050": 3,
+        "count_gt_060": 2,
+        "count_gt_065": 1
+      },
+      "ETHUSDT": {
+        "min": 0.2776650278804292,
+        "p25": 0.3143136402304936,
+        "median": 0.3293771432060715,
+        "p75": 0.3504491758808783,
+        "max": 0.5881924746274676,
+        "count_gt_050": 8,
+        "count_gt_060": 0,
+        "count_gt_065": 0
+      },
+      "SOLUSDT": {
+        "min": 0.046264434046048,
+        "p25": 0.3881369905613659,
+        "median": 0.4091194708732905,
+        "p75": 0.4288314758975643,
+        "max": 0.5891894688877112,
+        "count_gt_050": 41,
+        "count_gt_060": 0,
+        "count_gt_065": 0
+      }
+    },
+    "W2": {
+      "BTCUSDT": {
+        "min": 0.2093531225450857,
+        "p25": 0.2651229530293936,
+        "median": 0.28852017155069465,
+        "p75": 0.31954999095912606,
+        "max": 0.8964459172542003,
+        "count_gt_050": 30,
+        "count_gt_060": 9,
+        "count_gt_065": 4
+      },
+      "ETHUSDT": {
+        "min": 0.221960815330922,
+        "p25": 0.29704831884091987,
+        "median": 0.31912636634884395,
+        "p75": 0.35262008512179954,
+        "max": 0.8532606161930824,
+        "count_gt_050": 27,
+        "count_gt_060": 8,
+        "count_gt_065": 5
+      },
+      "SOLUSDT": {
+        "min": 0.2725207540003556,
+        "p25": 0.38946128353723153,
+        "median": 0.4076184908514482,
+        "p75": 0.42772011417906386,
+        "max": 0.5714096440545459,
+        "count_gt_050": 34,
+        "count_gt_060": 0,
+        "count_gt_065": 0
+      }
+    },
+    "R2025": {
+      "BTCUSDT": {
+        "min": 0.2186755243171844,
+        "p25": 0.2645725936486361,
+        "median": 0.2845759074726326,
+        "p75": 0.3140628740712141,
+        "max": 0.6926996396019016,
+        "count_gt_050": 29,
+        "count_gt_060": 7,
+        "count_gt_065": 4
+      },
+      "ETHUSDT": {
+        "min": 0.2365459038868245,
+        "p25": 0.3110121232749294,
+        "median": 0.3413017648288411,
+        "p75": 0.3836508836287843,
+        "max": 0.8289241203697181,
+        "count_gt_050": 103,
+        "count_gt_060": 27,
+        "count_gt_065": 17
+      },
+      "SOLUSDT": {
+        "min": 0.2528227219697557,
+        "p25": 0.3924587428584621,
+        "median": 0.4092044264150038,
+        "p75": 0.4305973829416028,
+        "max": 0.6994862098617725,
+        "count_gt_050": 58,
+        "count_gt_060": 7,
+        "count_gt_065": 1
+      }
+    }
+  },
+  "volatility_estimates": {
+    "BTCUSDT": {
+      "annual_vol": 0.42,
+      "inv_vol": 2.380952380952381,
+      "risk_parity_share": 0.45425418298326803
+    },
+    "ETHUSDT": {
+      "annual_vol": 0.58,
+      "inv_vol": 1.7241379310344829,
+      "risk_parity_share": 0.3289426842292631
+    },
+    "SOLUSDT": {
+      "annual_vol": 0.88,
+      "inv_vol": 1.1363636363636365,
+      "risk_parity_share": 0.21680313278746885
+    }
+  }
+}

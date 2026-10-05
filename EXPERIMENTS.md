@@ -169,8 +169,27 @@
 | EXP-149 | 相对强弱回测 | 完成 | R7（Alpha 波动率双自适应）R2025 base 成本（收益-2.01%>-5%，回撤11.13%，周期57） | [摘要](artifacts/experiments/EXP-149/summary.json)；[报告](artifacts/experiments/EXP-149/report.md) |
 | EXP-150 | 相对强弱筛选 | 完成（全失格） | 第九轮 R5/R6/R7 跨三窗口 9 组 Base 基础筛选；全失格坚决停止压力测试 | [选择](artifacts/experiments/EXP-150/selection.json)；[报告](artifacts/experiments/EXP-150/report.md) |
 | EXP-157 | 相对强弱对比 | 完成 | 第九轮 R5/R6/R7 多币种相对强弱解耦全景综合对比评估与三层结论最终评定 | [报告](artifacts/experiments/EXP-157/report.md)；[比较](artifacts/experiments/EXP-157/comparison.json) |
+| EXP-158 | 既有产物只读诊断 | 完成 | 第九轮相对强弱解耦产物只读深度诊断（W1 缺 1 笔机制根因、W2 差 1.18% 损益归因与第十轮技术路线决策） | [报告](artifacts/experiments/EXP-158/report.md)；[诊断](artifacts/experiments/EXP-158/diagnostics.json)；[清单](artifacts/experiments/EXP-158/run_manifest.json) |
 
-## EXP-141—157：第九轮多币种相对强弱解耦与自适应配仓实际结果
+## EXP-158：第九轮相对强弱解耦产物只读深度诊断实际结果
+
+- 状态：全部完成。2026-10-05（Asia/Shanghai）；只读深度诊断，0 新交易账户，0 真实下单，2026 测试集物理封存。
+- 诊断来源：EXP-141~149（第九轮 Base）、EXP-130~140（第八轮）、EXP-108~110（R0 基准）。
+- 关键诊断发现：
+  1. **W1 周期（29 vs 30）底层真相**：
+     - 四组变体（R3、R5、R6、R7）在 2023 开发期**实际完成的买入和卖出撮合成交均为 30 笔**；
+     - 记录少计 1 笔的根因：2023-06-10 04:00 SOL 以 10% 仓位买入（10.33 USDT）；05:00 遭遇突发闪跌 -10.5% 至 14.57 USDT，持仓净值跌至 9.24 USDT；触发 8% 止损时因低于交易所最低 10 USDT 名义金额限制被拒单；撮合引擎中的 `complete_exit_if_tail` 将其误判为无法卖出的零头尾差，将 `cycle_open` 标志提前清零；随后在 2023-06-11 20:00 SOL 反弹至 15.99 USDT（名义价值 10.14 USDT）被 `strategy_exit` 完整平仓时，由于 `cycle_open` 为 False，导致该笔完整交易未被累计入 `closed_cycles` 计数器；
+     - **结论**：W1 实质已具备 30 笔样本的统计充足性。
+  2. **W2 牛市收益差距（+13.82% vs 15.00%）损益剖析**：
+     - 实际差距仅 **1.176 USDT**；
+     - 交易摩擦成本消耗 2.036 USDT（折合 2.04% 净值），毛收益实为 **+15.86%**；
+     - 资产贡献极度分化：SOL 净贡献 +9.99 USDT（占 71.7%），ETH 贡献 +3.82 USDT，BTC 净贡献仅 +0.01 USDT（且 4 笔大止损亏掉 -2.08 USDT）；
+     - 出场机制检验：91.1% 的交易由 4 小时趋势反转自然出场，未发生趋势被提前截断的情况。
+  3. **第十轮技术路线决策判定（Risk Parity vs 置信度配仓）**：
+     - **否定传统 Risk Parity（波动率平价）**：年化波动率 SOL 88% > ETH 58% > BTC 42%。套用该模型将给 BTC 分配 45% 重仓，而只给 SOL 分配 22% 轻仓！但这将直接削弱产生 72%~84% 利润的 SOL，并把重仓交给打平甚至亏损的 BTC，**必然导致牛市收益大幅下滑，无法跨越 15% 门槛**；
+     - **否定绝对概率置信度（$P \ge 0.60$）**：底层 12 特征逻辑回归对高波动 SOL 的预测概率在 2023 与 2024 全年**从未达到过 0.60**（W1 最大 0.5892，W2 最大 0.5714）；达到 0.60 的全是不赚钱的 BTC 和 ETH。若设置绝对门槛提仓，SOL 永远无法获得高配仓；
+     - **推荐第十轮科学破局方向**：**币种内部相对置信度（$\Delta P = P - 0.50 \ge 0.03$）与短期动量加速（$R_{24h} > 0$ 且 Top-1 Alpha）强化配仓**（将 SOL 加速期 7 笔交易由 20% 恢复至 30%，预计可直接增厚收益 +2.5%~3.5%，推动 W2 越过 15%）。
+- 产物位置：[EXP-158诊断报告](artifacts/experiments/EXP-158/report.md)、[诊断JSON](artifacts/experiments/EXP-158/diagnostics.json)、[清单](artifacts/experiments/EXP-158/run_manifest.json)。
 
 - 状态：全部完成。2026-10-05（Asia/Shanghai）；涵盖 9 组 Base 基础回测（EXP-141~149）、1 组基础门槛决策筛选（EXP-150）与 1 组全景综合对比报告（EXP-157）。
 - 实验性质：各窗口独立 100 USDT 虚拟本金，固定 50 USDT 硬底线，C2 出场规则（1.20% 保本激活），12 特征逻辑回归模型（复用 EXP-065/067/094 权重，不重拟合），纯离线回测，2026 保留测试集继续严格封存。
