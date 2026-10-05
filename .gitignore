@@ -19,4 +19,4 @@ artifacts/experiments/**/*.parquet
 artifacts/experiments/**/*.zip
 artifacts/experiments/**/source_snapshot/
 scratch/
-
+catboost_info/

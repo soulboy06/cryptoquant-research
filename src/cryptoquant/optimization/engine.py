@@ -68,6 +68,18 @@ def fit_and_predict_fold(
                 with threadpool_limits(limits=1):
                     model.fit(X_train, y_train)
                     probs_series.loc[ready] = model.predict_proba(X_eval_ready)[:, 1]
+            elif model_candidate.family == 'xgboost':
+                from xgboost import XGBClassifier
+                model = XGBClassifier(**model_candidate.params)
+                with threadpool_limits(limits=1):
+                    model.fit(X_train, y_train)
+                    probs_series.loc[ready] = model.predict_proba(X_eval_ready)[:, 1]
+            elif model_candidate.family == 'catboost':
+                from catboost import CatBoostClassifier
+                model = CatBoostClassifier(**model_candidate.params)
+                with threadpool_limits(limits=1):
+                    model.fit(X_train, y_train)
+                    probs_series.loc[ready] = model.predict_proba(X_eval_ready)[:, 1]
             else:
                 raise ValueError(f"Unknown model family: {model_candidate.family}")
                 

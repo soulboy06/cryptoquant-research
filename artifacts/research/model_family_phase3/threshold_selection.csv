@@ -1,0 +1,169 @@
+fold,model_name,inner_train_window,inner_eval_window,candidate_threshold,inner_metric_name,inner_metric_value,is_selected
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.6452032299407872,False
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.2994345810421892,False
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.23193252972525877,False
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.08722308410966627,False
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,-0.002971050903799136,False
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,0.023477041663651617,False
+W1 (2023 eval),LR_C0.10,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.049229535794022755,True
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.184158205976476,True
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,0.169627589929815,False
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,0.0715886387682535,False
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.050642681133701,False
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.0520801049318855,False
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.012056821711205,False
+W2 (2024 eval),LR_C0.10,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.033554511470955,False
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.249666382629215,True
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.13254060033528,False
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,0.174087546859815,False
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,0.136995916543419,False
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,0.116829512587898,False
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0296614345365455,False
+R2025 (2025 eval),LR_C0.10,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.006269598856875,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.6041503670151975,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.3907603353510176,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.24147303937382938,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.12911650841336947,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,-0.026869342715201524,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,-0.007338548469952782,False
+W1 (2023 eval),LR_C0.50,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.03106714960574406,True
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.1205128821107185,False
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,0.184995564448555,True
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,0.0685909348043365,False
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.062087140797256,False
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.066692687521026,False
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.028220644565573,False
+W2 (2024 eval),LR_C0.50,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.0016863617234355,False
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.2659573127162915,True
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.128740670796253,False
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,0.1716596881848215,False
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,0.1328064907228285,False
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,0.1212810110011675,False
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0663762913769815,False
+R2025 (2025 eval),LR_C0.50,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.006269598856875,False
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.432736657682377,False
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.32422965767366346,False
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.24616943361473564,False
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.08153336870441322,False
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,0.04257629499581101,True
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,0.03936883800660995,False
+W1 (2023 eval),LGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,-0.00503672802019155,False
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.0857943562813335,False
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,0.1606300357512215,True
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,0.0308231228514385,False
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.052579731458071,False
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.04671460041382,False
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.03405802875075,False
+W2 (2024 eval),LGB_shallow,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.01589636425265,False
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.0376384892825345,True
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.026061738634079,False
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,0.028157796894817,False
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,0.0260516838842295,False
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,0.0003586718627,False
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,-0.0042701587563,False
+R2025 (2025 eval),LGB_shallow,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.0023707228046,False
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.4421564784632946,False
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.32997650160100606,False
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.11437283441144828,False
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.023715945578647805,False
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,0.00623141195045387,True
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,-0.006236338343511473,False
+W1 (2023 eval),LGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.0,False
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.002032379472439,False
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,0.009839049771676,False
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,-0.01435882133123,False
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.01269427494405,True
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.00686093715345,False
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.0,False
+W2 (2024 eval),LGB_conservative,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.0,False
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.084316868471789,True
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.07235708535617,False
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,0.0359965676263,False
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,0.0150063844688,False
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,-0.0090715677142,False
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0,False
+R2025 (2025 eval),LGB_conservative,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.0,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.5242819388058695,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.4099440573610372,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.11119026850328205,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.1721201256624901,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,-0.0893557133010522,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,-0.027611113944676635,False
+W1 (2023 eval),XGB_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.007701549067666802,True
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.0992428166824405,False
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,0.138517041115578,True
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,0.0138456452434075,False
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,-0.029198382337,False
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,-0.00268354289145,False
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.0403340253002,False
+W2 (2024 eval),XGB_shallow,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.02411482981695,False
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.0637265052729625,True
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.023770823325181,False
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,0.0501902222149935,False
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,-0.03195813447523,False
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,-0.03099048077436,False
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0009340672899,False
+R2025 (2025 eval),XGB_shallow,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.00399015936335,False
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.5054879854904709,False
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.2016075223795041,False
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.16158196059282884,False
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.04984599463880516,False
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,-0.018396725647333037,False
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,0.0,True
+W1 (2023 eval),XGB_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.0,False
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.226016720867815,True
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,-0.019693828924535,False
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,-0.00995941252943,False
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.0051610718693,False
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.0023064024643,False
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.0,False
+W2 (2024 eval),XGB_conservative,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.0,False
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.1137918189827285,True
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.0353657469541605,False
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,-0.01066450685415,False
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,-0.01420351503969,False
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,0.00399015936335,False
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0,False
+R2025 (2025 eval),XGB_conservative,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.0,False
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.3977125448677862,False
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.1523058297020902,False
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.09328591575754074,False
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,-0.05009850759604432,False
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,-0.004254080679091604,False
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,0.0009042812274368232,True
+W1 (2023 eval),CAT_shallow,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.0,False
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,0.07332419030596,True
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,-0.06386663071933,False
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,-0.0273952008364,False
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.02157692029225,False
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.0044533697579,False
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.0,False
+W2 (2024 eval),CAT_shallow,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.0,False
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.168557949782275,True
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.04606155226738,False
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,0.0365030986187,False
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,-0.0144580270449,False
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,0.0,False
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0,False
+R2025 (2025 eval),CAT_shallow,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.0,False
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.44,inner_sample_net_return,-0.41931632972708494,False
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.46,inner_sample_net_return,-0.2143239871581097,False
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.48,inner_sample_net_return,-0.06206334480387446,False
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.5,inner_sample_net_return,0.01616832415049264,True
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.52,inner_sample_net_return,0.0,False
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.54,inner_sample_net_return,0.0,False
+W1 (2023 eval),CAT_conservative,2022-01 to 2022-08,2022-09 to 2022-12,0.56,inner_sample_net_return,0.0,False
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.44,inner_w1_net_return,-0.05558641513764,False
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.46,inner_w1_net_return,-0.0095230478422,False
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.48,inner_w1_net_return,0.0,True
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.5,inner_w1_net_return,0.0,False
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.52,inner_w1_net_return,0.0,False
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.54,inner_w1_net_return,0.0,False
+W2 (2024 eval),CAT_conservative,2022 (full),2023 (W1 execution),0.56,inner_w1_net_return,0.0,False
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.44,inner_w2_net_return,0.173957007440165,True
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.46,inner_w2_net_return,0.04256535978465,False
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.48,inner_w2_net_return,-0.00767156312185,False
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.5,inner_w2_net_return,0.0,False
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.52,inner_w2_net_return,0.0,False
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.54,inner_w2_net_return,0.0,False
+R2025 (2025 eval),CAT_conservative,2022-2023 (full),2024 (W2 execution),0.56,inner_w2_net_return,0.0,False

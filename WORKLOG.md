@@ -994,9 +994,51 @@
   - 2026 数据未用于训练、特征计算或评估（严格执行 no future leakage；test 分区物理 0 读取）；
   - 100 USDT 虚拟资金、50 USDT 底线与现货无杠杆规则严格保持。
 
+### WL-061: 2026-10-05 23:25:00+08:00 Phase 3 4h 二分类模型结构受控比较（LR vs LightGBM vs XGBoost vs CatBoost）实证完成与瓶颈归因定论
+
+- 用户要求：
+  1. 进入 Phase 3：4h 二分类模型结构受控比较，回答核心问题：“当前收益瓶颈究竟来自模型表达能力不足，还是现有 12 个特征本身缺乏更强 Alpha？”；
+  2. 冻结当前 Champion OPT-0026（LR C=0.10, th=0.48, 纯动态 C2, g_week=+0.1293%/w）作为唯一基准；
+  3. 唯一变量为模型结构，比较 Logistic Regression, LightGBM, XGBoost, CatBoost；严禁神经网络、MLP、LSTM、Transformer、Ensemble、新特征、新币种；
+  4. 采用严格时间序列 Walk-Forward（Fold 1: train 2022 -> eval 2023; Fold 2: train 2022~2023 -> eval 2024; Fold 3: train 2022~2024 -> eval 2025）；2026 数据未用于训练、特征拟合、阈值选择或评估（no future leakage）；
+  5. 分为双轨：Lane A（纯结构基准，统一固定 0.48 阈值）；Lane B（实用潜力对照，严格在训练期内通过时间顺序 inner split 自适应选择阈值，绝不提前偷看 outer eval 年份）；
+  6. 模型参数保持浅树、强正则、固定随机种子（seed=42）；
+  7. 输出预测层指标与交易层全景指标，撰写诊断报告；
+  8. 建立单测验证 Phase 3 守卫（outer eval 隔离、训练隔离、特征列一致、决策网格一致、可复现性、2026 隔离）；
+  9. 完成后停止，提交汇报，不要自动进入下一阶段。
+- 实际改动与执行：
+  1. **环境与模型引擎支持**：
+     - 最小化安装 `xgboost==3.4.1` 与 `catboost==1.2.10` 进入 `.venv`；
+     - 修改 `src/cryptoquant/optimization/engine.py`（`fit_and_predict_fold`），原生无缝接入 XGBoost 与 CatBoost 分类器；
+  2. **实验执行流水线构建与运行**：
+     - 编写并执行全流程受控流水线 `scripts/run_model_family_phase3.py`，全量执行 8 个模型在三窗上的预测指标诊断、Lane A 固定阈值回测、Lane B 训练期内部时序自适应阈值搜索及 outer 年份回测（共计 160+ 轮扣成本账本仿真）；
+     - 产物目录完整保存于 `artifacts/research/model_family_phase3/`（`comparison_report.md`, `model_family_summary.csv`, `prediction_metrics.csv`, `trading_metrics.csv`, `threshold_selection.csv`, `results.json`, `experiment_config.json`）；
+  3. **实证对比数据核心事实**：
+     - **Champion 基准精确复现**：`LR_C0.10`（Lane A）周收益精确复现为 **+0.1293% / week**（2023: +7.16%, 2024: +17.41%, 2025: -2.70%, MDD: 11.51%, 交易: 225 笔, 胜率: 57.3%, 手续费: 10.69U）；
+     - **Lane A（固定 0.48 阈值纯结构对照）**：
+       - `LR_C0.10`: **+0.1293%/w**（冠军）
+       - `LR_C0.50`: **+0.1181%/w**（微跌 1.1 bps）
+       - 所有树模型合成周收益全部为负：`LGB_shallow` (-0.0515%/w), `LGB_conservative` (-0.0103%/w), `XGB_shallow` (-0.0482%/w), `XGB_conservative` (-0.0272%/w), `CAT_shallow` (-0.0295%/w), `CAT_conservative` (-0.0285%/w)；
+     - **Lane B（严格时序内自适应阈值潜力对照）**：
+       - 尽管经过自适应校准，表现最好的树模型 `CAT_shallow` 仅达 **+0.0676% / week**（落后 Champion 6.2 bps），且平均持仓拉长至 36.2h；其余树模型仍全部亏损（-0.0027%/w 至 -0.0909%/w）；
+     - **预测指标 vs 交易收益背离**：
+       - 验证集上树模型 ROC-AUC（0.58~0.60）普遍略高于 LR（0.55~0.57），但在真实扣费与动态 C2 出场下全面落后于 LR；证实树模型的微观非线性拟合主要记住了局部市场噪音，未能产生泛化超额收益；
+  4. **终审科学结论（决策 D-050）**：
+     - **确凿证实属于【情况 B】**：“当前收益瓶颈更可能不是模型容量，而是现有 12 个特征本身所包含的净 Alpha 信息量不足以覆盖 0.30055% 交易摩擦”；
+     - **彻底剪枝非线性模型方向**：停止继续扩大模型复杂度，严禁引入神经网络或复杂集成；
+     - **Champion OPT-0026 坚决不更换**；
+     - 下一阶段明确转向：横截面 Top-K 相对强弱排序、新动量与波动率挤压特征工程，以及严格市场环境 no-trade 过滤；
+  5. **单测体系与回归验证**：
+     - 新建 `tests/test_model_family_phase3.py`，完整覆盖 6 项核心不变性断言；
+     - 运行全量测试：`tests/test_model_family_phase3.py`（6项）、`test_holdout_guard.py`（4项）、`test_optimization_pipeline.py`（4项）共 14 项测试全部 PASS（2.60s）。
+- 边界核验：
+  - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
+  - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。
+
 
 
 

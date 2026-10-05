@@ -1,0 +1,169 @@
+{
+  "experiment_name": "Phase 3: 4h Binary Classification Model Structure Controlled Comparison",
+  "timestamp_utc": "2026-10-05T15:22:15.639037+00:00",
+  "software_versions": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "catboost": "1.2.10"
+  },
+  "invariants": {
+    "features": [
+      "return_1h",
+      "return_4h",
+      "return_24h",
+      "return_72h",
+      "volatility_24h",
+      "range_fraction",
+      "quote_volume_change",
+      "ema24_distance",
+      "ema72_distance",
+      "funding_rate_latest",
+      "funding_rate_ma3",
+      "funding_rate_zscore"
+    ],
+    "feature_count": 12,
+    "cost_multiplier": 1.0030055082611389,
+    "round_trip_cost_pct": 0.30055,
+    "symbols": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT"
+    ],
+    "sizing": "R6_default (30% favorable / 25% weak alpha / 0% weak ordinary)",
+    "exit_rules": "Pure Dynamic C2 (breakeven_activation=0.0120, breakeven_ratio=0.0025, stop_loss=0.08, max_holding=None)",
+    "account": "100 USDT virtual, 50 USDT floor, spot no leverage",
+    "champion_baseline": "OPT-0026 (LR_C0.10, th=0.48, g_week=+0.1293%/w)"
+  },
+  "models": [
+    {
+      "name": "LR_C0.10",
+      "family": "logistic_regression",
+      "params": {
+        "C": 0.1
+      }
+    },
+    {
+      "name": "LR_C0.50",
+      "family": "logistic_regression",
+      "params": {
+        "C": 0.5
+      }
+    },
+    {
+      "name": "LGB_shallow",
+      "family": "lightgbm",
+      "params": {
+        "max_depth": 3,
+        "num_leaves": 7,
+        "learning_rate": 0.03,
+        "min_child_samples": 50,
+        "colsample_bytree": 0.8,
+        "subsample": 0.8,
+        "n_estimators": 100,
+        "random_state": 42,
+        "verbosity": -1,
+        "n_jobs": 1
+      }
+    },
+    {
+      "name": "LGB_conservative",
+      "family": "lightgbm",
+      "params": {
+        "max_depth": 2,
+        "num_leaves": 4,
+        "learning_rate": 0.03,
+        "min_child_samples": 100,
+        "reg_alpha": 2.0,
+        "reg_lambda": 2.0,
+        "colsample_bytree": 0.8,
+        "subsample": 0.8,
+        "n_estimators": 100,
+        "random_state": 42,
+        "verbosity": -1,
+        "n_jobs": 1
+      }
+    },
+    {
+      "name": "XGB_shallow",
+      "family": "xgboost",
+      "params": {
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "min_child_weight": 50,
+        "colsample_bytree": 0.8,
+        "subsample": 0.8,
+        "n_estimators": 100,
+        "random_state": 42,
+        "eval_metric": "logloss",
+        "n_jobs": 1
+      }
+    },
+    {
+      "name": "XGB_conservative",
+      "family": "xgboost",
+      "params": {
+        "max_depth": 2,
+        "learning_rate": 0.03,
+        "min_child_weight": 100,
+        "reg_alpha": 2.0,
+        "reg_lambda": 2.0,
+        "colsample_bytree": 0.8,
+        "subsample": 0.8,
+        "n_estimators": 100,
+        "random_state": 42,
+        "eval_metric": "logloss",
+        "n_jobs": 1
+      }
+    },
+    {
+      "name": "CAT_shallow",
+      "family": "catboost",
+      "params": {
+        "depth": 3,
+        "learning_rate": 0.03,
+        "l2_leaf_reg": 3.0,
+        "iterations": 100,
+        "random_seed": 42,
+        "verbose": 0,
+        "thread_count": 1
+      }
+    },
+    {
+      "name": "CAT_conservative",
+      "family": "catboost",
+      "params": {
+        "depth": 2,
+        "learning_rate": 0.03,
+        "l2_leaf_reg": 10.0,
+        "iterations": 100,
+        "random_seed": 42,
+        "verbose": 0,
+        "thread_count": 1
+      }
+    }
+  ],
+  "lanes": {
+    "lane_a": "Fixed threshold 0.48 across all models",
+    "lane_b": "In-sample inner walk-forward threshold selection from [0.44, 0.46, 0.48, 0.50, 0.52, 0.54, 0.56]"
+  },
+  "data_boundary": {
+    "folds": {
+      "W1": {
+        "train": "2022-01-01 to 2023-01-01",
+        "eval": "2023-01-01 to 2024-01-01"
+      },
+      "W2": {
+        "train": "2022-01-01 to 2024-01-01",
+        "eval": "2024-01-01 to 2025-01-01"
+      },
+      "R2025": {
+        "train": "2022-01-01 to 2025-01-01",
+        "eval": "2025-01-01 to 2025-12-31"
+      }
+    },
+    "research_data": "2023, 2024, 2025 are development/research data (not pristine OOS)",
+    "2026_policy": "2026 data not used for training, feature engineering, threshold selection, or evaluation (no future leakage)"
+  }
+}
