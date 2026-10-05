@@ -72,8 +72,11 @@ def generate_horizon_training_samples(root: Path, dev_frames: dict, horizon_hour
 
 def run_experiment():
     root = Path('D:/量化').resolve()
-    reject_holdout(root)
-    
+    with reject_holdout(root):
+        _run_experiment_guarded(root)
+
+
+def _run_experiment_guarded(root: Path):
     out_dir = root / 'artifacts/research/multi_horizon_phase2'
     out_dir.mkdir(parents=True, exist_ok=True)
     

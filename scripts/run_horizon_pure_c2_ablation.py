@@ -64,8 +64,11 @@ def generate_horizon_training_samples(root: Path, dev_frames: dict, horizon_hour
 
 def run_ablation():
     root = Path('D:/量化').resolve()
-    reject_holdout(root)
-    
+    with reject_holdout(root):
+        _run_ablation_guarded(root)
+
+
+def _run_ablation_guarded(root: Path):
     out_dir = root / 'artifacts/research/horizon_c2_ablation'
     out_dir.mkdir(parents=True, exist_ok=True)
     
@@ -214,7 +217,7 @@ def generate_factorial_report(out_dir: Path, pure_c2_results: list[dict], root: 
         "## 1. 实验目的与核心科学问题",
         "",
         "在 Phase 2 初步实验中，我们将预测周期 $H$ 与最大持仓时间绑定为 `max_holding_hours = 2 * H`。",
-        "为了排除“持仓时间被动拉长”对收益的干扰，本消融实验**将所有预测周期的退出机制 100% 保持为原版的纯动态 C2 出场**（`max_holding_hours = None`，浮盈 1% 激活动态保本 50% 锁定，8% 止损，信号出场）。",
+        "为了排除“持仓时间被动拉长”对收益的干扰，本消融实验**将所有预测周期的退出机制 100% 保持为原版的纯动态 C2 出场**（`max_holding_hours = None`，浮盈达到 +1.2% 激活动态保本，回落至成本价 +0.25% 退出，8% 硬止损，信号出场）。",
         "",
         "**核心回答**：",
         "> 到底是因为**“预测周期变长”**导致了信号质量劣化，还是因为**“持仓时间变长”**导致了收益受损？",

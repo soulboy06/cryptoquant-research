@@ -207,7 +207,7 @@ def main():
             f"- 报告生成时间：`{datetime.now(timezone.utc).isoformat()}` UTC",
             "- 实验性质：**单变量受控实验**（仅改变预测目标，现有12特征、C2退出机制、仓位上限、4h决策频率完全冻结不变）",
             "- 成本基准修正：**base 标签往返盈亏平衡严格等于 0.30055%**（非约 0.25%）",
-            "- 实际退出与持仓核验：当前 C2 执行系统为 **动态退出体系**（8h 最长持仓上限 + 浮盈 +1% 激活动态保本 50% 锁定 + 信号翻转退出），非固定 4h 强平",
+            "- 实际退出与持仓核验：当前 C2 执行系统为 **动态退出体系**（浮盈达到 +1.2% 激活动态保本，回落至成本价 +0.25% 退出 + 8% 硬止损 + 信号翻转退出），非固定 4h 强平",
             "- 验证架构：严格 Walk-Forward 滚动时序（Fold 1 训22评23、Fold 2 训22-23评24、Fold 3 训22-24评25），**2026 数据完全物理封存（0 读取、0 统计）**",
             f"- 最终长期目标标尺：**$g_{{week}} \\ge 1.5000\\% / \\text{{week}}$**（52 周复合年化 +116.89%）",
             "",
@@ -221,7 +221,7 @@ def main():
         
         for rank, (_, row) in enumerate(df_results.head(10).iterrows(), start=1):
             report_lines.append(
-                f"| **Reg Top-{rank} ({row['candidate_id'].split('_')[0]})** | 回归 / `{row['model_name']}` | "
+                f"| **Reg Top-{rank} ({str(row['candidate_id']).split('_')[0]})** | 回归 / `{row['model_name']}` | "
                 f"Margin `+{row['margin']*10000:.0f} bps` | "
                 f"{row['ret_w1']*100:+.2f}% | {row['ret_w2']*100:+.2f}% | "
                 f"{row['ret_2025']*100:+.2f}% ({row['mdd_2025']*100:.2f}%) | "
