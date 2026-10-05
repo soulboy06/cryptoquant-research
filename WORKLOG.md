@@ -942,7 +942,7 @@
   3. 彻底回答核心科学疑问：到底是“预测周期变长”害死了收益，还是“持仓时间变长”害死了收益？
 - 架构扩展与消融实验实施：
   - 编写并执行专用消融脚本 `scripts/run_horizon_pure_c2_ablation.py`；
-  - 覆盖 4h、8h、12h、24h 在完全纯动态 C2（`max_holding_hours = None`，浮盈达到 +1.2% 激活动态保本，回落至成本价 +0.25% 退出，8% 硬止损，信号出场）下的完整三窗回测（W1, W2, 2025），严格保持 12 特征、LR 模型、R6 配仓与 2026 物理封存（8 组配置，24 次独立仿真）；
+  - 覆盖 4h、8h、12h、24h 在完全纯动态 C2（`max_holding_hours = None`，浮盈达到 +1.2% 激活动态保本，回落至成本价 +0.25% 退出，8% 硬止损，信号出场）下的完整三窗回测（W1, W2, 2025），严格保持 12 特征、LR 模型、R6 配仓与 2026 数据隔离（8 组配置，24 次独立仿真）；
   - 构建 $2 \times 4$ 完整析因对比矩阵（预测周期 vs 出场机制）。
 - 析因对比实证数据（OPT-0026 参数设置：C=0.10, th=0.48）：
   - **4h 周期**：纯 C2 为 **+0.1293% / week**（225 笔，手续费 10.69U）vs 8h 强平为 **+0.1033% / week**（235 笔，手续费 11.03U）；
@@ -951,13 +951,48 @@
   - **24h 周期**：纯 C2 为 **+0.0014% / week**（536 笔，手续费 25.87U）vs 48h 强平为 **-0.0230% / week**（502 笔，手续费 24.16U）。
 - 核心科学问题的终审回答：
   1. **“预测周期变长”是导致收益严重衰退的最主要原因**：在完全排除任何持仓时限约束的前提下，预测周期拉长至 12h/24h 时，周收益依然直接断崖式归零（从 +0.1293% 暴跌至 +0.0015%）；
-  2. **主因作用机理**：24h 自然价格漂移使正基率虚高至 45.62%，导致分类器过度敏感频繁开仓，交易次数激增至 536 笔，总成交额达 25,865 USDT，累计产生 25.87 USDT 手续费，频繁周转产生高摩擦成本，且现有 12 个短周期特征在长周期上缺乏解释力；
+  2. **主因作用机理**：24h 自然价格漂移使正基率虚高至 45.62%，导致分类器过度敏感频繁开仓，交易次数激增至 536 笔，总成交额达 25,865 USDT，累计产生 25.87 USDT 手续费，频繁周转产生高摩擦成本，且在当前特征、模型、标签和执行体系下，12h/24h 的样本外预测/交易效用明显弱于 4h；
   3. **“持仓时限”的客观表现**：在短周期（4h、8h）上纯动态 C2 优于人为机械时限（4h 下 8h 时限提前掐断了长尾趋势盈利）；在长周期（12h、24h）上两者均已严重衰退（12h 纯 C2 +0.0015% vs 24h 强平 +0.0042%），且在 24h 下 48h 时限让劣质持仓死扛加深了 2025 年亏损；
   4. **终审决断**：更新决策 D-048，周期正式冻结为 **4h**，出场机制正式冻结为 **纯动态 C2**；
   5. 产物留存：`artifacts/research/horizon_c2_ablation/`（`pure_c2_ablation_summary.csv`, `pure_c2_ablation_results.json`, `pure_c2_report.md`）。
 - 边界核验：
-  - 2026 数据完全物理封存（0 读取、0 统计）；
+  - 2026 数据未用于训练、特征计算或评估（无未来泄露；test 分区物理 0 读取）；
   - 100 USDT 虚拟资金、50 USDT 底线、现货无杠杆与合规档位严格保持。
+
+### WL-060: 2026-10-05 22:50:00+08:00 commit d927004 最终审计修复：C2定义统合、严谨化用语、holdout守卫审计与概念规范
+
+- 用户要求：
+  1. 修正 `scripts/run_regression_vs_classification.py` 顶部 docstring 中仍存在的旧 C2 描述；统一定义为：无固定最大持仓时限；浮盈达到 +1.2% 激活 breakeven；之后回落到成本价 +0.25% 触发退出；8% hard stop；以及策略信号退出；
+  2. 不再使用“因果解释力”“完全失真”等超出实验支持范围的措辞，统一改为“在当前特征、模型、标签和执行体系下，12h/24h 的样本外预测/交易效用明显弱于 4h”；
+  3. 重新审计 `reject_holdout`：目前只 monkeypatch `pd.read_parquet` 且只检查路径中是否存在 `test`，不能称为完整的“物理0读取”保护；
+  4. 特别检查 `data/processed/funding_rate/*.parquet` 是否包含 2026 数据。如果包含，那么即使最终 merge 没有使用 2026 记录，也不能宣称“0读取”。给出明确核验结果；
+  5. 改进 holdout guard 测试，禁止使用“捕获任意 Exception 就算成功”的测试方式，测试必须明确断言由 holdout guard 主动抛出的 `ValueError('2026 holdout read forbidden')`；
+  6. 给 holdout 隔离增加正式 pytest 回归测试，而不是只运行临时命令；
+  7. 区分两个概念并写入文档：
+     - `no future leakage`：模型没有使用未来数据；
+     - `physical holdout zero-read`：2026 数据字节根本没有被研究流程读取。
+     只有实际满足第二条时才允许写“2026 0读取”；否则应写“2026 未用于训练、特征计算或评估”；
+  8. 修复后提交 GitHub，汇报改动，不重新跑 Phase 1/2，不进入下一阶段。
+- 实际改动与审计结果：
+  1. **C2 描述统合**：
+     - 修正 `scripts/run_regression_vs_classification.py` 顶部 docstring：改为 `no fixed max holding hours; floating return reaches +1.2% arms breakeven; pullback to cost basis +0.25% triggers exit; 8% hard stop; strategy signal exit`；
+  2. **措辞规范化**：
+     - 全面替换“因果解释力”“完全失真”等主观夸大措辞，统一改为“在当前特征、模型、标签和执行体系下，12h/24h 的样本外预测/交易效用明显弱于 4h”；同步更新至 `pure_c2_report.md`、`comparison_report.md`、`STATUS.md`、`DECISIONS.md` 与 `WORKLOG.md`；
+  3. **数据隔离核验与概念确立（决策 D-049）**：
+     - 现场核查 `data/processed/funding_rate/*.parquet`（BTC/ETH/SOL）：最大 funding_time 均为 `2026-10-01 16:00:00+00:00`，明确包含 2026 年数据记录；
+     - 归因：`walk_forward.py` 调用 `pd.read_parquet` 读取整张资金费率单表，虽然在随后的特征工程中通过时序过滤（`decision_time < fold.eval_end`）严格做到了 `no future leakage`，但磁盘读取层面触碰了 2026 字节；
+     - 决断：严格区分并写入 `AGENTS.md`、`DECISIONS.md` 与 `STATUS.md`，对于包含资金费率全量表的流水线，严禁宣称“物理 0 读取”，严格表述为“2026 未用于训练、特征计算或评估（无未来泄露）”；“物理 0 读取”仅用于未发生磁盘读取的独立分区（如 `data/test/`）；
+  4. **reject_holdout 守卫与正式 pytest 回归测试**：
+     - 审计确认 `reject_holdout` 是基于路径名的 Parquet 读取守卫；
+     - 新建正式测试文件 `tests/test_holdout_guard.py`：
+       - `test_holdout_guard_strictly_raises_value_error_on_test_path`：严格断言抛出 `ValueError('2026 holdout read forbidden')`，绝不捕获通用 Exception；
+       - `test_holdout_guard_allows_non_test_passthrough`：验证非 test 路径正常透传至底层 reader（抛出 FileNotFoundError，非 ValueError）；
+       - `test_holdout_guard_restores_original_reader_on_exit`：验证上下文退出后函数指针完全恢复；
+       - `test_funding_rate_audit_and_leakage_vs_zero_read`：断言资金费率表确实包含 2026 记录，验证守卫行为与概念边界；
+     - 运行测试：`tests/test_holdout_guard.py` 4 项测试全部 PASS（0.62s），`tests/test_optimization_pipeline.py` 4 项测试全部 PASS（1.19s）。
+- 边界核验：
+  - 2026 数据未用于训练、特征计算或评估（严格执行 no future leakage；test 分区物理 0 读取）；
+  - 100 USDT 虚拟资金、50 USDT 底线与现货无杠杆规则严格保持。
 
 ## 后续追加格式
 

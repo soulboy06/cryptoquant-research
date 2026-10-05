@@ -2,12 +2,12 @@
 
 Strict controlled experiment requirements:
 - Question: Does continuous net return regression beat 4h binary classification on real execution?
-- Fixed controls: 12 features, C2 exit rules (8h max holding, dynamic breakeven +1%, stop loss),
+- Fixed controls: 12 features, C2 exit rules (no fixed max holding hours; floating return reaches +1.2% arms breakeven; pullback to cost basis +0.25% triggers exit; 8% hard stop; strategy signal exit),
   4h decision frequency, sizing scheme (30% favorable / 25% weak alpha / 10% weak ordinary).
 - Horizon: strictly 4h horizon.
 - Base label cost: round-trip break-even exactly 0.30055%.
 - Temporal validation: Strict Walk-Forward (Fold 1: 2022->2023, Fold 2: 2022-23->2024, Fold 3: 2022-24->2025).
-- 2026 data: strictly physically sealed (0 reads, 0 queries).
+- 2026 data: not used for training, feature engineering, or evaluation (no future leakage).
 - Baselines: R6 (+0.0979%/w), OPT-0026 (+0.1293%/w).
 """
 import argparse
@@ -208,7 +208,7 @@ def main():
             "- 实验性质：**单变量受控实验**（仅改变预测目标，现有12特征、C2退出机制、仓位上限、4h决策频率完全冻结不变）",
             "- 成本基准修正：**base 标签往返盈亏平衡严格等于 0.30055%**（非约 0.25%）",
             "- 实际退出与持仓核验：当前 C2 执行系统为 **动态退出体系**（浮盈达到 +1.2% 激活动态保本，回落至成本价 +0.25% 退出 + 8% 硬止损 + 信号翻转退出），非固定 4h 强平",
-            "- 验证架构：严格 Walk-Forward 滚动时序（Fold 1 训22评23、Fold 2 训22-23评24、Fold 3 训22-24评25），**2026 数据完全物理封存（0 读取、0 统计）**",
+            "- 验证架构：严格 Walk-Forward 滚动时序（Fold 1 训22评23、Fold 2 训22-23评24、Fold 3 训22-24评25），**2026 数据未用于训练、特征计算或评估（无未来泄露）**",
             f"- 最终长期目标标尺：**$g_{{week}} \\ge 1.5000\\% / \\text{{week}}$**（52 周复合年化 +116.89%）",
             "",
             "## 一、核心基线与回归候选全景对比表",

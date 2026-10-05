@@ -8,7 +8,7 @@ Strict Invariants:
 - Max holding hours = 2 * prediction_horizon (4h->8h, 8h->16h, 12h->24h, 24h->48h)
 - Invariant exit rules: breakeven_activation=0.0120, breakeven_ratio=0.0025, stop_loss=0.08, equity_floor=50.0
 - Strict Walk-Forward: Fold 1 (22->23), Fold 2 (22-23->24), Fold 3 (22-24->25)
-- 2026 data strictly physically sealed (0 read, 0 query)
+- 2026 data: not used for training, feature engineering, or evaluation (no future leakage)
 """
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -245,7 +245,7 @@ def generate_markdown_report(results: list[dict], opt_baseline_g_week: float) ->
         "  - 标的与资金：BTC、ETH、SOL 三币共用 100 USDT 虚拟账户，50 USDT 刚性底线，现货无杠杆；",
         "  - 时间尺度对应关系：`max_holding_hours = 2 * prediction_horizon`（4h->8h, 8h->16h, 12h->24h, 24h->48h）；",
         "  - 风控退出规则保持不变：`breakeven_activation = 0.0120`, `breakeven_ratio = 0.0025`, `stop_loss = 0.08`；",
-        "  - 严格 Walk-Forward：Fold 1 (2022->2023), Fold 2 (2022-2023->2024), Fold 3 (2022-2024->2025)，**2026 数据完全封存（0 读取、0 统计）**。",
+        "  - 严格 Walk-Forward：Fold 1 (2022->2023), Fold 2 (2022-2023->2024), Fold 3 (2022-2024->2025)，**2026 数据未用于训练、特征计算或评估（无未来泄露）**。",
         "",
         "## 2. 全量回测数据对比表",
         "",
