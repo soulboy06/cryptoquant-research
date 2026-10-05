@@ -16,13 +16,12 @@
 
 ## 进行中与检查点
 
-- 决策 D-045 已登记（全面停止人工规则，转入自动化时序优化管线）；
-- 核心模块已就绪并单测全绿通过（`tests/test_optimization_pipeline.py`）；
-- 自动模型与策略优化主进程正在后台执行中（任务 `task-4829`）：
-  - 搜索空间：8 组模型（4 组 Logistic Regression，4 组 LightGBM）× 5 组入场阈值（0.48~0.58）× 5 组配仓方案（含 R6 基线与 pure_defense 防御系列），共 200 组策略全生命周期；
-  - 验证架构：严格 Walk-Forward 滚动时序（Fold 1 训2022评2023、Fold 2 训2022-2023评2024、Fold 3 训2022-2024评2025）；
-  - 物理边界：2026 数据完全物理封存（`reject_holdout` 运行时防护）；
-  - 产物目录：`artifacts/research/automated_optimization/`。
+- 自动模型与策略优化全景搜索已全部圆满完成（任务 `task-4829` 退出码 0）；
+- 产物全部落地于 `artifacts/research/automated_optimization/`：
+  - `optimization_summary.csv`（200 组全量账本回测统计）
+  - `top_candidates.json`（优选策略参数与跨窗口明细）
+  - `comparison_with_r6.md`（Top 候选策略与 R6 人工基准全景对比报告）
+- 准备将最新优化产物与报告提交并推送到 GitHub `main` 分支。
 
 ## 已完成与证据
 
@@ -47,6 +46,16 @@
   - **EXP-198 全景报告生成**：
     - 产物保存于 `artifacts/experiments/EXP-198/comparison.json` 与 `artifacts/experiments/EXP-198/report.md`；
     - 压力测试与条件邻域按规则跳过；最终候选为 **None**。未达到每周 1.5% 长期复利目标。
+- **自动模型与策略优化全景搜索完成（Walk-Forward 验证）**：
+  - 任务与执行：以 LR 与 LightGBM 为首批模型族，覆盖 200 组策略全生命周期（8 模型 × 5 阈值 × 5 配仓方案），跨 Fold 1 (2023)、Fold 2 (2024)、Fold 3 (2025) 严格 Walk-Forward 切分（600 次独立账本回测）；
+  - 战胜 R6 人工基准候选：
+    - **Top-1 (`OPT-0056_LR_C0.50_th0.50_R6_default`)**：合成周收益达到 **+0.1024% / week**（高于人工基准 R6 的 +0.0979%），W1 收益提升至 **+6.21%**（高于 R6 的 +5.06%），W2 为 +13.28%，2025 年净收益 -2.44%（最大回撤 11.21% 保持一致），综合评分达到最高 **-4.22**；
+    - **Top-3 (`OPT-0060_LR_C0.50_th0.50_alpha_high30`)**：周收益达到 **+0.1074% / week**，W1 提升至 +7.14%，W2 为 +13.68%；
+    - **Top-5 (`OPT-0026_LR_C0.10_th0.48_R6_default`)**：周收益高达 **+0.1293% / week**，W1 为 +7.16%，W2 高达 **+17.41%**（跨越 15% 门槛！）；
+  - 模型族归因对比：
+    - **Logistic Regression 线性强正则族**：在低信噪比 4 小时线上泛化鲁棒性显著优于浅层树模型；
+    - **LightGBM 浅层决策树族**：在低阈值下易受噪声干扰，而在高阈值配合 pure_defense 防御仓位虽能有效抑制回撤（MDD 仅 0.25%），但捕获交易能力偏弱；
+  - 全流程严守边界：2026 数据完全物理封存，零读取零统计。产物见 `artifacts/research/automated_optimization/`。
 
 ## 当前限制与长期边界
 
