@@ -653,16 +653,119 @@
   - 零交易账户消耗，2026 测试集物理封存，零数据泄露。
 - 下一步：将上述严密的数学与撮合逻辑以通俗透彻的语言向用户汇报。
 
+## WL-044：最新文档与项目进度接手核对（2026-10-05，Asia/Shanghai）
+
+- 用户要求：读取最新文档，说明项目当前进度；本轮仅调查与交接维护，未启动新研究。
+- 按AGENTS规定顺序读取STATUS、PLAN、DECISIONS、EXPERIMENTS与WORKLOG最新记录，继续核对README、第九轮EXP-141~149原始summary、EXP-150筛选、EXP-157比较及EXP-158报告／诊断脚本／来源清单。
+- 现场结果：第九轮9组Base回测产物均为complete；EXP-150仍全失格；第十轮独立方案／配置／新回测产物未发现，下一编号从EXP-159现场登记。项目仍在阶段4历史研究，未进入实时模拟。
+- 证据限制：R0为C2模型固定30%目标对照，不能称买入持有；EXP-158的42%／58%／88%波动率为脚本常量，第十轮收益16%~17%及保持2025收益为固定报告文字，未有对应新策略回测支持，不能作为实测成绩或确定结论。
+- 核对当前`src/cryptoquant/trading/risk.py`仍存在不可卖时清除周期／风险状态的逻辑；本轮未修复、未测试，也未重写冻结实验。需在后续实质研究前核对其影响并验收。
+- 更新STATUS加入优先适用的接手核对，区分已完成、已发现缺陷与待验证建议；未改变研究参数、预算、路线或原筛选记录，未读取2026行情。
+- 检查：9份summary关键指标读取；EXP-158来源清单37份来源中18份存在且SHA256一致，19份成交／订单／信号CSV缺失，不能现场逐笔复核30／58笔诊断。文档本地链接检查结果见本轮工具输出。仅文件检查，不声明模型测试通过。
+- 下一行动：汇报现状；接续研究时先恢复并校验缺失CSV、核对周期与风险状态缺陷，再编制并冻结第十轮方案与实施计划。2026策略评价继续封存，100USDT共用本金／50USDT底线／纯模拟边界不变。
+
+## WL-045：删除并停止使用using-superpowers技能（2026-10-05，Asia/Shanghai）
+
+- 用户要求：删除刚才使用的`superpowers:using-superpowers`，以后不再使用。
+- 实际改动：核对目标为普通目录且绝对路径精确匹配后，通过PowerShell原生`Remove-Item -LiteralPath`删除`C:/Users/yyy/.agents/skills/superpowers/using-superpowers`及其内容；未删除其他技能或研究文档。
+- 记录：AGENTS追加长期不使用该技能的约定，DECISIONS登记D-041，STATUS记录完成；研究阶段与实验编号保持。
+- 检查：删除命令退出0，目标目录`Test-Path`为False；核对偏好与交接记录。仅文件检查，未运行测试、训练或回测。
+- 遗留：无删除任务遗留；研究下一步仍见STATUS。
+
+## WL-046：Phase A状态机修复与15组历史配对核验完成（2026-10-05，Asia/Shanghai）
+
+- 请求：严格按用户附件先修复／验证再设计第十轮，完成后更新GitHub；用户另明确允许仅复用旧R2025终点开盘报价。
+- 根因：`complete_exit_if_tail`将整个低于名义金额的持仓当作已完成退出，清除pending／保本／时长并提前冷却；普通信号退出拒单也未持续锁存。
+- 修改：risk保持真实持仓状态，holding_hours使用UTC经过时间且不重复观察累计；engine锁存信号退出；ledger仅对真实退出成交后的严格sub-step零头作显式损失核销，持仓置零、现金与费用不变、审计事件完整；reporting逐币PnL包含核销，不能把模拟核销冒充成交。
+- 检查：新增11项测试（前7项在旧实现全部按预期失败；逐币报告测试再发现并修正漏记损失），受影响风险／账本／订单／出场／三仓位执行检查共65 passed（4.47s）。旧两项测试更新为用户新不变量，未删测试。
+- 输入恢复：从D:/量化恢复EXP-158缺失19份CSV，逐一SHA匹配；未修改旧冻结配置／快照／结果。只读development／validation(2025)与既有终点报价，测试分区未读。
+- 实验：事前登记EXP-159～174；EXP-159两次重放后在源码快照SameFileError失败保留，登记EXP-175同参数替代，总32核验账户。EXP-160～173与175旧／新引擎配对均完成，旧逐笔成交及关键收益／费用／回撤匹配原结果；EXP-174总验收完成。
+- 结论：15组均是行为修复。R5W1/W2新周期30/25，R6为30/27；收益已改变，原第六～九轮不能直接继续作为新baseline。损益变化含显式零头放弃的损失，尤其BTC累积较大，不能全部归因于原bug。
+- 证据：[修复计划](docs/cycle-state-repair-plan-2026-10-05.md)、[结果报告](docs/cycle-state-repair-results-2026-10-05.md)、EXP-174/comparison.json；各配对目录before/after保存完整流水、风险事件、净值及SHA。
+- 下一步：独立提交Phase A修复；技术验收通过后冻结Phase B三候选及研究预算。尚未运行第十轮或读取2026；研究盈利仍未通过。
+
+## WL-047：第十轮事前冻结与实现（2026-10-05，Asia/Shanghai）
+
+- Phase A已独立提交3751f9d后冻结三候选方案、参数卡、筛选及预算，登记EXP-176～192；按修复R5/R6选择R6父策略，负收益限制明示。
+- 新增leader_allocation模块及受控run_tenth_research入口：闭合动量／Top-1／自身因果分位数，冻结卡一致性、Phase A验收SHA、父targets和BTC状态SHA及失败消耗预算校验；不修改交易引擎追收益。
+- 检查：5项机制因果／边界行为检查通过（0.66s）；2项预算及Phase A门禁检查通过（0.86s）。首次预算测试因.cache父目录缺失导致pytest临时目录创建失败，创建目录后通过；并非策略失败或新账户运行。
+- 方案只读审查通过，无阻塞；要求25%复用逐项证明targets相等，负baseline相对改善与盈利分开报告。当前尚未运行第十轮账户；下一步9Base后一次统一筛选，全失败接受失败。
+
+## WL-048：第十轮全失格与最终交付证据（2026-10-05，Asia/Shanghai）
+
+- 实际运行受控入口EXP-176～184九Base、185一次筛选、192报告，进程23485已退出0。三候选全失格，186～191压力跳过，条件25%邻域未启动，未新增候选。模型与交易引擎未为结果调整，2026测试未读。
+- 结果：R8描述性最好但三窗合成周收益-0.108368%，W2+0.2236%／28周期，2025-18.7838%；2025较父R6更亏0.4373个百分点，未过防守条件。R8/R10 W1/W2 targets SHA完全相同，稀疏提升以SOL为主，不证明独立泛化。
+- 新增只读summarize_cycle_research／write_cycle_delivery_report，2813项产物与源码SHA核对通过，复核周期PnL、每币核销及favorable目标保持。报告脚本修正source_manifest.files结构与NaN相等处理后完成，未改写实验或增加账户。
+- package_cycle_evidence只遍历列出的实验目录，完整新旧流水、targets和源码4452文件压缩后逐一SHA校验，46.47MiB；SHA见artifacts/research/evidence_manifest.json，不含原始行情、2026测试或凭据。最初防护把源码cryptoquant/data目录也当成原始data而拒绝打包，改为要求顶层artifacts后完成，未读取市场data目录。
+- 最终报告逐项回答用户12问题，并区分行为修复与新增dust政策的联合影响、相对改善与盈利、未做压力／邻域与已完成检查。更新STATUS、PLAN、AGENTS、DECISIONS及EXPERIMENTS，保留旧失败／冻结输出。尚需完成GitHub上传并记录链接，研究后续不自动启动。
+
+## WL-049：GitHub交付与最终文档核对（2026-10-05，Asia/Shanghai）
+
+- 修复独立3751f9d、事前冻结33ca36e、结果证据5fcb8ad已上传origin/codex/cycle-state-integrity；创建[PR #1](https://github.com/soulboy06/cryptoquant-research/pull/1)并关联本聊天，未合并main。
+- 13份当前相关文档的UTF-8与459个本地Markdown链接检查通过，没有缺失目标。Git diff检查在识别Windows CR行尾的设置下通过；冻结产物原字节和压缩包不因文本换行整理改写。
+- STATUS记录上传完成和PR，保留旧失败、实验SHA及三候选失格；没有后台账户、实盘、新参数或2026测试读取。本轮任务完成，后续研究按附件先向用户汇报，不自动启动。
+- 大型events.json与既有CSV／Parquet一样通过完整证据包交付，追加精确忽略规则避免重复散装提交；本地原文件与冻结SHA保留，未删除或改写。
+
+## WL-050：状态机修复与Dust核销归因消融研究（2026-10-05，Asia/Shanghai）
+
+- 用户要求：对PR #1（codex/cycle-state-integrity分支）中“状态机修复”与“dust零头核销政策”做严格可比的归因拆分研究；不调策略/模型/仓位，不启动第十一轮，不触碰2026封存数据；查证真实Binance现货规则，给出明确拆解与基线建议。
+- 代码实现：
+  - 在`src/cryptoquant/trading/risk.py`实现可配置`dust_policy`（`'retain_mark_to_market'`与`'writeoff_zero_recovery'`）；尾差核销分支与尾差资产保留分支严格解耦，增加`dust_retained`审计事件。
+  - 在`src/cryptoquant/baselines/engine.py`接入`dust_policy`配置；修复引擎对已关闭周期的sub-step残留资产误触发`pending='strategy_exit'`导致锁仓的bug；默认采用`'retain_mark_to_market'`。
+  - 在`src/cryptoquant/baselines/reporting.py`动态上报不同执行政策的dust成本与估值。
+  - 新增`tests/test_dust_policy_execution.py`覆盖两种政策的独立测试；通过`pytest tests/test_dust_policy_execution.py tests/test_rejected_exit_cycle.py tests/test_research_windows.py`共16项检查通过（20.10s）。
+- 归因实验与结果：
+  - 构建3个严格可比执行版本：Legacy（原引擎复现）、Cycle Fix Only（仅状态机修复+保留市价估值）、Cycle Fix + Writeoff（PR #1当前极端保守核销）。
+  - 完成代表性3账户及全量9账户（R0/R5/R6在W1/W2/R2025）的27次回测重放与归因分解，产物保存于`artifacts/research/dust_and_bug_attribution.json`。
+  - **核心结论**：Bug Fix Effect在全量9账户中仅为**0.00%至-0.20%**，状态机修复本身对收益影响极微；收益崩塌**98%～100%源于`post_exit_sub_step_writeoff_v1`**（导致-2.29%至-37.82%的净值暴跌，最大单账户累计核销41.57 USDT本金）。
+  - 在Cycle Fix Only下，R0 W2保持+26.62%，R5 W2为+13.66%，R6 W2为+13.70%，R6 W1为+5.06%，策略相对优势与旧版完全一致。
+  - 真实Binance现货规则核验：小于stepSize或minNotional的余额始终保存在现货钱包，受法律与密码学保护，绝不被没收；每小时可一键按2%手续费闪兑BNB，且可在后续加仓时与新买入合并卖出。将100%成本直接计为realized loss属于严重脱离真实交易所机制的超保守假设。
+- 边界保持：2026测试数据继续物理封存（0读取）；未开展策略搜参或第十一轮；PR #1中R8/R9/R10失格事实保留。
+
+## WL-051：修改PR #1执行基线并重评第十轮（2026-10-05，Asia/Shanghai）
+
+- 用户要求：修改PR #1，使`retain_mark_to_market`成为正式baseline、`writeoff_zero_recovery`仅作为压力测试；在不修改任何R8/R9/R10参数前提下，基于新baseline重新执行第十轮并重新筛选；2026继续物理封存。
+- 代码修改：
+  - `src/cryptoquant/trading/risk.py`与`src/cryptoquant/baselines/engine.py`默认`dust_policy='retain_mark_to_market'`。
+  - `configs/tenth_experiment.json`与`scripts/run_tenth_research.py`配置冻结参数`dust_policy='retain_mark_to_market'`。
+  - 修复`cycle_distributions`以复用账本单笔成交真实已实现盈亏，确保逐周期PnL与Portfolio已实现损益数学上严格守恒（误差<1e-18）。
+- Phase A基线重建：
+  - 运行`python scripts/verify_cycle_repair.py --source-root D:/量化 --output-root . --replacement-first-id 175`。
+  - EXP-160～173及EXP-175共15组配对回测在新baseline下完成，EXP-174完成基线汇总，无holdout读取。
+  - 父策略选择：修复后R5三窗合成周收益+0.095110%，R6为+0.097859%，R6更高，确定父策略仍为R6。
+- 第十轮重跑与统一筛选：
+  - 运行`python scripts/run_tenth_research.py --source-root D:/量化`。
+  - R8（Top-1 30%）：W1=+5.9562%（30周期），W2=+14.0286%（62周期），2025=-2.8637%（11.24%回撤），合成周收益+0.102308%。
+  - R9（24h动量正30%）：W1=+5.0643%（30周期），W2=+13.7029%（62周期），2025=-2.7618%（11.20%回撤），合成周收益+0.095745%。
+  - R10（自身因果预测>80分位数30%）：W1=+5.9562%（30周期），W2=+14.0286%（62周期），2025=-2.8750%（11.24%回撤），合成周收益+0.102234%。
+  - 筛选门禁（EXP-185）：三候选均未突破W2收益15%门槛（最高+14.03%），且2025净收益均劣于父策略R6（-2.44% vs 候选-2.86%～-2.76%），因此全部失格。基础筛选胜出：None；描述性收益最高：R8；最终候选：None；未达每周1.5%目标。EXP-186～191压力回测按规则跳过。
+- 完整性验收：
+  - `pytest tests/test_dust_policy_execution.py tests/test_rejected_exit_cycle.py tests/test_research_windows.py tests/test_tenth_research_budget.py tests/test_leader_allocation.py`共23项检查全部通过（20.40s）。
+  - `summarize_cycle_research.py`验证2884项产物与源码SHA一致通过。
+  - `package_cycle_evidence.py`重新打包4558文件，证据包56.11 MiB，SHA校验通过。
+  - 2026测试数据物理封存（0读取）。
+
+## WL-052：PR #1远端推送与R8/R10恢复加仓只读结构诊断（2026-10-05，Asia/Shanghai）
+
+- 用户要求：推送PR #1到GitHub；随后做一次严格只读诊断，专门比较R8/R10在W1、W2、2025中所有恢复加仓交易，分析盈利与亏损样本在入场前的结构差异；不新增策略、不调参数、不打开2026。
+- PR #1推送：
+  - 提交`a3d53d0`（`fix(baseline): set retain_mark_to_market as formal baseline and re-evaluate tenth round`），包含基线切换至`retain_mark_to_market`、Phase A 15组配对回测、第十轮全量重跑产物、归因报告及23项完整性测试。
+  - 成功推送到远端GitHub分支`origin/codex/cycle-state-integrity`。
+- 只读诊断实施：
+  - 编写并执行`scripts/diagnose_promoted_trades.py`与`scripts/print_diagnosis_report.py`，产物保存于`artifacts/research/promoted_trades_diagnosis.json`与`.csv`。
+  - 严格限制数据源范围仅使用开发集与验证集已闭合历史，2026测试分区物理封存（0读取、0行统计）。
+- 样本全景统计：
+  - 覆盖R8与R10全部19个独立恢复加仓周期（10胜9负，总体胜率52.6%）。
+  - 按窗口：W1（5胜0负，胜率100%）、W2（3胜3负，胜率50%）、R2025（2胜6负，胜率25%）。
+  - 按币种：SOL（9胜4负，胜率69.2%，累计+6.10 USDT）、ETH（1胜5负，胜率16.7%，累计-1.92 USDT）。
+- 入场前关键结构差异发现：
+  1. **币种真实Alpha vs 虚假Alpha**：SOL在弱市恢复中具备真实独立爆发力（72h动量中位数+13.1%）；ETH大多只是跌得比BTC慢0.5%的假超额（72h动量中位数仅+7.5%，且常在+0.1%边缘），一旦加仓30%几乎必亏。
+  2. **模型置信度悖论（Probability Paradox）**：盈利样本入场时的模型概率密集在低置信度右侧启动点（中位数0.5162，均值0.5183）；而亏损样本的模型概率显著偏高（中位数0.5459，均值0.5496，最高达0.6268与0.5942）。在弱市环境下，高置信度多为短期加速赶顶的诱多接盘陷阱。
+  3. **短周期回踩 vs 追高陷阱（Pullback vs Chasing）**：10个盈利样本中有8个（80%）入场前24h收益为负（中位数-1.49%，如2023-11-12的-0.58%、2024-03-15的-1.78%），表现为大周期上升趋势中的短周期健康回踩；而亏损样本多为24h加速追高（如2025-01-19 SOL入场前24h暴涨+4.98%，入场后即遭遇跳水，亏损-5.92%）。这也从结构上解释了为何第十轮R9引入`ret_24h > 0`作为恢复门槛后，精准过滤掉了所有核心盈利样本、却保留了追高亏损样本。
+  4. **大盘宏观背景失真**：盈利样本入场时BTC 72h动量中位数为正（+0.84%），处于震荡企稳期；亏损样本入场时BTC 72h动量深跌（中位数-1.31%，最深-8.78%）。大盘崩盘时的“对BTC超额”纯属补跌滞后幻觉。
+  5. **波动率活力与量价背离**：盈利样本入场前24h ATR比例中位数达3.18%（量比1.16），波动充沛；亏损样本ATR比例仅1.53%（量比0.94），流动性低迷，阴跌损耗严重。
+- 边界核验：无新策略、无参数调优、未启动第十一轮、2026测试数据严格封存。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。
-
-
-
-
-
-
-
-
-
-

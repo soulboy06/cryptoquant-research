@@ -1,0 +1,31 @@
+{
+  "experiment_id": "EXP-159",
+  "type": "cycle_repair_paired_replay",
+  "status": "failed",
+  "variant": "R0",
+  "window": "W1",
+  "legacy_experiment_id": "EXP-108",
+  "started_at_utc": "2026-10-05T08:33:58.294734+00:00",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "dust_policy": "post_exit_sub_step_writeoff_v1",
+  "holdout_read": false,
+  "existing_terminal_quote_authorized": true,
+  "error": "WindowsPath('C:/Users/yyy/.codex/worktrees/4df6/量化/artifacts/experiments/EXP-159/config.toml') and WindowsPath('C:/Users/yyy/.codex/worktrees/4df6/量化/artifacts/experiments/EXP-159/config.toml') are the same file"
+}

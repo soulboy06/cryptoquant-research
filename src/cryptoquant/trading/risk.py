@@ -5,7 +5,6 @@ from datetime import timedelta
 
 from cryptoquant.data.calendar import can_execute
 from cryptoquant.trading.ledger import ZERO, amount
-from cryptoquant.trading.orders import sellable_quantity
 
 
 @dataclass
@@ -24,7 +23,11 @@ class SymbolState:
 
 class RiskState:
     def __init__(self, symbols, floor, stop_loss, cooldown_hours, *,
-                 max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None):
+                 max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None,
+                 dust_policy='retain_mark_to_market'):
+        if dust_policy not in {'writeoff_zero_recovery', 'post_exit_sub_step_writeoff_v1', 'retain_mark_to_market'}:
+            raise ValueError(f'unsupported dust policy: {dust_policy}')
+        self.dust_policy = 'writeoff_zero_recovery' if dust_policy == 'post_exit_sub_step_writeoff_v1' else dust_policy
         self.states = {symbol: SymbolState() for symbol in sorted(symbols)}
         self.floor = amount(floor)
         self.stop_loss = amount(stop_loss)
@@ -74,7 +77,10 @@ class RiskState:
                 position = portfolio.positions[symbol]
                 state = self.states[symbol]
                 if position.quantity and not state.exit_completed:
-                    state.holding_hours += 1
+                    if state.entry_time is not None:
+                        state.holding_hours = max(state.holding_hours, int((timestamp - state.entry_time).total_seconds() // 3600))
+                    else:
+                        state.holding_hours += 1
                     cost_basis = position.average_cost
                     if cost_basis > 0:
                         float_return = (marks[symbol] - cost_basis) / cost_basis
@@ -98,7 +104,7 @@ class RiskState:
 
     def register_buy(self, symbol, portfolio, reference, rules, cost, timestamp=None):
         state = self.states[symbol]
-        if not state.cycle_open and sellable_quantity(portfolio.positions[symbol].quantity, reference, rules, cost):
+        if not state.cycle_open and portfolio.positions[symbol].quantity > ZERO:
             state.cycle_open = True
             state.had_exit_fill = False
             state.exit_completed = False
@@ -114,8 +120,24 @@ class RiskState:
         if open_quote is None or not can_execute(open_quote):
             return False
         state = self.states[symbol]
-        if sellable_quantity(portfolio.positions[symbol].quantity, open_quote['open'], rules, cost):
+        if not state.cycle_open or state.exit_completed:
             return False
+        quantity = portfolio.positions[symbol].quantity
+        if quantity > ZERO:
+            if not state.had_exit_fill or quantity >= rules.step_size:
+                return False
+            if self.dust_policy in {'writeoff_zero_recovery', 'post_exit_sub_step_writeoff_v1'}:
+                dust = portfolio.write_off_precision_dust(symbol, rules.step_size, open_quote['open'])
+                self.emit('dust_written_off', timestamp, symbol=symbol,
+                          policy='post_exit_sub_step_writeoff_v1', quantity_step=rules.step_size, **dust)
+            elif self.dust_policy == 'retain_mark_to_market':
+                dust_cost = quantity * portfolio.positions[symbol].average_cost
+                dust_val = quantity * amount(open_quote['open'])
+                self.emit('dust_retained', timestamp, symbol=symbol,
+                          policy='retain_mark_to_market', quantity=quantity, cost_usdt=dust_cost,
+                          value_usdt=dust_val, quantity_step=rules.step_size)
+            else:
+                raise ValueError(f'unsupported dust policy: {self.dust_policy}')
         if state.cycle_open and state.had_exit_fill:
             self.closed_cycles += 1
             self.emit('cycle_closed', timestamp, symbol=symbol)

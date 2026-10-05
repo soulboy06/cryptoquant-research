@@ -27,6 +27,7 @@ class BacktestResult:
     period: str = 'development'
     window: str | None = None
     exit_variant: str | None = None
+    dust_policy: str = 'retain_mark_to_market'
 
 
 def validate_frames(frames, config, period='development', *, window=None):
@@ -87,7 +88,7 @@ def _validate_buy_permission(permission, strategy, grid, start, end):
 
 def run_backtest(frames, rules, config, strategy, cost_name, period='development', decision_targets=None, *, window=None,
                  exit_variant=None, max_holding_hours=None, breakeven_activation=None, breakeven_ratio=None,
-                 buy_permission=None):
+                 buy_permission=None, dust_policy='retain_mark_to_market'):
     """独立账户评价；window模型信号须来自原连续历史特征。
 
     ema_trend在此循环重算EMA，744h视图会改变连续历史，故拒绝window。
@@ -153,6 +154,7 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
         max_holding_hours=max_holding_hours,
         breakeven_activation=breakeven_activation,
         breakeven_ratio=breakeven_ratio,
+        dust_policy=dust_policy,
     )
     trend, cost = TrendSignals(config.symbols), config.costs[cost_name]
     active = strategy in {'ema_trend', 'logistic_regression'}
@@ -174,6 +176,10 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
         equity.append(row)
 
     def execute(intent, time, quotes, full_exit=False):
+        state = risk.states[intent.symbol]
+        if full_exit and state.cycle_open and book.positions[intent.symbol].quantity >= rules[intent.symbol].step_size:
+            # Latch normal strategy exits too: a rejection is not an exit.
+            risk.request_exit(intent.symbol, intent.reason, time)
         decision = simulate_fill(intent, quotes.get(intent.symbol), rules[intent.symbol], cost, book)
         record = dict(time=time, symbol=intent.symbol, side=intent.side,
                       requested_quantity=intent.quantity, quantity=decision.quantity,
@@ -264,4 +270,4 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
                 else:
                     execute(intent, time, quotes, full_exit=intent.reason == 'strategy_exit')
         snapshot(time, 'open', quotes)
-    return BacktestResult(book, marks, orders, fills, equity, signals, risk, strategy, cost_name, period, window, exit_variant)
+    return BacktestResult(book, marks, orders, fills, equity, signals, risk, strategy, cost_name, period, window, exit_variant, dust_policy=dust_policy)

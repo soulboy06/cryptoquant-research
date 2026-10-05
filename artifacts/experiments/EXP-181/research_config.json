@@ -1,0 +1,20 @@
+{
+  "research_id": "tenth_leader_allocation_v1",
+  "phase_a_experiment": "EXP-174",
+  "parent_variant": "R6",
+  "parent_rule": "higher_combined_g_week_of_repaired_R5_R6_then_lower_2025_drawdown_then_R5",
+  "variants": ["R8", "R9", "R10"],
+  "windows": ["W1", "W2", "R2025"],
+  "promotion_weight": "0.30",
+  "neighbor_weight": "0.25",
+  "probability_threshold": "0.50",
+  "confidence_quantile": 0.8,
+  "confidence_min_prior_points": 30,
+  "history_hours": 744,
+  "max_base_accounts": 9,
+  "max_pressure_accounts": 6,
+  "max_records": 17,
+  "dust_policy": "retain_mark_to_market",
+  "evaluation_data_status": "repeatedly_viewed_research_development",
+  "holdout_allowed": false
+}

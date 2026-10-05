@@ -1,5 +1,28 @@
 # 加密货币离线研究
 
+最新工作见[状态](STATUS.md)和[修复／第十轮最终报告](docs/cycle-repair-and-tenth-results-2026-10-05.md)。min-notional状态机已修复，15组历史配对核验与第十轮9Base完成；三候选全部失格，2026测试封存。旧第六～九轮交易成绩不再当新引擎baseline；零头模拟放弃成本显著，未证明稳定盈利。
+
+## 周期修复与第十轮入口
+
+修改入口：`trading/risk.py`维护生命周期与冷却，`trading/ledger.py`核销模拟sub-step零头，`baselines/engine.py`锁存退出；`models/leader_allocation.py`只在闭合行情下恢复弱市目标仓位。具体冻结参数卡是[configs/tenth_experiment.json](configs/tenth_experiment.json)，不是实盘设置。
+
+本轮实际命令（以当前工作树src为准、公开数据来源仓库D:/量化只读）：
+
+```powershell
+$env:PYTHONUTF8 = '1'
+$env:PYTHONDONTWRITEBYTECODE = '1'
+$env:PYTHONPATH = (Join-Path $PWD 'src')
+& D:/量化/.venv/Scripts/python.exe scripts/verify_cycle_repair.py --source-root D:/量化 --output-root . --replacement-first-id 175
+& D:/量化/.venv/Scripts/python.exe scripts/run_tenth_research.py --source-root D:/量化
+& D:/量化/.venv/Scripts/python.exe scripts/summarize_cycle_research.py
+& D:/量化/.venv/Scripts/python.exe scripts/write_cycle_delivery_report.py
+& D:/量化/.venv/Scripts/python.exe scripts/package_cycle_evidence.py --source-root D:/量化
+```
+
+前两条是已完成实验的历史调用，现有目录会拒绝覆盖；再次研究须先登记新编号、来源和预算，不能直接重复执行。后两份报告脚本只重算已有产物，不拟合或新增账户。换机器使用重建环境的python路径，不能沿用D盘路径；需按数据manifest校验公开分区，不能为复现本轮读取test。
+
+完整流水、targets与旧新源码快照见[证据包说明](artifacts/research/README.md)，解压后可以核查所有实际结果，不需要下载2026行情。未受本轮影响的模块没有重复跑全套测试；本轮65项执行／账本＋5项机制＋2项门禁关键检查通过。
+
 新对话／新agent先读[AGENTS.md](AGENTS.md)，再按其中顺序恢复状态与决策；[STATUS.md](STATUS.md)给出具体下一行动，[WORKLOG.md](WORKLOG.md)保存每轮重要工作的历史与证据。无需依赖旧聊天才能接手。
 
 当前已实现公开现货数据准备：配置校验、官方 ZIP 与 SHA-256 校验、小时行情标准化、质量检查、评价分区及公开规则快照。研究 BTCUSDT、ETHUSDT、SOLUSDT，不需要账户或密钥。
@@ -20,7 +43,7 @@ python -m venv .venv
 & .\.venv\Scripts\python.exe -m cryptoquant --help
 ```
 
-开发首次安装也可使用 `pip install -e '.[dev]'`。锁文件记录本次环境实际解析的版本；其中包含构建工具，以支持离线构建入口。当前目录没有 Git，实验保存源码快照及哈希。
+开发首次安装也可使用 `pip install -e '.[dev]'`。锁文件记录环境实际解析的版本；其中包含构建工具，以支持离线构建入口。当前项目使用Git，实验仍保存源码快照及哈希；较早manifest的git_commit=null是当时记录，不补写虚构版本。
 
 ## 数据流程
 

@@ -60,9 +60,14 @@ def test_exit_retry_tail_cycle_and_wall_clock_cooldown():
         portfolio.apply_fill('SELL', SYMBOL, '2', '9', '0')
         risk.register_full_exit_fill(SYMBOL)
         done = risk.complete_exit_if_tail(SYMBOL, portfolio, quote('9'), limits, COST, NOW + timedelta(hours=hour))
-        assert done is (hour == 2)
-    assert portfolio.positions[SYMBOL].quantity == D('1') and risk.closed_cycles == 1
-    assert risk.states[SYMBOL].cooldown_until == NOW + timedelta(hours=6)
+        assert done is False
+    assert portfolio.positions[SYMBOL].quantity == D('1') and risk.closed_cycles == 0
+    assert risk.states[SYMBOL].cooldown_until is None
+    portfolio.apply_fill('SELL', SYMBOL, '1', '11', '0')
+    risk.register_full_exit_fill(SYMBOL)
+    assert risk.complete_exit_if_tail(SYMBOL, portfolio, quote('11'), limits, COST, NOW + timedelta(hours=3))
+    assert risk.closed_cycles == 1
+    assert risk.states[SYMBOL].cooldown_until == NOW + timedelta(hours=7)
     assert not risk.can_buy(SYMBOL, NOW + timedelta(hours=4))
     assert not risk.can_buy(SYMBOL, NOW + timedelta(hours=7))
     assert risk.can_buy(SYMBOL, NOW + timedelta(hours=8))
@@ -75,12 +80,13 @@ def test_pure_rejection_or_partial_rebalance_does_not_close_cycle():
     portfolio.apply_fill('SELL', SYMBOL, '1', '10', '0')
     assert risk.closed_cycles == 0
     risk.request_exit(SYMBOL, 'stop_loss', NOW)
-    assert risk.complete_exit_if_tail(SYMBOL, portfolio, quote('1'), rule(), COST, NOW)
+    assert not risk.complete_exit_if_tail(SYMBOL, portfolio, quote('1'), rule(), COST, NOW)
     assert risk.closed_cycles == 0 and portfolio.positions[SYMBOL].quantity == D('4')
 
 
 def test_completed_stop_tail_does_not_refresh_cooldown_or_stop_count():
-    portfolio = book()
+    portfolio = Portfolio('100', [SYMBOL])
+    portfolio.apply_fill('BUY', SYMBOL, '5', '10', '0.0001')
     risk = RiskState([SYMBOL], D('50'), D('0.08'), 4)
     risk.register_buy(SYMBOL, portfolio, D('10'), rule(), COST)
     risk.observe(portfolio, {SYMBOL: D('9')}, {SYMBOL}, NOW)
