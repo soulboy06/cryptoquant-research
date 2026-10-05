@@ -49,7 +49,7 @@ def load_fifo_cycles(fills_path):
                     if inventory[0][0] < 1e-8:
                         inventory.pop(0)
                 pnl = (sell_qty * sell_price) - cost - fees
-                pnl_pct = pnl / cost if cost > 0 else 0
+                pnl_pct = float(pnl / cost) if cost != 0 else 0.0
                 cycles.append({
                     "symbol": sym,
                     "entry_time": entry_t,
@@ -61,7 +61,7 @@ def load_fifo_cycles(fills_path):
                     "fees": fees,
                     "pnl": pnl,
                     "pnl_pct": pnl_pct,
-                    "exit_reason": str(row["intent_reason"]) if pd.notna(row["intent_reason"]) else "unknown"
+                    "exit_reason": str(row["intent_reason"]) if bool(pd.notna(row["intent_reason"])) else "unknown"
                 })
     return pd.DataFrame(cycles)
 
@@ -230,16 +230,40 @@ def run_diagnostics():
         df_sig = pd.read_csv(sig_path)
         prob_stats[label] = {}
         for sym in ["BTCUSDT", "ETHUSDT", "SOLUSDT"]:
-            p = df_sig[df_sig["symbol"] == sym]["probability"]
+            p = np.array(df_sig[df_sig["symbol"] == sym]["probability"], dtype=float)
+            p_active = p[p >= 0.50]
             prob_stats[label][sym] = {
-                "min": float(p.min()),
-                "p25": float(p.quantile(0.25)),
-                "median": float(p.median()),
-                "p75": float(p.quantile(0.75)),
-                "max": float(p.max()),
-                "count_gt_050": int((p >= 0.50).sum()),
-                "count_gt_060": int((p >= 0.60).sum()),
-                "count_gt_065": int((p >= 0.65).sum()),
+                "unconditional_all_4h_points": {
+                    "total_count": int(len(p)),
+                    "min": float(np.min(p)),
+                    "p25": float(np.percentile(p, 25)),
+                    "median": float(np.median(p)),
+                    "p75": float(np.percentile(p, 75)),
+                    "p80": float(np.percentile(p, 80)),
+                    "p90": float(np.percentile(p, 90)),
+                    "p95": float(np.percentile(p, 95)),
+                    "max": float(np.max(p)),
+                    "count_ge_050": int((p >= 0.50).sum()),
+                    "pct_ge_050": float((p >= 0.50).mean()),
+                    "count_ge_053": int((p >= 0.53).sum()),
+                    "pct_ge_053": float((p >= 0.53).mean()),
+                },
+                "conditional_active_buy_signals_ge_050": {
+                    "active_count": int(len(p_active)),
+                    "min": float(np.min(p_active)) if len(p_active) else 0.0,
+                    "p25": float(np.percentile(p_active, 25)) if len(p_active) else 0.0,
+                    "median": float(np.median(p_active)) if len(p_active) else 0.0,
+                    "p75": float(np.percentile(p_active, 75)) if len(p_active) else 0.0,
+                    "p80": float(np.percentile(p_active, 80)) if len(p_active) else 0.0,
+                    "p90": float(np.percentile(p_active, 90)) if len(p_active) else 0.0,
+                    "max": float(np.max(p_active)) if len(p_active) else 0.0,
+                },
+                "counts_above_thresholds": {
+                    "count_gt_050": int((p >= 0.50).sum()),
+                    "count_gt_053": int((p >= 0.53).sum()),
+                    "count_gt_060": int((p >= 0.60).sum()),
+                    "count_gt_065": int((p >= 0.65).sum()),
+                }
             }
 
     # Theoretical Risk Parity weights
@@ -343,14 +367,28 @@ def run_diagnostics():
 - 但同时，ETH 净贡献从 `+3.82 U` 降至 `+3.36 U`（减少了 0.46U），BTC 净贡献从 `+0.01 U` 降至 `-0.10 U`（减少了 0.11U）；
 - **资金占用排挤效应**：当 SOL 占满 25% 仓位时，遇到 ETH 同步出现良好入场机会，由于可用现金分配比例收紧，且 ETH 偶发出现逆势小亏损时，25% 档位放大了个别止损的绝对金额。
 
-### 2.3 出场原因分析：趋势是否被提前扼杀？
+### 2.3 出场原因与交易笔数严格对账（56 闭合周期 vs 58 完整交易 vs 59 笔平仓成交）
 
-在 EXP-142（R5 W2）中，56 笔交易的出场分布：
-- `strategy_exit`（4 小时模型信号自然反转）：**51 笔（占 91.1%）**；
-- `breakeven_exit`（C2 动态保本止损锁定 0.25%）：**6 笔（占 8.9%）**；
-- `stop_loss`（8% 硬止损）：**0 笔（牛市零止损）**。
+在 EXP-142（R5 W2）中，底层成交流水与记录指标之间存在三个不同层次的统计口径，严格对账如下：
 
-> **量化结论**：C2 动态保本出场在 2024 年并没有像 C1 那样机械截断利润奔跑（仅触发 6 次微利平仓，91% 的交易均由 4 小时趋势信号自然持有并出场）。**错失 1.18% 的根本原因在于配仓权重被打折（30% 降至 20%），而非出场规则过严**。
+1. **59 笔平仓成交明细（`fills.csv` 中所有 `side == SELL` 成交）**：
+   - `strategy_exit`（4 小时模型信号自然反转平仓）：**52 笔**（占平仓成交的 88.1%）；
+   - `breakeven_exit`（C2 动态保本止损锁定 0.25% 平仓）：**6 笔**（占平仓成交的 10.2%）；
+   - `rebalance`（SOL 仓位从 30% 目标调降至 10% 的部分减仓成交）：**1 笔**（2024-01-04 00:00 减仓 0.204 SOL，后续 04:00 由 `strategy_exit` 卖出剩余 0.101 SOL）；
+   - 52 + 6 + 1 = **59 笔平仓成交**。
+2. **58 笔完整闭合交易生命周期（从 BUY 开仓到最终清仓 Flat 的完整 Round-Trip）**：
+   - 剔除上述 1 笔部分减仓（rebalance，属于持仓过程中的仓位再平衡，非独立退出）后，全周期共执行了 **58 笔完整交易**；
+   - 其中 **52 笔由 `strategy_exit` 趋势信号自然持有并平仓（占 89.7%）**；
+   - **6 笔由 `breakeven_exit` 触发保本微利退出（占 10.3%）**；
+   - `stop_loss`（8% 硬止损）：**0 笔（牛市零止损触发，0.0%）**；
+   - 52 + 6 = **58 笔完整交易**（无任何算术矛盾）。
+3. **为什么引擎记录显示 `closed_cycles = 56`？**
+   - 与 W1 中丢失第 30 笔的底层撮合边界机制完全相同：在 BTC（2024-08-05 13:00 闪跌至 49,000 美元）与 ETH（2024-04-14 04:00 闪跌）中，10% 试错仓位的净值短时跌破了 10 USDT 最低名义成交金额；
+   - 触发风控请求时因小于 10 USDT 被交易所规则拒单，`complete_exit_if_tail` 提前将 `cycle_open` 重置为 False；
+   - 待数小时后价格反弹被 `strategy_exit` 顺利卖出时，由于 `cycle_open` 状态已为 False，导致引擎计数器未递增；
+   - 真实各币种完成交易笔数：SOL 23 笔（记录 23）、ETH 19 笔（记录 18）、BTC 16 笔（记录 15），合计 **58 笔完整交易**。
+
+> **量化结论**：C2 动态保本出场在 2024 年并没有像 C1 那样机械截断利润奔跑（仅触发 6 次微利平仓，89.7% 的交易均由 4 小时趋势信号自然持有并出场）。**错失 1.18% 的根本原因在于配仓权重被打折（30% 降至 20%），而非出场规则过严**。
 
 ---
 
@@ -388,20 +426,20 @@ $$w_i = \\frac{{1 / \\sigma_i}}{{\\sum_j 1 / \\sigma_j}}$$
 > 2. Risk Parity 是一种纯风险中性资产配置工具，其假设“所有资产的夏普比率接近”。但在高 Beta 的加密市场中，低波动的 BTC 缺乏 Alpha，而高波动的 SOL 是强 Alpha 载体。
 > 3. 若机械采用 Risk Parity，**将大幅削减 SOL 仓位至 21.7%，并把 45.4% 资金堆砌在不产生利润的 BTC 上**，结果只会导致 W2 净收益从 +13.82% 进一步跌破 +10%，无法逾越 15% 红线！
 
-### 4.2 方案 B：绝对概率置信度（$P \\ge 0.60$）配仓深度证伪
+### 4.2 方案 B：绝对概率置信度（$P \ge 0.60$）配仓深度证伪与统计口径澄清
 
-统计底层 12 特征逻辑回归模型在全周期的预测概率分布：
+底层 12 特征逻辑回归模型在全周期的预测概率分布如下：
 
-| 币种 | W1 概率范围 (中位数) | W2 概率范围 (中位数) | 2025 概率范围 (中位数) | 信号中 $P \\ge 0.60$ 次数 |
+| 币种 | 全样本 4 小时决策点分布 (全部 2,196 根 K 线) | 买入信号条件分布 ($P \ge 0.50$ 激活样本) | 牛市 W2 最高概率 | 跨期 $P \ge 0.60$ 次数 |
 | :--- | :--- | :--- | :--- | :--- |
-| **BTCUSDT** | 0.16 ~ 0.70 (0.28) | 0.21 ~ 0.90 (0.29) | 0.22 ~ 0.69 (0.28) | 18 次 |
-| **ETHUSDT** | 0.28 ~ 0.59 (0.33) | 0.22 ~ 0.85 (0.32) | 0.24 ~ 0.83 (0.34) | 35 次 |
-| **SOLUSDT** | 0.05 ~ 0.59 (0.41) | 0.27 ~ **0.57** (0.41) | 0.25 ~ 0.70 (0.41) | **W1=0次，W2=0次** |
+| **BTCUSDT** | 范围 0.21 ~ 0.90，中位数 0.29 | 样本 27 个，中位数 0.602，80% 分位 0.697 | 0.9022 | 18 次 |
+| **ETHUSDT** | 范围 0.22 ~ 0.85，中位数 0.32 | 样本 35 个，中位数 0.598，80% 分位 0.685 | 0.8491 | 35 次 |
+| **SOLUSDT** | 范围 0.27 ~ 0.57，中位数 0.41 | 样本 34 个，中位数 0.529，80% 分位 0.546 | **0.5714** | **W1=0次，W2=0次** |
 
-> **致命缺陷**：
-> 1. 在整个 2024 年大牛市（W2）中，**SOL 的预测概率最高只有 0.5714，从未突破 0.60**！
-> 2. 原因是逻辑回归在拟合高波动标的时，对高收益标签的预测概率天然向均值收敛，导致 SOL 的有效买入信号高度集中在 $0.51 \\sim 0.55$；
-> 3. 如果在第十轮设定“$P \\ge 0.60$ 给予 30% 仓位”，**SOL 将在 2024 全年享受不到一次加仓**，加仓配额全被分配给了胜率更低、贡献更差的 BTC 和 ETH！
+> **关键统计口径澄清与量化事实**：
+> 1. **全样本无条件分布（全部 2,196 个 4 小时点）**：SOL 的预测概率中位数为 **0.4076（~0.41）**。在全样本中，$P \ge 0.50$ 已属于前 **1.55%** 的多头极端事件，$P \ge 0.53$ 更是全样本前 **0.73%** 的极罕见多头强信号；
+> 2. **有效买入信号条件分布（仅统计 $P \ge 0.50$ 的 34 个买点）**：概率分布在 0.5003 ~ 0.5714 之间，**中位数为 0.5286（~0.53）**，**前 20%（80分位数）为 $P \ge 0.5458（~0.546）**；
+> 3. **核心症结**：由于逻辑回归在拟合高波动率资产（SOL）时存在概率压缩效应，SOL 在 2024 年全年的最高预测概率仅为 **0.5714**。若设置跨币种死卡 $P \ge 0.60$ 加仓，SOL 虽为最强盈利引擎，却将面临 **0 次加仓** 的窘境！加仓配额全被分配给了胜率更低、贡献更差的 BTC 和 ETH。
 
 ---
 
@@ -411,8 +449,10 @@ $$w_i = \\frac{{1 / \\sigma_i}}{{\\sum_j 1 / \\sigma_j}}$$
 
 1. **机制一：单币相对置信度加成（Symbol-Specific Confidence Delta）**：
    - 弃用跨币种死卡 0.60 绝对值，改为使用“预测概率相对买入阈值的超额度”：
-     $$\\Delta P = P - T_{\\text{{base}}} = P - 0.50$$
-   - 对于 SOL，中位数为 0.41，因此当 $P \\ge 0.53$ 时（$\\Delta P \\ge 0.03$），已属于其自身前 20% 的极端强信号！此时允许在弱市中解除 20% 限制，给予 25%~30% 优势配仓。
+     $$\Delta P = P - T_{\text{base}} = P - 0.50$$
+   - 在 SOL 激活的 34 个买入信号中：
+     - 中位数为 0.5286（$\Delta P \approx 0.029$），当 $\Delta P \ge 0.03$（$P \ge 0.53$）时，属于买入信号中**置信度高于中位数（前 47%）的高确信度信号**；
+     - 80% 分位数为 0.5458（$\Delta P \approx 0.046$），当 $\Delta P \ge 0.046$ 时，属于买入信号中**置信度前 20% 的极端强信号**；此时允许在弱市中解除 20% 限制，给予 25%~30% 优势配仓。
 2. **机制二：动量加速度与主导地位强化（Momentum Acceleration & Dominance Targeting）**：
    - 当某币种不仅满足 $\\Delta R_{72h} > 0$，且满足：
      1. 全池相对超额第一（Top-1 Dominance：$\\Delta R_{72h} = \\max_s \\Delta R_{72h}$ 且 $\\Delta R_{72h} \\ge 3\\%$）；
