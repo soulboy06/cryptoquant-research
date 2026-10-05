@@ -1121,13 +1121,60 @@
      - 被 Top-K 淘汰的交易在所有 8 组候选中，其若执行的净收益 `eliminated_net_pnl` **无一例外全部为显著正值（+4.26 USDT 至 +33.21 USDT）**，胜率均超过 60%！
      - 例如 `B_Top2_Prob` 淘汰了 15 笔交易（11 胜 4 负），净损失 +33.21 USDT；`A_Top1_Prob` 淘汰了 66 笔交易（40 胜 26 负），净损失 +29.00 USDT；
      - 恶化主因：在 2024 年强动量大牛市多币种齐涨共振时，Top-1 强行将单币仓位锁死在 30% 并淘汰其他合格币种，导致 70% 资金以现金闲置踏空，2024 收益由 +17.41% 腰斩至 +7.88%~+8.97%，而 2025 年弱势期并未带来有效防守（2025 年净收益仍为 -2.25% ~ -3.45%）；
-  4. **终审定论与科学剪枝（决策 D-052）**：
-     - **定论表述**：“当前三币横截面择优未产生实质性 Alpha 提升。”；
-     - 严格遵守既定纪律：“Lane A 全部失败，不运行 Lane B”；
-     - 坚决不立平庸 Challenger，锁定 **OPT-0026** 继续作为唯一 Champion；
-     - 下一步明确转向：**Phase 5：真正的新特征 / 新 Alpha 信息源研究**。
+  4. **终审定论与科学限定（决策 D-052）**：
+     - **定论表述**：“在固定单币仓位、被淘汰资金直接留现金的 Selection-Only 条件下，Top-1 / Top-2 横截面筛选均未超过 Champion。”；
+     - 禁止表述为：“横截面策略已经彻底失败”、“现有12特征所有策略空间已穷尽”或“0.1293%/week 就是现有12特征的 Alpha 上限”；
+     - 坚决不立平庸 Challenger，保持 **OPT-0026** 继续作为唯一 Champion；
+     - 下一步明确转向：**Phase 4B2：横截面择优 + 资本重分配（Cross-Sectional Selection + Capital Reallocation）**。
 - 单测体系与回归验证：
   - 运行 pytest 测试套件：`tests/test_topk_phase4b.py`（5项测试全部 PASS）、`test_no_trade_phase4a.py`（5项测试全部 PASS）、`test_model_family_phase3.py`（6项测试全部 PASS）、`test_holdout_guard.py`（4项测试全部 PASS）、`test_optimization_pipeline.py`（4项测试全部 PASS），共 24 项单测全部 PASS（2.64s）。
+- 边界核验：
+  - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
+  - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
+
+### WL-064: 2026-10-06 00:05:00+08:00 Phase 4B2 横截面择优 + 资本重分配受控实验执行、多信号归因与终极定论
+
+- 用户任务：
+  1. 修正 Phase 4B 结论表述为“在固定单币仓位、被淘汰资金直接留现金的 Selection-Only 条件下，Top-1 / Top-2 横截面筛选均未超过 Champion”，严禁扩大化定论；
+  2. 启动 Phase 4B2：Cross-Sectional Selection + Capital Reallocation 受控实验；
+  3. 冻结基准 OPT-0026，仅在多信号事件（$\ge 2$ 币合格）时启动重分配；
+  4. 建立 Lane A（Top-2 重分配上限 45%）与 Lane B（Top-1 集中度压力上限 45%、60%），总候选 $\le 8$；
+  5. 重点检验 Section IX：Rank 1 是否在多信号事件中真正优于 Rank 2 和 Rank 3；
+  6. 回答 10 项终审问题，完成后立即停止，绝不自动进入 Phase 5。
+- 实际改动与涉及文件：
+  1. **代码与仿真架构扩展**：
+     - 修改 `src/cryptoquant/baselines/engine.py`：在 `run_backtest` 中引入 `allow_reallocation_weights` 标志，在支持上限 0.60 资本重分配的同时，完整保留原有离散档位非法检测的单测行为；
+     - 编写全流程脚本 `scripts/run_reallocation_phase4b2.py`，实现多信号事件识别、8 组候选重分配引擎、多信号事件归因追踪器以及 Rank 1 vs 2 vs 3 真实期望分析器；
+  2. **三窗时间序列 Walk-Forward 全景仿真**：
+     - 在 W1、W2、R2025 三个时序外评估窗口上，对 8 组候选执行扣成本账本仿真；
+  3. **产物留存**：
+     - 生成完整产物目录 `artifacts/research/reallocation_phase4b2/`，包含 `comparison_report.md`、`candidate_summary.csv`、`multi_signal_attribution.csv`、`rank_expectancy_analysis.csv`、`trading_metrics.csv`、`results.json`、`experiment_config.json`；
+  4. **单测构建**：
+     - 编写 `tests/test_reallocation_phase4b2.py`，覆盖基准精确复现、候选边界与仓位上限约束、多信号事件激活计数、Rank 1 负期望选择效应验证及 Champion 保持。
+- 实证结果全景与关键科学发现：
+  1. **Control 基准精准复现**：
+     - `Control_OPT0026`（LR C=0.10, th=0.48, 纯动态 C2）：周收益精确复现为 **+0.1293% / week**（2023: +7.16%, 2024: +17.41%, 2025: -2.70%, MDD: 11.51%, 225 笔交易, 胜率: 57.3%, 手续费: 10.69U）；
+  2. **8 组重分配机制周收益全景（全线跑输 Champion）**：
+     - `Top2_Prob_Reallocate45`: +0.1077%/w（$\Delta = -2.2\text{ bps}$，MDD 13.55%，2024=+17.00%，2025=-5.60%）；
+     - `Top2_Combined_Reallocate45`: +0.0943%/w（$\Delta = -3.5\text{ bps}$，MDD 14.02%，2024=+15.69%，2025=-6.52%）；
+     - `Top2_RS72_Reallocate45`: +0.0706%/w（$\Delta = -5.9\text{ bps}$，MDD 15.53%，2024=+14.11%，2025=-8.67%）；
+     - `Top1_Combined_Cap45`: +0.0586%/w（$\Delta = -7.1\text{ bps}$，MDD 13.12%，2024=+12.84%，2025=-9.16%）；
+     - `Top1_Combined_Cap60`: +0.0569%/w（$\Delta = -7.2\text{ bps}$，MDD 14.85%，2024=+14.17%，2025=-10.68%）；
+     - `Top1_Prob_Cap45`: +0.0531%/w（$\Delta = -7.6\text{ bps}$，MDD 13.12%，2024=+12.51%，2025=-9.67%）；
+     - `Top1_Prob_Cap60`: +0.0514%/w（$\Delta = -7.8\text{ bps}$，MDD 14.85%，2024=+13.86%，2025=-11.20%）；
+  3. **重大科学发现（Section IX：Rank Expectancy Analysis）**：
+     - 在 104 次多信号共振事件中，**Top-1 Probability 呈现显著的反向选择效应（Negative Selection）**：
+       - `PROB Rank 1`: 44 笔交易，累计净收益 **-18.39 USDT**（胜率 50.0%）；
+       - `PROB Rank 2`: 42 笔交易，累计净收益 **+4.79 USDT**（胜率 54.8%）；
+       - `PROB Rank 3`: 11 笔交易，累计净收益 **+2.38 USDT**（胜率 72.7%）；
+     - 根因分析：在当前 12 特征模型下，多币同时合格是贝塔爆发期；模型单币概率最高时往往对应局部急拉竭尽阶段，盲目提仓放大了短线见顶回撤；而 Rank 3 胜率高达 72.7%，淘汰 Rank 3 并把资金压给负期望的 Rank 1 导致双重失血；
+  4. **终审定论与科学决断（决策 D-053）**：
+     - **定论表述**：“在当前三币、当前 12 特征和现有模型信号下，简单横截面选择与资本重分配没有产生显著增量 Alpha。”；
+     - 经历 Selection-Only 与 Selection + Capital Reallocation 两次严谨受控实验，正式停止横截面方向探索；
+     - 保持 **OPT-0026** 继续作为唯一 Champion；
+     - 现有 12 特征短周期量价与资金费率的 Alpha 上限已完全受控确认，下一阶段正式建议转向 **Phase 5：全新特征 / 全新 Alpha 信息源工程**；按指令立即停止，绝不自动进入 Phase 5。
+- 单测体系与回归验证：
+  - 运行 pytest 测试套件：`tests/test_reallocation_phase4b2.py`（5项全部 PASS）、`test_topk_phase4b.py`（5项全部 PASS）、`test_no_trade_phase4a.py`（5项全部 PASS）、`test_model_family_phase3.py`（6项全部 PASS）、`test_holdout_guard.py`（4项全部 PASS）、`test_optimization_pipeline.py`（4项全部 PASS）、`test_dynamic_execution.py`（3项全部 PASS）、`test_alpha_execution.py`（3项全部 PASS），共 35 项单测全部 100% 通过（3.30s）。
 - 边界核验：
   - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
   - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。

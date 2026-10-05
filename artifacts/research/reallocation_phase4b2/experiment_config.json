@@ -1,0 +1,88 @@
+{
+  "phase": "Phase 4B2: Cross-Sectional Selection + Capital Reallocation",
+  "generated_at_utc": "2026-10-05T15:58:49.986546+00:00",
+  "champion_baseline": "OPT-0026 (LR C=0.10, th=0.48, g_week=+0.1293%/w)",
+  "horizon_hours": 4,
+  "features_count": 12,
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT"
+  ],
+  "base_cost": 0.0030055,
+  "candidates_count": 8,
+  "candidates": [
+    {
+      "candidate_id": "Control_OPT0026",
+      "lane": "Control",
+      "group": "Baseline",
+      "description": "Baseline OPT-0026 (No Top-K, all qualified signals trade at base R6 sizing)",
+      "rank_metric": null,
+      "k": 3,
+      "cap": "0.30"
+    },
+    {
+      "candidate_id": "Top2_Prob_Reallocate45",
+      "lane": "Lane_A",
+      "group": "Probability",
+      "description": "Top-2 by Model Prob P; 3-signal reallocated to Top-2 capped at 45%/45%",
+      "rank_metric": "prob",
+      "k": 2,
+      "cap": "0.45"
+    },
+    {
+      "candidate_id": "Top2_RS72_Reallocate45",
+      "lane": "Lane_A",
+      "group": "Relative_Strength",
+      "description": "Top-2 by 72h RS return_72h; 3-signal reallocated to Top-2 capped at 45%/45%",
+      "rank_metric": "rs72",
+      "k": 2,
+      "cap": "0.45"
+    },
+    {
+      "candidate_id": "Top2_Combined_Reallocate45",
+      "lane": "Lane_A",
+      "group": "Combined_Rank",
+      "description": "Top-2 by Combined Rank; 3-signal reallocated to Top-2 capped at 45%/45%",
+      "rank_metric": "combined",
+      "k": 2,
+      "cap": "0.45"
+    },
+    {
+      "candidate_id": "Top1_Prob_Cap45",
+      "lane": "Lane_B",
+      "group": "Probability",
+      "description": "Top-1 by Model Prob P; multi-signal reallocated to Top-1 capped at 45%",
+      "rank_metric": "prob",
+      "k": 1,
+      "cap": "0.45"
+    },
+    {
+      "candidate_id": "Top1_Combined_Cap45",
+      "lane": "Lane_B",
+      "group": "Combined_Rank",
+      "description": "Top-1 by Combined Rank; multi-signal reallocated to Top-1 capped at 45%",
+      "rank_metric": "combined",
+      "k": 1,
+      "cap": "0.45"
+    },
+    {
+      "candidate_id": "Top1_Prob_Cap60",
+      "lane": "Lane_B",
+      "group": "Probability",
+      "description": "Top-1 by Model Prob P; multi-signal reallocated to Top-1 capped at 60%",
+      "rank_metric": "prob",
+      "k": 1,
+      "cap": "0.60"
+    },
+    {
+      "candidate_id": "Top1_Combined_Cap60",
+      "lane": "Lane_B",
+      "group": "Combined_Rank",
+      "description": "Top-1 by Combined Rank; multi-signal reallocated to Top-1 capped at 60%",
+      "rank_metric": "combined",
+      "k": 1,
+      "cap": "0.60"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+candidate_id,lane,two_signal_events,three_signal_events,reallocation_events
+Control_OPT0026,Control,71,33,0
+Top2_Prob_Reallocate45,Lane_A,71,33,33
+Top2_RS72_Reallocate45,Lane_A,71,33,33
+Top2_Combined_Reallocate45,Lane_A,71,33,33
+Top1_Prob_Cap45,Lane_B,71,33,104
+Top1_Combined_Cap45,Lane_B,71,33,104
+Top1_Prob_Cap60,Lane_B,71,33,104
+Top1_Combined_Cap60,Lane_B,71,33,104
