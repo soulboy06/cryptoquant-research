@@ -1,0 +1,92 @@
+{
+  "experiment_id": "EXP-160",
+  "type": "cycle_repair_paired_replay",
+  "status": "complete",
+  "variant": "R0",
+  "window": "W2",
+  "legacy_experiment_id": "EXP-109",
+  "started_at_utc": "2026-10-05T08:35:07.609099+00:00",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "dust_policy": "post_exit_sub_step_writeoff_v1",
+  "holdout_read": false,
+  "existing_terminal_quote_authorized": true,
+  "data_info": {
+    "data_experiment_id": "EXP-003",
+    "period": "development",
+    "data_manifest_sha256": "2412dadf0b06b2ac4b4997fdb547a72f9047023674e63829e7453ee0c0ac6740",
+    "quality_report_sha256": "2e591ffa5667d73928dc9fd313960da8e7ecd79c6dab43de2ba5ad5bfb11eb93",
+    "rules_sha256": "7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3",
+    "data_policy_sha256": "c6bfe76b46c15d3233b2c8a7c1de1cb885bf8c41553f38ee1ec01f6e20a47fdf",
+    "rule_report_sha256": "214532b597f37fa165d5ec577f313cd672c66c57d21a83d0b1a0ac824aed4d93",
+    "partitions": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "ef6a5b84eefca9340ae24d05d2778b822ef69b3af21edab78e17fb22f9bd75c8",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "261e3a67d3ae235cb2895d4f7ba48bea35a97a1974a67ca7f02676fa6655d58d",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "65b89257a4554ae97bf2f9118b42f68b8858df02ae26b866b7a0702b86202671",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    }
+  },
+  "source_hash": "629635de31d0fe19eaf8415db976299a1689cca9601e0b413a3fbf7c1e558e75",
+  "input_hashes": {
+    "D:\\量化\\artifacts\\experiments\\EXP-109\\config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "D:\\量化\\artifacts\\experiments\\EXP-109\\summary.json": "312dadba960eb8b642c65556659145ba6dcc6be91f6960e7da93624a98f25219",
+    "D:\\量化\\artifacts\\experiments\\EXP-109\\fills.csv": "ed4bc09b38d8543f91a00de914f82c309c3ca1771ee231fcf460e25d392fb551",
+    "D:\\量化\\artifacts\\experiments\\EXP-142\\probabilities.parquet": "e8d8b90f62b932cbfce9a70a2dcd0d105b0424d8898f30a578a2c88d35120b80",
+    "D:\\量化\\artifacts\\experiments\\EXP-109\\source_snapshot\\src\\cryptoquant\\trading\\risk.py": "0509c59fc8241c0cb5f43e492ad5a8908b9358e983cd50e88eebcabe36b1f661",
+    "D:\\量化\\artifacts\\experiments\\EXP-109\\source_snapshot\\src\\cryptoquant\\baselines\\engine.py": "9923d5cffa0909b771053ebd6764a598847af13961df7ce98acfcafe78835864"
+  },
+  "finished_at_utc": "2026-10-05T08:35:13.289757+00:00",
+  "artifacts": {
+    "comparison.json": "e5e3f7e03c1b5e8c703a013c0bc764da5d121ce0f983ef05d2ae77cb91cf0abb",
+    "config.toml": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+    "source_manifest.json": "a5e08837c4c0ed8592251db648ed5497cdaaadcacd9fd2158d4353c0136bdaad",
+    "targets.parquet": "4342829d4ab62981bff5c09148cfa2e644014999e3262fe14969b9cce950c017",
+    "after/annual.json": "b0aa7de60c9514060edc426f1f7d4ff50a0086cb02b9fe61434590755fe0bd01",
+    "after/equity.csv": "4552c44f33b16e1f8d13541a04a8f0b6a28ab8b9c30f88653331dfc6af986f29",
+    "after/events.json": "c8601190b787658003517cae38d1cfd9b52859593b2e2d2ec93904e3b125a8f3",
+    "after/fills.csv": "98070a4d71e2f2dae9a109a91a0a7a4b3097d3db84b92f1060b18916f9dbcf56",
+    "after/orders.csv": "647e945d32d503305530dc56ae5418ab0c3b629e9737ba22e069e5733802f044",
+    "after/summary.json": "f08b733c8ac53defe21505bc58841ac033fa415708c2eb0abacb0b3ce01a099e",
+    "after/weekly.csv": "f80bcc25b0a4a3d7847341297c5c0df29dff44aabd5863816c0e98c83ee130b7",
+    "before/annual.json": "25bad37afb080349b7f9325d1b3c63e564ef011ab261ffef49430616ef03857d",
+    "before/equity.csv": "e839a8c28213f591d927bae43673ba0e35c9ba87b65e648f3c3eb0864e0efaaf",
+    "before/events.json": "6843dad2d2bb4cb617e68885fd020bf7c0f63ca18de8f31f6f7089b165730caa",
+    "before/fills.csv": "79da678f01144e390bed3474fc2a8264f822daff7245c483fca3d70ed4e67f19",
+    "before/orders.csv": "3e8909068e27d2451c8e7ce7d40b07a654739aeb9bbf98398dd55050686d003b",
+    "before/summary.json": "27b63f68c7fa31dbe99239964cf1b74298d90f84baf734cf7a6edcf8e313daec",
+    "before/weekly.csv": "1391f312408e0f64fdd80d606c1f8bd421ed5c84faddf82d09481dc2277e208f"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "selected_variant": null,
+  "eligible": false,
+  "variants": {
+    "R8": {
+      "eligible": false,
+      "failed_checks": [
+        "W2:cycles>=30",
+        "W2:return>=15%",
+        "R2025:return>=parent"
+      ],
+      "combined_g_week": "-0.00108368226876018125289536971352182274904673293244",
+      "profitable": false,
+      "weekly_target_achieved": false,
+      "r2025_above_minus_five": false
+    },
+    "R9": {
+      "eligible": false,
+      "failed_checks": [
+        "W2:cycles>=30",
+        "W2:return>=15%",
+        "R2025:return>=parent",
+        "g_week>R6"
+      ],
+      "combined_g_week": "-0.00115653077212249925616411594912956265082568798549",
+      "profitable": false,
+      "weekly_target_achieved": false,
+      "r2025_above_minus_five": false
+    },
+    "R10": {
+      "eligible": false,
+      "failed_checks": [
+        "W2:cycles>=30",
+        "W2:return>=15%",
+        "R2025:return>=parent"
+      ],
+      "combined_g_week": "-0.00108398245264554002690190491272440841373815825412",
+      "profitable": false,
+      "weekly_target_achieved": false,
+      "r2025_above_minus_five": false
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "experiment_id": "EXP-174",
+  "type": "cycle_repair_acceptance",
+  "status": "complete",
+  "comparison_sha256": "afbd4bbe7fefe358ffad067bdb89581fb20743f817d906e744e90ab6f18600ae",
+  "holdout_read": false
+}

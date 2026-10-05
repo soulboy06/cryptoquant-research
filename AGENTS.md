@@ -44,6 +44,10 @@
 | [第八轮全景对比报告](artifacts/experiments/EXP-140/report.md) | R2/R3/R4动态响应全量9账户回测、基础筛选失格与三层结论最终评定 |
 | [第九轮相对强弱与自适应配仓方案](docs/superpowers/specs/2026-10-05-relative-strength-and-adaptive-allocation-design.md) | 第九轮改进方案：多币种相对强弱解耦与波动率自适应配仓（R5/R6/R7） |
 | [第九轮相对强弱与自适应配仓实施计划](docs/superpowers/plans/2026-10-05-relative-strength-and-adaptive-allocation-implementation.md) | 龙头判定、引擎多档仓位支持、Base回测与筛选评估任务清单 |
+| [周期修复核验计划](docs/cycle-state-repair-plan-2026-10-05.md) | 正持仓风险不变量、明确零头政策及冻结配对重放 |
+| [修复后基线](docs/cycle-state-repair-results-2026-10-05.md) | R0/R3/R5/R6/R7三窗新版本成绩，旧六至九轮不作新baseline |
+| [第十轮冻结方案](docs/tenth-experiment-design-2026-10-05.md) | R8/R9/R10三机制、父策略、因果口径与有限预算 |
+| [修复与第十轮交付](docs/cycle-repair-and-tenth-results-2026-10-05.md) | 12项答复、全部基础结果、归因与失败结论；当前状态仍以STATUS为准 |
 
 ### 开始工作前
 
@@ -141,6 +145,8 @@
 - 使用滚动训练或验证时，每一步只使用当时可用的数据，记录模型版本、配置和随机种子。
 
 ## 回测与模拟规范
+
+- 正持仓的生命周期和风险状态不能因min-notional拒单而关闭／重置，直到实际数量为零或明确政策完成实质清理。当前模拟只允许真实全退出SELL后严格sub-step零头显式放弃，成本计损失并审计，不虚构SELL、收入或可执行dust转换；政策变化须另行冻结并重建基线。普通信号退出拒单也保留pending，不能提前开启新周期或冷却。
 
 - 分离行情数据、特征与模型、交易规则、风控、执行和账户账本，保持接口简单清楚。
 - 用已经收盘的 K 线生成信号时，成交发生在信号形成之后。明确下单时点、成交价格和订单类型。
