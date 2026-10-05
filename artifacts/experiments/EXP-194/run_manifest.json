@@ -1,0 +1,90 @@
+{
+  "experiment_id": "EXP-194",
+  "type": "eleventh_evaluation",
+  "status": "complete",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "started_at_utc": "2026-10-05T11:18:35.464719+00:00",
+  "research_config_sha256": "66f344f45e9959a7101d13bcfd2918c67555f39d4d064f89b7fb244937919b28",
+  "allocation_source_sha256": "99cf927a8762d829a895c2ca3a28458111488b00424608eba5911736270fbfac",
+  "runner_sha256": "8c7e6d446f7ce7f6dd921aa643e141b257950abf755c7a48f89d823aa5b88e2b",
+  "phase_a_comparison_sha256": "43c00a83001e8a20b6e90c765187f930b29a17b7f1989371079fa44e737aea88",
+  "holdout_read": false,
+  "parent_variant": "R6",
+  "variant": "R11",
+  "window": "W1",
+  "cost": "base",
+  "source_hash": "827e659334bc65299130c45668b933ca78e676455384e2cf721aed11c4ff4a06",
+  "input_hashes": {
+    "D:\\量化\\artifacts\\experiments\\EXP-168\\targets.parquet": "587aaf3e1518b9c3675171eaa488b69c9b31efe4685c0801315052cd0193c71a",
+    "D:\\量化\\artifacts\\experiments\\EXP-122\\state_W1.parquet": "a1a137421c664706f2b76688f0a7439f1f7ad25038f544116e3118a51e8f8fa5",
+    "state_manifest.json": "a8c06a53ba8d43377d38aac5a7677263364b0e07292b71a5cea0eefc39b16c62"
+  },
+  "data_info": {
+    "data_experiment_id": "EXP-003",
+    "period": "development",
+    "data_manifest_sha256": "2412dadf0b06b2ac4b4997fdb547a72f9047023674e63829e7453ee0c0ac6740",
+    "quality_report_sha256": "2e591ffa5667d73928dc9fd313960da8e7ecd79c6dab43de2ba5ad5bfb11eb93",
+    "rules_sha256": "7cb927bb749569151af31b9c326ab1ac4134ce8f2188e49b86bc5a6eeaf206a3",
+    "data_policy_sha256": "c6bfe76b46c15d3233b2c8a7c1de1cb885bf8c41553f38ee1ec01f6e20a47fdf",
+    "rule_report_sha256": "214532b597f37fa165d5ec577f313cd672c66c57d21a83d0b1a0ac824aed4d93",
+    "partitions": {
+      "BTCUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\BTCUSDT.parquet",
+        "sha256": "ef6a5b84eefca9340ae24d05d2778b822ef69b3af21edab78e17fb22f9bd75c8",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "ETHUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\ETHUSDT.parquet",
+        "sha256": "261e3a67d3ae235cb2895d4f7ba48bea35a97a1974a67ca7f02676fa6655d58d",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      },
+      "SOLUSDT": {
+        "path": "D:\\量化\\data\\processed\\development\\EXP-003\\attempt-001\\SOLUSDT.parquet",
+        "sha256": "65b89257a4554ae97bf2f9118b42f68b8858df02ae26b866b7a0702b86202671",
+        "evaluation_rows": 26304,
+        "warmup_rows": 744,
+        "boundary_rows": 1
+      }
+    }
+  },
+  "promoted_decisions": 6,
+  "finished_at_utc": "2026-10-05T11:18:39.756012+00:00",
+  "artifacts": {
+    "closed_cycles.csv": "fff562cc7dae540616cc482795d1b89a7529c919df00ce36d5c320a6fd83f3d2",
+    "config.toml": "0ebb39dfa60a7eb66bf048592879729d75a09506590f2ed7ea1169d2478f1050",
+    "cycle_distributions.json": "88bef979f42e1cde4e80fe49fb086b53a0ea61c583d991ebddeba73e688f44de",
+    "research_config.json": "66f344f45e9959a7101d13bcfd2918c67555f39d4d064f89b7fb244937919b28",
+    "source_manifest.json": "4150864721a28d5d4723f8effdbc0de0cd08262ff736f6bff2333860c3b43be7",
+    "summary.json": "4c3581994e83f5a99c3d844d79779d4aa6cf89decb79f85e4b00f7a0b227fd59",
+    "targets.parquet": "574e2fad404157be045a505dddc6e46921bdcc01656432623e2b1c0cbaf59d2e",
+    "targets_audit.csv": "d6924fe96779cc0e37c12bfe3221bfdb78344a86f6bbaedd15c777561f027fd9",
+    "account/annual.json": "1501598041dff8284e1653c130754f72ed507f5b8a1e12d4537dc07284605117",
+    "account/equity.csv": "988c24dd186d53aae5c109e45fb4858c780c23acf671d0673656d653957cb436",
+    "account/events.json": "2865ecb26d0e9d7da5d909eeda11f1d298024719becfce702c584a9669ccd7c9",
+    "account/fills.csv": "3eac0d7a8e366f874774321ba23c24af8c9c5045abafc6def6e6471d045a6c3a",
+    "account/orders.csv": "de8a3b4b4af7fb212c747297b99bbfd08e2e2c0ac7c1f75dc61769c3ea908b67",
+    "account/summary.json": "ee7d04e5f25487c6d2dabd8f8a2a35342aa4621f88dfac1e86a7d3bef890da82",
+    "account/weekly.csv": "a3c1f27ebc96b5e9e9c6375976eb59d72e0cc2fbe27bbbe25559ab217e51f39e"
+  }
+}

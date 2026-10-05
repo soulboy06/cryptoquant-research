@@ -1,0 +1,19 @@
+{
+  "research_id": "eleventh_pullback_recovery_v1",
+  "phase_a_experiment": "EXP-174",
+  "parent_variant": "R6",
+  "parent_rule": "repaired_R6_baseline",
+  "variants": ["R11"],
+  "windows": ["W1", "W2", "R2025"],
+  "promotion_weight": "0.30",
+  "neighbor_weight": "0.25",
+  "probability_threshold": "0.50",
+  "pullback_threshold": "0.0",
+  "history_hours": 744,
+  "max_base_accounts": 3,
+  "max_pressure_accounts": 6,
+  "max_records": 11,
+  "dust_policy": "retain_mark_to_market",
+  "evaluation_data_status": "repeatedly_viewed_research_development",
+  "holdout_allowed": false
+}

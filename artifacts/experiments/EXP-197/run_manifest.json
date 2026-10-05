@@ -1,0 +1,38 @@
+{
+  "experiment_id": "EXP-197",
+  "type": "eleventh_selection",
+  "status": "complete",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "started_at_utc": "2026-10-05T11:18:48.936144+00:00",
+  "research_config_sha256": "66f344f45e9959a7101d13bcfd2918c67555f39d4d064f89b7fb244937919b28",
+  "allocation_source_sha256": "99cf927a8762d829a895c2ca3a28458111488b00424608eba5911736270fbfac",
+  "runner_sha256": "8c7e6d446f7ce7f6dd921aa643e141b257950abf755c7a48f89d823aa5b88e2b",
+  "phase_a_comparison_sha256": "43c00a83001e8a20b6e90c765187f930b29a17b7f1989371079fa44e737aea88",
+  "holdout_read": false,
+  "parent_variant": "R6",
+  "source_hash": "827e659334bc65299130c45668b933ca78e676455384e2cf721aed11c4ff4a06",
+  "finished_at_utc": "2026-10-05T11:18:49.059263+00:00",
+  "artifacts": {
+    "config.toml": "0ebb39dfa60a7eb66bf048592879729d75a09506590f2ed7ea1169d2478f1050",
+    "research_config.json": "66f344f45e9959a7101d13bcfd2918c67555f39d4d064f89b7fb244937919b28",
+    "selection.json": "4b8a38da31d32c9fa4c47629e2bf50473e30c3565d39944569286c9e77522396",
+    "source_manifest.json": "4150864721a28d5d4723f8effdbc0de0cd08262ff736f6bff2333860c3b43be7"
+  }
+}

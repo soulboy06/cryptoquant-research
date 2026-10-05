@@ -16,7 +16,7 @@ def _utc(series):
 
 def build_leader_targets(parent, states, momentum, variant, *, promotion_weight=None):
     weight = Decimal('.30') if promotion_weight is None else Decimal(str(promotion_weight))
-    if variant not in ('R8','R9','R10') or weight not in (Decimal('.25'),Decimal('.30')):
+    if variant not in ('R8', 'R9', 'R10', 'R11') or weight not in (Decimal('.25'), Decimal('.30')):
         raise ValueError('unsupported frozen variant or promotion weight')
     if list(parent.columns) != COLUMNS:
         raise ValueError('parent columns must contain only trading fields')
@@ -73,7 +73,7 @@ def build_leader_targets(parent, states, momentum, variant, *, promotion_weight=
             cutoff=float(np.quantile(prior,.8)) if len(prior)>=30 else None
             confirm=bool(cutoff is not None and not pd.isna(prob) and prob>=cutoff)
             eligible=not favorable and full_history and alpha[row.symbol] and not pd.isna(prob) and prob>=.5
-            promote=eligible and (row.symbol==top if variant=='R8' else row.symbol==top and float(mom.loc[(time,row.symbol)].return_24h)>0 if variant=='R9' else confirm)
+            promote=eligible and (row.symbol==top if variant=='R8' else row.symbol==top and float(mom.loc[(time,row.symbol)].return_24h)>0 if variant=='R9' else row.symbol==top and float(mom.loc[(time,row.symbol)].return_24h)<0 if variant=='R11' else confirm)
             original=row.target_weight
             if original is not None and not pd.isna(original) and Decimal(str(original)) not in (Decimal('0'),Decimal('.10'),Decimal('.25'),Decimal('.30')):
                 raise ValueError('parent must be frozen repaired R6 weights')

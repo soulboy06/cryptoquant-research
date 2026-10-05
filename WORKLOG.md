@@ -796,7 +796,55 @@
      - ETH在弱市整体期望为负（真Alpha净均值-0.984%，胜率16.67%），弱市追逐ETH超额呈负偏。
 - 下一步：根据只读验证事实，向用户汇报，严格限制未来R11仅引入单一最稳健机制（如回踩确认或真Alpha绝对动量门槛），坚决避免多参数拼接过拟合。
 
+## WL-054：第十一轮真Alpha回踩恢复机制方案冻结与三窗回测（2026-10-05，Asia/Shanghai）
+
+- 用户要求：
+  1. 先核实当前 R6/R8 的 Alpha Leader 是否已经要求自身 72h 收益 > 0；如果是，则候选 B 与现有机制重复，不进入 R11。
+  2. 随后仅以候选 A“真 Alpha 在 24h 回踩（R24h<0）时恢复 30%”作为唯一 R11 候选；
+  3. 先冻结方案和评价门槛，再执行三窗口回测，不新增任何其他过滤条件，不调整阈值，2026 继续封存。
+- 核验与方案冻结：
+  - 核实源码 `src/cryptoquant/models/leader_allocation.py:L65` 与 `relative_strength.py:L80`：现有 R6/R8 基础定义已包含 `float(mom.loc[(time,s)].return_72h) > 0 and float(mom.loc[(time,s)].return_72h) > btc`。自身 72h 收益 > 0 早已内置，候选 B 100% 重复，严格剔除，不进入 R11。
+  - 编写并事前冻结方案文档：`docs/eleventh-experiment-design-2026-10-05.md` 与配置文件 `configs/eleventh_experiment.json`。
+  - 在 `src/cryptoquant/models/leader_allocation.py` 增加变体 `'R11'` 支持（`eligible and row.symbol == top and float(mom.loc[(time, row.symbol)].return_24h) < 0`），在 `tests/test_leader_allocation.py` 补充专用行为单测并通过（6 passed）。
+  - 在 `EXPERIMENTS.md` 预登记 EXP-194～198。
+- 实验执行（EXP-194～EXP-198）：
+  - 编写并运行 `scripts/run_eleventh_research.py`，0 报错完成三窗回测、门禁判定与报告归档。
+  - 回测实际结果：
+    - EXP-194（W1 base）：净收益 **+5.9562%**（30 周期，MDD 3.60%），高于父策略 R6（+5.0643%）+0.8919%，门禁通过；
+    - EXP-195（W2 base）：净收益 **+14.0035%**（62 周期，MDD 3.09%），高于父策略 R6（+13.6996%）+0.3039%，但因未达 15% 门槛，**门禁失败（W2:return>=15%）**；
+    - EXP-196（R2025 base）：净收益 **-2.5232%**（59 周期，MDD 11.24%），微劣于父策略 R6（-2.4368%）-0.0864%，**门禁失败（R2025:return>=parent）**；
+    - 三窗合成周收益：达到 **+0.104405% / week**，创下整个量化研究历史所有候选策略的**最高纪录**（R0: +0.088985%, R3: +0.062773%, R6: +0.097859%, R8: +0.103730%, R10: +0.102234%）。
+  - 筛选与门禁评定（EXP-197）：因未满足两项事前冻结硬门槛，判定为 **失格（Disqualified）**，胜出候选为 None。
+  - 全景报告（EXP-198）：保存于 `artifacts/experiments/EXP-198/comparison.json` 与 `report.md`。压力测试按规则跳过，最终候选为 None。未达每周 1.5% 长期目标。
+- 边界核验：
+  - 2026 测试分区继续物理封存（0 读取、0 统计）；
+  - 严格遵守 100 USDT 虚拟资金、50 USDT 底线、现货无杠杆边界；
+  - 面对失格实事求是接受，坚决不反向调参（不过度拟合 15% 或 -2.44%）。
+
+### WL-055: 2026-10-05 20:00:00+08:00 停止新增人工规则，构建自动模型与策略优化管线（Walk-Forward 验证）
+
+- 用户要求：
+  1. 停止新增 R12/R13 人工规则，保留 R6 作为人工基准；
+  2. 建立自动模型与策略优化管线：以 Logistic Regression 和 LightGBM 为第一批模型，使用严格时间序列训练/验证切分和 Walk-Forward 滚动时序验证，自动搜索模型超参数、入场阈值和仓位参数；
+  3. 评价目标以扣除成本后的收益、最大回撤和跨窗口稳定性为主；
+  4. 禁止读取 2026，禁止根据单一年份结果手工改规则；输出 Top 候选与 R6 对比；
+  5. 上传 GitHub 合并 main 分支。
+- 架构构建与代码变动：
+  - 记录决策 D-045（停止人工试凑规则，保留 R6 作为基线，全面转向自动化 Walk-Forward 优化管线）。
+  - 创建 `src/cryptoquant/optimization/` 核心组件：
+    - `walk_forward.py`：定义严格单调时序切分（Fold 1 训2022评2023、Fold 2 训2022-2023评2024、Fold 3 训2022-2024评2025），严格物理隔离 2026 年数据；
+    - `search_space.py`：定义两大模型族（LR正则族、LightGBM轻量树模型族）、入场阈值网格（0.48～0.58）、合规多档配仓方案（含 pure_defense 防御系列）；
+    - `engine.py`：实现样本外概率缓存、多窗口账本回测仿真与多目标综合适应度（Fitness）评分。
+  - 创建自动化搜索入口 `scripts/run_automated_optimization.py` 与单元测试 `tests/test_optimization_pipeline.py`。
+- 测试与执行核验：
+  - 执行 `pytest tests/test_optimization_pipeline.py`，3 项测试全部通过（测试时序不变量、目标构建与适应度单调性）。
+  - 启动主进程后台执行任务（task-4829），全面覆盖 200 组策略全生命周期（8 模型 × 5 阈值 × 5 配仓 × 3 折叠 = 600 次独立账本回测）。
+- 边界核验：
+  - 2026 数据完全封存，受 `reject_holdout` 运行时严格防护；
+  - 100 USDT 虚拟资金、50 USDT 底线、现货无杠杆与合规档位严格保证。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。
+
 

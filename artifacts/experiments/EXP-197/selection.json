@@ -1,0 +1,17 @@
+{
+  "selected_variant": null,
+  "eligible": false,
+  "variants": {
+    "R11": {
+      "eligible": false,
+      "failed_checks": [
+        "W2:return>=15%",
+        "R2025:return>=parent"
+      ],
+      "combined_g_week": "0.0010440518898501333928921746927754473081421688361",
+      "profitable": true,
+      "weekly_target_achieved": false,
+      "r2025_above_minus_five": true
+    }
+  }
+}

@@ -30,6 +30,22 @@ def test_top_leader_and_direction_are_separate_mechanisms():
     assert r9.target_weight.tolist() == p.target_weight.tolist()
 
 
+def test_r11_pullback_recovery_promotes_only_on_negative_24h():
+    p, s, m = inputs(2)
+    # Case 1: return_24h = +0.02 (>= 0), no pullback -> should not promote (remain parent weight 0.25)
+    r11_chasing, audit1 = build_leader_targets(p, s, m, 'R11')
+    assert r11_chasing.target_weight.tolist() == p.target_weight.tolist()
+    assert not audit1.promoted.any()
+
+    # Case 2: return_24h = -0.01 (< 0), pullback -> SOLUSDT is top Alpha leader and should promote to 0.30
+    m.loc[m.symbol == 'SOLUSDT', 'return_24h'] = -0.01
+    r11_pullback, audit2 = build_leader_targets(p, s, m, 'R11')
+    assert set(r11_pullback.loc[r11_pullback.symbol == 'SOLUSDT', 'target_weight']) == {D('.30')}
+    assert set(r11_pullback.loc[r11_pullback.symbol == 'ETHUSDT', 'target_weight']) == {D('.25')}
+    assert set(r11_pullback.loc[r11_pullback.symbol == 'BTCUSDT', 'target_weight']) == {D('.10')}
+
+
+
 def test_causal_quantile_uses_only_prior_symbol_predictions_and_suffix_is_invariant():
     p,s,m = inputs()
     t=p.decision_time.unique()[30]
