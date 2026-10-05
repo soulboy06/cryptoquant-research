@@ -30,10 +30,19 @@
 - **第四阶段 B2（Selection + 资本重分配受控实验）已完成（D-053）**：
   - 产物目录：`artifacts/research/reallocation_phase4b2/`；
   - 冻结基准精准复现：Control_OPT0026（LR C=0.10, th=0.48, 纯动态 C2）精确复现 $g_{week} = \mathbf{+0.1293\%/w}$（W1: +7.16%, W2: +17.41%, 2025: -2.70%, MDD: 11.51%, 225 周期）；
-  - 8 组预冻结机制实证：所有 7 组资本重分配机制长期合成周收益全部跑输 Champion（+0.0514%/w 至 +0.1077%/w）；
+  - 8 组预冻结机制实证：所有 7 组资本重分配机制长期合成周收益全部跑输基准（+0.0514%/w 至 +0.1077%/w）；
   - 核心科学发现：在 104 次多信号共振事件中，Top-1 Probability 累计净损益为 **-18.39 USDT**（胜率 50.0%），而 Rank 2 为 **+4.79 USDT**（54.8%），Rank 3 为 **+2.38 USDT**（72.7%）；Top-1 呈现显著的负期望选择效应（追高局部超买竭尽点）；
   - 集中度压力测试定论：Cap 45% 与 Cap 60% 激进重分配使 2025 年净亏损放大至 -9.16% ~ -11.20%，MDD 飙升至 14.85%，最大单币敞口达 62.0%，严重放大错误选币的灾难性亏损；
-  - 终审定论：在当前三币、当前 12 特征和现有模型信号下，简单横截面选择与资本重分配没有产生显著增量 Alpha；正式停止横截面方向探索；保持 OPT-0026 作为唯一 Champion；准备转向 Phase 5 全新特征与信息源工程。
+  - 终审定论：在当前三币、当前 12 特征和现有模型信号下，简单横截面选择与资本重分配没有产生显著增量 Alpha；正式停止横截面方向探索。
+- **基准与 Champion 选择全面审计已完成（Champion Selection Audit，D-054）**：
+  - 产物目录：`artifacts/research/champion_selection_audit/`（含 `audit_summary.csv`, `top_by_gweek.csv`, `top_by_fitness.csv`, `pareto_front.csv`, `benchmark_comparison.csv`, `selection_history.md`, `comparison_report.md`）；
+  - 终审结论判定（正式采纳选项 B）：**“OPT-0026 不是收益最高，也不是 fitness 最高，但在收益 / 2025 防守 / MDD / 交易数量之间是合理折中，因此可继续作为 Benchmark，但不应称绝对 Champion。”**；
+  - 核心定量铁证：
+    - 纯收益最高为 `OPT-0005`（$+0.1371\%/\text{w}$），次高为 `OPT-0001`（$+0.1311\%/\text{w}$），OPT-0026（$+0.1293\%/\text{w}$）列第 3；
+    - 适应度最高为 `OPT-0056`（$-4.22$），防守表现最佳（2025 仅亏 $-2.44\%$，MDD 仅 $11.21\%$），OPT-0026（$-4.47$）列第 5；
+    - 三目标 Pareto 前沿审计：有效交易下仅有 5 个候选落于 Pareto 前沿，OPT-0026 严格落在前沿的平衡折中点上；
+  - 治理与认知修正：全面清理文档中“唯一 Champion”、“Alpha 上限”、“物理锁死”等神化修辞，确认 2023～2025 开发集筛选固有的 Selection Bias 与 Winner's Curse，以及后续单变量消融的路径依赖性；
+  - 下一步转向：治理规范修正完毕，准备正式转向 Phase 5 全新特征与信息源工程。
 
 ## 已完成与证据
 
@@ -42,7 +51,8 @@
 - **第三阶段（4h 二分类模型结构受控比较）**：产物见 `artifacts/research/model_family_phase3/`。
 - **第四阶段 A（No-Trade / 信号精选受控实验）**：产物见 `artifacts/research/no_trade_phase4a/`。
 - **第四阶段 B（横截面 Top-K / 相对强弱分配受控实验）**：产物见 `artifacts/research/topk_phase4b/`。
-- **第四阶段 B2（横截面择优 + 资本重分配受控实验）**：产物见 `artifacts/research/reallocation_phase4b2/`（含 `comparison_report.md`, `candidate_summary.csv`, `multi_signal_attribution.csv`, `rank_expectancy_analysis.csv`, `trading_metrics.csv`, `results.json`, `experiment_config.json`）。
+- **第四阶段 B2（横截面择优 + 资本重分配受控实验）**：产物见 `artifacts/research/reallocation_phase4b2/`。
+- **Champion 选择与基准审计（Champion Selection Audit）**：产物见 `artifacts/research/champion_selection_audit/`。
 - **单测体系**：`tests/test_reallocation_phase4b2.py`、`test_topk_phase4b.py`、`test_no_trade_phase4a.py`、`test_model_family_phase3.py`、`test_holdout_guard.py`、`test_optimization_pipeline.py`、`test_dynamic_execution.py`、`test_alpha_execution.py` 共计 35 项 pytest 100% 通过。
 
 ## 当前限制与长期边界
@@ -50,14 +60,14 @@
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
 - 面对实验事实实事求是接受，坚决不进行事后反向调参。
 - 100 USDT 虚拟资金、三币共用账户、固定 50 USDT 底线、普通现货/无杠杆边界保持不变。
-- 当前最优基准依然为 OPT-0026（+0.1293%/w），距离 1.5%/week 目标仍有约 11.6 倍数量级差距。
+- OPT-0026 作为当前实证权衡最优的研究 Benchmark（+0.1293%/w），距离 1.5%/week 目标仍有约 11.6 倍数量级差距。
 
 ## 下一行动与交接
 
-1. **Phase 4B2 实验全部执行完毕，按用户要求立即停止，向用户汇报完整成果、代码修改、测试结果与 Git commit；绝不自动进入 Phase 5。**
+1. **Champion Selection Audit 审计工作全部执行完毕，按用户要求立即停止，向用户汇报完整审计证据、回答十项关键问题与 Git commit；绝不自动进入 Phase 5。**
 2. **严守研究红线**：
-   - 2026 数据未用于训练、特征计算或评估（严格执行 no future leakage，test 分区物理 0 读取）；
-   - 100 USDT 虚拟本金、50 USDT 固定底线、现货无杠杆与合规档位严格保持；
-   - 坚决不在现有 12 特征内进行无意义调参，等待用户决定是否进入 Phase 5 全新特征与信息源工程。
+   - 不跑新回测、不跑新模型、不新增候选；
+   - 2026 数据严格封存（物理 0 读取）；
+   - 等待用户审阅审计结论并明确指示后续方向。
 
 

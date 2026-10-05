@@ -1179,6 +1179,48 @@
   - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
   - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
 
+### WL-065: 2026-10-06 00:20:00+08:00 Champion Selection Audit 基准与 Champion 选择全面定量审计、Pareto 前沿复核与研究治理修正
+
+- 用户任务：
+  1. 重新审计为什么 OPT-0026 被选为当前 Benchmark / Champion；
+  2. 严禁跑新模型、新特征、新策略、改阈值、改仓位、改 C2、使用 2026 或新增候选；
+  3. 审计对象覆盖 R6、OPT-0005、OPT-0001、OPT-0026、OPT-0056，以及优化搜索全量 200 候选中的各类 Top 10，去重后审计 30 候选；
+  4. 回答核心科学问题：OPT-0026 是综合权衡最合理，还是因路径依赖过早固化；
+  5. 重新输出纯收益排名、风险调整排名与稳健性排名；
+  6. 解构原 fitness 公式并量化惩罚阶梯；
+  7. 构建三目标（$g_{week}$, MDD, ret_2025）Pareto Front；
+  8. 检视 Selection Bias 与 Winner's Curse，以及 Phase 1~4B2 单变量消融的局限性；
+  9. 修正全库过度神化表述，终审结论三选一（采纳选项 B）；
+  10. 输出 7 项产物，更新决策 D-054 与 STATUS，回答十项最终问题并停止。
+- 实际改动与涉及文件：
+  1. **代码与审计管线**：
+     - 编写审计脚本 `scripts/run_champion_audit.py`，无偏解析 `artifacts/research/automated_optimization/optimization_summary.csv`，计算三目标非支配排序（Pareto Front）并提取各类排行；
+  2. **产物留存**：
+     - 生成产物目录 `artifacts/research/champion_selection_audit/`，输出 `audit_summary.csv`、`top_by_gweek.csv`、`top_by_fitness.csv`、`pareto_front.csv`、`benchmark_comparison.csv`、`selection_history.md`、`comparison_report.md`；
+  3. **文档与治理修正**：
+     - `DECISIONS.md` 登记 D-054；
+     - `STATUS.md` 修正基准定位，明确采纳结论 B；
+     - 清理相关报告中“唯一 Champion”、“Alpha 上限”、“物理锁死”等非科学修辞。
+- 实证结果全景与核心审计发现：
+  1. **无绝对单一最优**：
+     - 纯收益第一：`OPT-0005`（$+0.1371\%/\text{w}$）；
+     - 适应度第一：`OPT-0056`（$-4.22$）；
+     - 2025 防守与回撤第一：`OPT-0056`（2025 仅亏 $-2.44\%$，最差 MDD 仅 $11.21\%$）；
+     - 跨期均衡折中第一：`OPT-0026`（$+0.1293\%/\text{w}$，53 闭合周期，2025 亏 $-2.70\%$，MDD $11.51\%$）；
+  2. **OPT-0026 入选归因**：
+     - 在自动化搜索呈现的 Top-5 表格中，OPT-0026 是唯一 W2 收益跨越 15% 门槛（+17.41%）且周收益逼近 0.13% 的候选；
+     - OPT-0005（+0.1371%）与 OPT-0001（+0.1311%）因 2025 亏损在原 fitness 函数高额惩罚下跌至第 11 与第 8 名，在当时仅展现 Top-5 的简报中被截断隐藏；
+     - OPT-0026 入选蕴含后验人工折中裁决，后续在 Phase 1~4B2 作为固定 Control 导致了路径依赖；
+  3. **Pareto Front 定量确认**：
+     - 在有效交易（$\text{min\_cycles} \ge 30$）下，全库仅 5 个候选落于 Pareto 前沿，OPT-0026 严格处于平衡型前沿点上；R6 被 OPT-0056 严格支配；
+  4. **终审裁决（选项 B）**：
+     - “OPT-0026 不是收益最高，也不是 fitness 最高，但在收益 / 2025 防守 / MDD / 交易数量之间是合理折中，因此可继续作为 Benchmark，但不应称绝对 Champion。”
+- 单测体系与回归验证：
+  - 运行 pytest 测试套件：`tests/test_reallocation_phase4b2.py`、`test_topk_phase4b.py`、`test_no_trade_phase4a.py`、`test_model_family_phase3.py`、`test_holdout_guard.py`、`test_optimization_pipeline.py`、`test_dynamic_execution.py`、`test_alpha_execution.py`，共 35 项单测全部 100% 通过（3.30s）。
+- 边界核验：
+  - 2026 数据完全物理封存，零读取零评估；
+  - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。
