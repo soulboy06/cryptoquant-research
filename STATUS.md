@@ -17,37 +17,37 @@
 
 ## 进行中与检查点
 
-- 决策 D-046、D-047、D-048 与 D-050 已登记；
-- **第一阶段（4h 连续净收益回归 vs 分类基准）实证与剪枝已完成（D-047）**：证实 4h 连续回归在低信噪比下发生均值收缩，无法超越分类基准；
+- 决策 D-046、D-047、D-048、D-050 与 D-051 已登记；
+- **第一阶段（4h 连续净收益回归 vs 分类基准）已完成（D-047）**：证实连续回归在低信噪比下发生均值收缩，无法超越分类基准；
 - **第二阶段（多预测周期 4h / 8h / 12h / 24h 受控实验与纯动态 C2 消融）已完成（D-048）**：确认 4h 为最佳预测周期，彻底终止长预测周期展期方向；
-- **第三阶段（4h 二分类模型结构受控比较：LR vs LightGBM vs XGBoost vs CatBoost）已圆满完成（D-050）**：
-  - 产物目录：`artifacts/research/model_family_phase3/`；
-  - 冻结基准复现：OPT-0026（LR C=0.10, th=0.48, 纯动态 C2）精确复现 $g_{week} = \mathbf{+0.1293\%/w}$（2023=+7.16%, 2024=+17.41%, 2025=-2.70%, MDD=11.51%）；
-  - 双轨对照实证结果：
-    - **Lane A（固定 0.48 阈值）**：LR_C0.10（+0.1293%/w）与 LR_C0.50（+0.1181%/w）表现突出，而所有树模型（LGB_shallow -0.0515%/w, LGB_conservative -0.0103%/w, XGB_shallow -0.0482%/w, XGB_conservative -0.0272%/w, CAT_shallow -0.0295%/w, CAT_conservative -0.0285%/w）合成收益**全部为负**；
-    - **Lane B（严格时序内 inner walk-forward 自适应阈值选择，0 lookahead）**：自适应校准各模型概率标尺后，表现最好的树模型为 CAT_shallow（+0.0676%/w），但仍显著落后于 Champion OPT-0026（落后 6.2 bps），且平均持仓长达 36.2 小时；其余树模型合成周收益全部在 -0.0027%/w 至 -0.0909%/w 之间；
-  - 预测诊断与交易实证脱节：树模型在验证集的 ROC-AUC（0.58~0.60）普遍略高于 LR（0.55~0.57），但在真实扣成本（0.30055%）仿真中全面劣于线性强正则模型，证实高 AUC 仅为微观非线性噪声过拟合；
-  - 核心科学结论：**确凿证实属于【情况 B】——当前收益瓶颈绝非模型表达能力不足，而是现有 12 个特征本身缺乏更强的净 Alpha 信息量**；
-  - 终审剪枝裁决：**彻底停止继续扩大模型复杂度，严禁引入神经网络或复杂非线性集成；Champion OPT-0026 坚决不予更换**；
-  - 测试验证：`tests/test_model_family_phase3.py`（6项测试）、`test_holdout_guard.py`（4项测试）、`test_optimization_pipeline.py`（4项测试）共计 14 项 pytest 100% 通过。
+- **第三阶段（4h 二分类模型结构受控比较：LR vs LightGBM vs XGBoost vs CatBoost）已完成（D-050）**：证实当前瓶颈源于 12 特征 Alpha 饱和（情况 B），彻底终结非线性模型复杂度扩张；
+- **第四阶段 A（No-Trade / 信号精选受控实验）已圆满完成（D-051）**：
+  - 产物目录：`artifacts/research/no_trade_phase4a/`；
+  - 冻结基准复现：Control_OPT0026（LR C=0.10, th=0.48, 纯动态 C2）精确复现 $g_{week} = \mathbf{+0.1293\%/w}$；
+  - 10 组预冻结机制实证：所有 9 组 No-Trade 机制合成周收益全部落后于基准（+0.0990%/w 至 -0.0421%/w）；
+  - 反事实分析（Counterfactual Avoidance Analysis）铁证：被 No-Trade 拦截的交易在所有候选中 `avoided_net_pnl` 全部为正（+23.62U 至 +68.48U）！过滤机制在节省 $3 \sim 8$U 手续费的同时，误杀了 $28 \sim 72$U 的毛利润，直接削弱了长期复利；
+  - 核心定论：当前主要矛盾绝非单纯的过度交易，单币种时间序列过滤无法弥补 Alpha 瓶颈；正式剪枝 No-Trade 路线，继续锁定 OPT-0026 为唯一 Champion；
+  - 下一步转向：Phase 4B 横截面 Top-K / 相对强弱排序（Cross-Sectional Top-K / Relative Strength Ranking）；
+  - 测试验证：`tests/test_no_trade_phase4a.py`（5项测试）、`test_model_family_phase3.py`（6项测试）、`test_holdout_guard.py`（4项测试）、`test_optimization_pipeline.py`（4项测试）共计 19 项 pytest 100% 通过。
 
 ## 已完成与证据
 
 - **第一阶段（4h 连续回归受控实验）**：产物见 `artifacts/research/regression_phase1/`。
 - **第二阶段（多预测周期与纯动态 C2 受控实验）**：产物见 `artifacts/research/multi_horizon_phase2/` 与 `artifacts/research/horizon_c2_ablation/`。
-- **第三阶段（4h 二分类模型结构受控比较）**：产物见 `artifacts/research/model_family_phase3/`（含 `comparison_report.md`, `trading_metrics.csv`, `prediction_metrics.csv`, `threshold_selection.csv`, `model_family_summary.csv`, `results.json`, `experiment_config.json`）。
-- **单测体系**：`tests/test_model_family_phase3.py` 严格覆盖事前时序阈值隔离、训练截断零未来泄露、特征列一致性、决策网格一致性、随机种子可复现性及 2026 数据封存。
+- **第三阶段（4h 二分类模型结构受控比较）**：产物见 `artifacts/research/model_family_phase3/`。
+- **第四阶段 A（No-Trade / 信号精选受控实验）**：产物见 `artifacts/research/no_trade_phase4a/`（含 `comparison_report.md`, `candidate_summary.csv`, `rejected_trade_analysis.csv`, `trading_metrics.csv`, `results.json`, `experiment_config.json`）。
+- **单测体系**：`tests/test_no_trade_phase4a.py` 严格覆盖基准复现、模型特征一致性、交易修剪单调性、反事实损益恒等式及 2026 数据封存。
 
 ## 当前限制与长期边界
 
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
-- 面对实验事实实事求是接受，坚决不进行事后反向调参（如为了让树模型赢而人为修改参数或阈值）。
+- 面对实验事实实事求是接受，坚决不进行事后反向调参。
 - 100 USDT 虚拟资金、三币共用账户、固定 50 USDT 底线、普通现货/无杠杆边界保持不变。
 - 当前最优基准依然为 OPT-0026（+0.1293%/w），距离 1.5%/week 目标仍有约 11.6 倍数量级差距。
 
 ## 下一行动与交接
 
-1. **Phase 3 实验全部执行完毕，按要求立即停止，向用户汇报完整成果、代码修改、测试结果与 Git commit；不自动进入下一阶段。**
+1. **Phase 4A 实验全部执行完毕，按用户要求立即停止，向用户汇报完整成果、代码修改、测试结果与 Git commit；绝不自动进入 Phase 4B。**
 2. **严守研究红线**：
    - 2026 数据未用于训练、特征计算或评估（严格执行 no future leakage，test 分区物理 0 读取）；
    - 100 USDT 虚拟本金、50 USDT 固定底线、现货无杠杆与合规档位严格保持；

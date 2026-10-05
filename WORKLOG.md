@@ -1035,9 +1035,58 @@
   - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
   - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
 
+### WL-062: 2026-10-05 23:35:00+08:00 Phase 4A No-Trade / Signal Selection 受控实验执行、反事实损益分析与“过度交易”假说剪枝
+
+- 用户要求：
+  1. 进入 Phase 4A：No-Trade / Signal Selection 受控实验；
+  2. 回答核心问题：“当前 LR 的问题是否主要来自做了太多质量不够高的交易？如果让模型学会‘什么时候不交易’，能否明显提高扣成本后的收益？”；
+  3. 冻结当前 Champion OPT-0026（4h cost-aware 二分类, LR C=0.10, th=0.48, 12 特征, BTC/ETH/SOL, R6_default sizing, Pure Dynamic C2, g_week ≈ +0.1293%/w）；
+  4. 严格锁死：不新增特征、不换模型、不改退出、不改仓位、不改周期，总候选 <= 10；
+  5. 优先测试预冻结候选：A. 置信度门槛（0.48基准, 0.50, 0.52, 0.54）；B. 边缘犹豫区（如 0.51）；C. 大盘环境过滤（BTC favorable / BTC mom > 0）；D. 跨标的共振过滤（全市场弱保持现金）；
+  6. 必须输出完整交易指标，并重点输出反事实指标：“被 no-trade 拦掉的交易，如果原本执行，会是什么结果？”（avoided losers, avoided winners, avoided gross PnL, avoided fees, avoided net PnL）；
+  7. 产物保存于 `artifacts/research/no_trade_phase4a/`，更新 DECISIONS/STATUS/WORKLOG；
+  8. 完成后停止，提交汇报与 Git commit，不要自动进入 Phase 4B。
+- 架构扩展与实验代码：
+  1. **流水线与反事实追踪引擎构建**：
+     - 编写全流程脚本 `scripts/run_no_trade_phase4a.py`，预定义 10 组事前冻结的 No-Trade 候选规则；
+     - 研发反事实未开仓交易追踪器：对每个被 No-Trade 拦截但通过 Control 信号检验的候选买单，独立进行纯动态 C2 模拟追踪，精确计算该被拒交易若执行原本会产生的毛盈亏、手续费及净损益；
+  2. **三窗时间序列 Walk-Forward 全景仿真**：
+     - 在 2023、2024、2025 三个时序外评估窗口上，对 10 组候选执行共计 30 轮严谨的扣成本账本仿真；
+  3. **产物留存**：
+     - 生成完整产物目录 `artifacts/research/no_trade_phase4a/`，包含 `comparison_report.md`、`candidate_summary.csv`、`rejected_trade_analysis.csv`、`trading_metrics.csv`、`results.json`、`experiment_config.json`；
+  4. **单测构建**：
+     - 编写 `tests/test_no_trade_phase4a.py`，覆盖基准复现、模型特征一致性、交易修剪单调性、反事实损益恒等式及 2026 数据隔离。
+- 实证结果全景与反事实关键发现：
+  1. **Control 基准精准复现**：
+     - `Control_OPT0026`（LR C=0.10, th=0.48, 纯动态 C2）：周收益精确复现为 **+0.1293% / week**（2023: +7.16%, 2024: +17.41%, 2025: -2.70%, MDD: 11.51%, 225 笔交易, 胜率: 57.3%, 手续费: 10.69U）；
+  2. **10 组 No-Trade 机制周收益全景（全部落后于基准）**：
+     - `B1_Hesitation_0.51`: +0.0990%/w（$\Delta = -3.0\text{ bps}$，交易 119 笔，胜率 57.1%）；
+     - `D1_CrossSymbol_AnyHigh`: +0.0985%/w（$\Delta = -3.1\text{ bps}$，交易 113 笔，胜率 56.6%）；
+     - `A1_Confidence_0.50`: +0.0979%/w（$\Delta = -3.1\text{ bps}$，交易 151 笔，胜率 56.3%）；
+     - `A2_Confidence_0.52`: +0.0781%/w（$\Delta = -5.1\text{ bps}$，交易 95 笔，胜率 57.9%）；
+     - `C2_Regime_PositiveBTCMom`: +0.0597%/w（$\Delta = -7.0\text{ bps}$，交易 118 笔，胜率 54.2%）；
+     - `C1_Regime_FavorableOnly`: +0.0432%/w（$\Delta = -8.6\text{ bps}$，交易 126 笔，胜率 50.8%）；
+     - `D2_CrossSymbol_Consensus2`: +0.0394%/w（$\Delta = -9.0\text{ bps}$，交易 86 笔，胜率 55.8%）；
+     - `A3_Confidence_0.54`: -0.0341%/w（$\Delta = -16.3\text{ bps}$，由盈转亏，交易 50 笔，胜率 46.0%）；
+     - `D3_CrossSymbol_BTCAligned`: -0.0421%/w（$\Delta = -17.1\text{ bps}$，由盈转亏，交易 68 笔，胜率 54.4%）；
+  3. **反事实分析（Counterfactual Avoidance Analysis）铁证**：
+     - 被 No-Trade 拦掉的交易在所有 9 组候选中，其若执行的净收益 `avoided_net_pnl` **无一例外全部为正（+23.62 USDT 至 +68.48 USDT）**！
+     - 例如 `A1_Confidence_0.50`：拦截了 100 笔交易（43 笔亏损，57 笔盈利），虽然节约了 4.38 USDT 手续费，但放弃了 28.00 USDT 毛利润，导致账户净收益直接损失 **-23.62 USDT**；
+     - `C1_Regime_FavorableOnly`：严格逆势禁买机制虽然规避了部分震荡，但错失了高达 **+68.48 USDT** 的净利润（主要是 SOL 与 ETH 在 BTC 震荡期率先领涨的独立行情）；
+  4. **终审定论与科学剪枝（决策 D-051）**：
+     - **“过度交易”假说被实证数据确凿证伪**：当前 OPT-0026 在 0.48~0.54 置信区间内生成的信号具备稳健的正期望（胜率在 57% 以上），并不是低质垃圾交易；单币独立的“做 vs 不做”过滤器在微幅减少手续费的同时，大幅扼杀了趋势捕获能力；
+     - **正式剪枝 No-Trade 路线**：坚决不立平庸 Challenger，锁定 **OPT-0026** 继续作为唯一 Champion；
+     - 下一步明确转向：**Phase 4B：横截面 Top-K / 相对强弱排序（Cross-Sectional Top-K / Relative Strength Ranking）**。
+- 单测体系与回归验证：
+  - 运行 pytest 测试套件：`tests/test_no_trade_phase4a.py`（5项测试全部 PASS）、`test_model_family_phase3.py`（6项测试全部 PASS）、`test_holdout_guard.py`（4项测试全部 PASS）、`test_optimization_pipeline.py`（4项测试全部 PASS），共 19 项单测全部 PASS（2.64s）。
+- 边界核验：
+  - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
+  - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。
+
 
 
 

@@ -1,0 +1,100 @@
+{
+  "phase": "Phase 4A: Controlled No-Trade / Signal Selection",
+  "generated_at_utc": "2026-10-05T15:32:46.589330+00:00",
+  "champion_baseline": "OPT-0026 (LR C=0.10, th=0.48, g_week=+0.1293%/w)",
+  "horizon_hours": 4,
+  "features_count": 12,
+  "features": [
+    "return_1h",
+    "return_4h",
+    "return_24h",
+    "return_72h",
+    "volatility_24h",
+    "range_fraction",
+    "quote_volume_change",
+    "ema24_distance",
+    "ema72_distance",
+    "funding_rate_latest",
+    "funding_rate_ma3",
+    "funding_rate_zscore"
+  ],
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT"
+  ],
+  "base_cost": 0.0030055,
+  "candidates_count": 10,
+  "candidates": [
+    {
+      "candidate_id": "Control_OPT0026",
+      "group": "Control",
+      "description": "Baseline OPT-0026 (P >= 0.48, no extra filter)",
+      "filter_type": "none",
+      "param": null
+    },
+    {
+      "candidate_id": "A1_Confidence_0.50",
+      "group": "Confidence",
+      "description": "Confidence filter: P >= 0.50 required for entry",
+      "filter_type": "threshold",
+      "param": 0.5
+    },
+    {
+      "candidate_id": "A2_Confidence_0.52",
+      "group": "Confidence",
+      "description": "Confidence filter: P >= 0.52 required for entry",
+      "filter_type": "threshold",
+      "param": 0.52
+    },
+    {
+      "candidate_id": "A3_Confidence_0.54",
+      "group": "Confidence",
+      "description": "Confidence filter: P >= 0.54 required for entry",
+      "filter_type": "threshold",
+      "param": 0.54
+    },
+    {
+      "candidate_id": "B1_Hesitation_0.51",
+      "group": "Margin_Zone",
+      "description": "Hesitation zone filter: exclude [0.48, 0.51), P >= 0.51 required",
+      "filter_type": "threshold",
+      "param": 0.51
+    },
+    {
+      "candidate_id": "C1_Regime_FavorableOnly",
+      "group": "Regime",
+      "description": "Market regime filter: only trade when BTC allow_buy is True",
+      "filter_type": "regime_favorable",
+      "param": null
+    },
+    {
+      "candidate_id": "C2_Regime_PositiveBTCMom",
+      "group": "Regime",
+      "description": "Market regime filter: only trade when BTC 72h momentum > 0",
+      "filter_type": "regime_btc_mom",
+      "param": 0.0
+    },
+    {
+      "candidate_id": "D1_CrossSymbol_AnyHigh",
+      "group": "Cross_Symbol",
+      "description": "Cross-symbol filter: at least one symbol must have P >= 0.52",
+      "filter_type": "cross_any_high",
+      "param": 0.52
+    },
+    {
+      "candidate_id": "D2_CrossSymbol_Consensus2",
+      "group": "Cross_Symbol",
+      "description": "Cross-symbol filter: at least 2 symbols must have P >= 0.48",
+      "filter_type": "cross_consensus",
+      "param": 2
+    },
+    {
+      "candidate_id": "D3_CrossSymbol_BTCAligned",
+      "group": "Cross_Symbol",
+      "description": "Cross-symbol filter: altcoins require BTC P >= 0.45 to trade",
+      "filter_type": "cross_btc_aligned",
+      "param": 0.45
+    }
+  ]
+}
