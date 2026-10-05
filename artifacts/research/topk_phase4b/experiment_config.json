@@ -1,0 +1,89 @@
+{
+  "phase": "Phase 4B: Cross-Sectional Top-K / Relative Strength Allocation",
+  "generated_at_utc": "2026-10-05T15:45:07.338002+00:00",
+  "champion_baseline": "OPT-0026 (LR C=0.10, th=0.48, g_week=+0.1293%/w)",
+  "lane_status": "Lane A evaluated (all candidates failed to beat Champion). Lane B NOT executed as per pre-frozen rule.",
+  "horizon_hours": 4,
+  "features_count": 12,
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT"
+  ],
+  "base_cost": 0.0030055,
+  "candidates_count": 9,
+  "candidates": [
+    {
+      "candidate_id": "Control_OPT0026",
+      "lane": "Lane_A",
+      "group": "Control",
+      "description": "Baseline OPT-0026 (No Top-K, all qualified signals trade)",
+      "rank_metric": null,
+      "k": 3
+    },
+    {
+      "candidate_id": "A_Top1_Prob",
+      "lane": "Lane_A",
+      "group": "Probability",
+      "description": "Top-1 by Model Probability P",
+      "rank_metric": "prob",
+      "k": 1
+    },
+    {
+      "candidate_id": "B_Top2_Prob",
+      "lane": "Lane_A",
+      "group": "Probability",
+      "description": "Top-2 by Model Probability P",
+      "rank_metric": "prob",
+      "k": 2
+    },
+    {
+      "candidate_id": "C_Top1_RS72h",
+      "lane": "Lane_A",
+      "group": "Relative_Strength",
+      "description": "Top-1 by 72h Relative Strength (return_72h)",
+      "rank_metric": "rs72",
+      "k": 1
+    },
+    {
+      "candidate_id": "D_Top2_RS72h",
+      "lane": "Lane_A",
+      "group": "Relative_Strength",
+      "description": "Top-2 by 72h Relative Strength (return_72h)",
+      "rank_metric": "rs72",
+      "k": 2
+    },
+    {
+      "candidate_id": "E_Top1_Mom24h",
+      "lane": "Lane_A",
+      "group": "Momentum",
+      "description": "Top-1 by 24h Momentum (return_24h)",
+      "rank_metric": "mom24",
+      "k": 1
+    },
+    {
+      "candidate_id": "F_Top2_Mom24h",
+      "lane": "Lane_A",
+      "group": "Momentum",
+      "description": "Top-2 by 24h Momentum (return_24h)",
+      "rank_metric": "mom24",
+      "k": 2
+    },
+    {
+      "candidate_id": "G_Top1_Combined",
+      "lane": "Lane_A",
+      "group": "Combined_Rank",
+      "description": "Top-1 by Combined Rank: Rank(P) + Rank(R72)",
+      "rank_metric": "combined",
+      "k": 1
+    },
+    {
+      "candidate_id": "H_Top2_Combined",
+      "lane": "Lane_A",
+      "group": "Combined_Rank",
+      "description": "Top-2 by Combined Rank: Rank(P) + Rank(R72)",
+      "rank_metric": "combined",
+      "k": 2
+    }
+  ]
+}

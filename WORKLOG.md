@@ -1074,11 +1074,60 @@
      - 例如 `A1_Confidence_0.50`：拦截了 100 笔交易（43 笔亏损，57 笔盈利），虽然节约了 4.38 USDT 手续费，但放弃了 28.00 USDT 毛利润，导致账户净收益直接损失 **-23.62 USDT**；
      - `C1_Regime_FavorableOnly`：严格逆势禁买机制虽然规避了部分震荡，但错失了高达 **+68.48 USDT** 的净利润（主要是 SOL 与 ETH 在 BTC 震荡期率先领涨的独立行情）；
   4. **终审定论与科学剪枝（决策 D-051）**：
-     - **“过度交易”假说被实证数据确凿证伪**：当前 OPT-0026 在 0.48~0.54 置信区间内生成的信号具备稳健的正期望（胜率在 57% 以上），并不是低质垃圾交易；单币独立的“做 vs 不做”过滤器在微幅减少手续费的同时，大幅扼杀了趋势捕获能力；
+     - **定论表述**：本轮预先冻结的 9 种简单 No-Trade 过滤机制均未超过 Champion，因此暂时停止该类 No-Trade 规则研究；
      - **正式剪枝 No-Trade 路线**：坚决不立平庸 Challenger，锁定 **OPT-0026** 继续作为唯一 Champion；
      - 下一步明确转向：**Phase 4B：横截面 Top-K / 相对强弱排序（Cross-Sectional Top-K / Relative Strength Ranking）**。
 - 单测体系与回归验证：
   - 运行 pytest 测试套件：`tests/test_no_trade_phase4a.py`（5项测试全部 PASS）、`test_model_family_phase3.py`（6项测试全部 PASS）、`test_holdout_guard.py`（4项测试全部 PASS）、`test_optimization_pipeline.py`（4项测试全部 PASS），共 19 项单测全部 PASS（2.64s）。
+- 边界核验：
+  - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
+  - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
+
+### WL-063: 2026-10-05 23:45:00+08:00 Phase 4B 横截面 Top-K / 相对强弱横截面分配受控实验执行、反事实损益分析与全候选剪枝
+
+- 用户要求：
+  1. 进入 Phase 4B：Cross-Sectional Top-K / Relative Strength Allocation 受控实验；
+  2. 回答核心问题：“当同一 4h 决策时刻存在多个合格买入信号时，是否应该根据横截面强弱进行择优分配，而不是按原规则同时配置多个币？”；
+  3. 冻结当前 Champion OPT-0026（4h, LR C=0.10, th=0.48, 12 特征, BTC/ETH/SOL, R6 sizing, Pure Dynamic C2, $g_{week} \approx +0.1293\%/w$）；
+  4. 严格锁死：不新增特征、不换模型、不改退出、不改仓位、不改周期，总候选 <= 10；
+  5. 优先测试预冻结候选：A. Top-1 Prob, B. Top-2 Prob, C. Top-1 RS72h, D. Top-2 RS72h, E. Top-1 Mom24h, F. Top-2 Mom24h, G. Top-1 Combined Rank, H. Top-2 Combined Rank；
+  6. 严格双轨纪律：Lane A（Selection Only，单币仓位不变，闲置资金留现金）；Lane B 仅在 Lane A 显著突破后执行，若 Lane A 未突破则坚决不运行 Lane B；
+  7. 必须输出完整交易指标与被横截面淘汰交易的反事实诊断指标；
+  8. 产物保存于 `artifacts/research/topk_phase4b/`，更新 DECISIONS/STATUS/WORKLOG；
+  9. 完成后停止，提交汇报与 Git commit，不要自动进入 Phase 5。
+- 架构扩展与实验代码：
+  1. **流水线与横截面择优引擎构建**：
+     - 编写全流程脚本 `scripts/run_topk_phase4b.py`，预定义 9 组事前冻结的 Top-K 候选规则（涵盖 Top-1/Top-2 across Probability, 72h Relative Strength, 24h Momentum, Combined Rank）；
+     - 研发淘汰交易反事实分析器：精确追踪被 Top-K 淘汰但在 Control 中原本执行的交易，统计原本盈亏、手续费及胜率；
+  2. **三窗时间序列 Walk-Forward 全景仿真**：
+     - 在 2023、2024、2025 三个时序外评估窗口上，对 9 组候选执行共计 27 轮严谨的扣成本账本仿真；
+  3. **产物留存**：
+     - 生成完整产物目录 `artifacts/research/topk_phase4b/`，包含 `comparison_report.md`、`candidate_summary.csv`、`eliminated_trade_analysis.csv`、`trading_metrics.csv`、`results.json`、`experiment_config.json`；
+  4. **单测构建**：
+     - 编写 `tests/test_topk_phase4b.py`，覆盖基准复现、候选边界与 Lane A 纪律、淘汰交易损益恒等式、全候选负超额验证及 2026 数据封存。
+- 实证结果全景与反事实关键发现：
+  1. **Control 基准精准复现**：
+     - `Control_OPT0026`（LR C=0.10, th=0.48, 纯动态 C2）：周收益精确复现为 **+0.1293% / week**（2023: +7.16%, 2024: +17.41%, 2025: -2.70%, MDD: 11.51%, 225 笔交易, 胜率: 57.3%, 手续费: 10.69U）；
+  2. **8 组 Top-K 机制周收益全景（全部落后于基准）**：
+     - `B_Top2_Prob`: +0.1136%/w（$\Delta = -1.6\text{ bps}$，交易 215 笔，胜率 55.3%）；
+     - `H_Top2_Combined`: +0.1126%/w（$\Delta = -1.7\text{ bps}$，交易 213 笔，胜率 54.9%）；
+     - `F_Top2_Mom24h`: +0.1119%/w（$\Delta = -1.7\text{ bps}$，交易 218 笔，胜率 53.7%）；
+     - `D_Top2_RS72h`: +0.0996%/w（$\Delta = -3.0\text{ bps}$，交易 211 笔，胜率 56.9%）；
+     - `G_Top1_Combined`: +0.0789%/w（$\Delta = -5.0\text{ bps}$，交易 171 笔，胜率 54.4%）；
+     - `A_Top1_Prob`: +0.0779%/w（$\Delta = -5.1\text{ bps}$，交易 171 笔，胜率 54.4%）；
+     - `C_Top1_RS72h`: +0.0759%/w（$\Delta = -5.3\text{ bps}$，交易 157 笔，胜率 56.1%）；
+     - `E_Top1_Mom24h`: +0.0758%/w（$\Delta = -5.3\text{ bps}$，交易 168 笔，胜率 55.4%）；
+  3. **反事实分析（Eliminated Trade Analysis）铁证**：
+     - 被 Top-K 淘汰的交易在所有 8 组候选中，其若执行的净收益 `eliminated_net_pnl` **无一例外全部为显著正值（+4.26 USDT 至 +33.21 USDT）**，胜率均超过 60%！
+     - 例如 `B_Top2_Prob` 淘汰了 15 笔交易（11 胜 4 负），净损失 +33.21 USDT；`A_Top1_Prob` 淘汰了 66 笔交易（40 胜 26 负），净损失 +29.00 USDT；
+     - 恶化主因：在 2024 年强动量大牛市多币种齐涨共振时，Top-1 强行将单币仓位锁死在 30% 并淘汰其他合格币种，导致 70% 资金以现金闲置踏空，2024 收益由 +17.41% 腰斩至 +7.88%~+8.97%，而 2025 年弱势期并未带来有效防守（2025 年净收益仍为 -2.25% ~ -3.45%）；
+  4. **终审定论与科学剪枝（决策 D-052）**：
+     - **定论表述**：“当前三币横截面择优未产生实质性 Alpha 提升。”；
+     - 严格遵守既定纪律：“Lane A 全部失败，不运行 Lane B”；
+     - 坚决不立平庸 Challenger，锁定 **OPT-0026** 继续作为唯一 Champion；
+     - 下一步明确转向：**Phase 5：真正的新特征 / 新 Alpha 信息源研究**。
+- 单测体系与回归验证：
+  - 运行 pytest 测试套件：`tests/test_topk_phase4b.py`（5项测试全部 PASS）、`test_no_trade_phase4a.py`（5项测试全部 PASS）、`test_model_family_phase3.py`（6项测试全部 PASS）、`test_holdout_guard.py`（4项测试全部 PASS）、`test_optimization_pipeline.py`（4项测试全部 PASS），共 24 项单测全部 PASS（2.64s）。
 - 边界核验：
   - 2026 数据未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage，test 分区物理 0 读取）；
   - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
