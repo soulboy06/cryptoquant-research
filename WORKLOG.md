@@ -699,6 +699,12 @@
 - package_cycle_evidence只遍历列出的实验目录，完整新旧流水、targets和源码4452文件压缩后逐一SHA校验，46.47MiB；SHA见artifacts/research/evidence_manifest.json，不含原始行情、2026测试或凭据。最初防护把源码cryptoquant/data目录也当成原始data而拒绝打包，改为要求顶层artifacts后完成，未读取市场data目录。
 - 最终报告逐项回答用户12问题，并区分行为修复与新增dust政策的联合影响、相对改善与盈利、未做压力／邻域与已完成检查。更新STATUS、PLAN、AGENTS、DECISIONS及EXPERIMENTS，保留旧失败／冻结输出。尚需完成GitHub上传并记录链接，研究后续不自动启动。
 
+## WL-049：GitHub交付与最终文档核对（2026-10-05，Asia/Shanghai）
+
+- 修复独立3751f9d、事前冻结33ca36e、结果证据5fcb8ad已上传origin/codex/cycle-state-integrity；创建[PR #1](https://github.com/soulboy06/cryptoquant-research/pull/1)并关联本聊天，未合并main。
+- 13份当前相关文档的UTF-8与459个本地Markdown链接检查通过，没有缺失目标。Git diff检查在识别Windows CR行尾的设置下通过；冻结产物原字节和压缩包不因文本换行整理改写。
+- STATUS记录上传完成和PR，保留旧失败、实验SHA及三候选失格；没有后台账户、实盘、新参数或2026测试读取。本轮任务完成，后续研究按附件先向用户汇报，不自动启动。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。
