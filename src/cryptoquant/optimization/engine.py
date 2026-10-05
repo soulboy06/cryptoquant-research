@@ -123,17 +123,56 @@ def build_candidate_targets(
     return pd.DataFrame(records, columns=['symbol', 'decision_time', 'probability', 'target_weight'])
 
 
-def evaluate_window_simulation(view, rules, cfg, targets, window, period, cost='base'):
+def evaluate_window_simulation(
+    view,
+    rules,
+    cfg,
+    targets,
+    window,
+    period,
+    cost='base',
+    *,
+    max_holding_hours: int | None = None,
+    breakeven_activation: Decimal | None = Decimal('0.0120'),
+    breakeven_ratio: Decimal | None = Decimal('0.0025'),
+    exit_variant: str | None = None,
+):
     """Simulate a single window backtest and return structured results."""
-    result = run_backtest(
-        view, rules, cfg, 'logistic_regression', cost, period,
-        decision_targets=targets, window=window, exit_variant='C2',
-        dust_policy='retain_mark_to_market',
-    )
+    if max_holding_hours is not None:
+        result = run_backtest(
+            view, rules, cfg, 'logistic_regression', cost, period,
+            decision_targets=targets, window=window, exit_variant=None,
+            max_holding_hours=max_holding_hours,
+            breakeven_activation=breakeven_activation,
+            breakeven_ratio=breakeven_ratio,
+            dust_policy='retain_mark_to_market',
+        )
+    else:
+        var = exit_variant if exit_variant is not None else 'C2'
+        result = run_backtest(
+            view, rules, cfg, 'logistic_regression', cost, period,
+            decision_targets=targets, window=window, exit_variant=var,
+            dust_policy='retain_mark_to_market',
+        )
     summary, _ = summarize(result, cfg)
     weekly = compute_weekly_statistics(result.equity, summary['start_utc'], summary['end_utc'])
     summary.update({k: v for k, v in weekly.items() if k != 'weekly_records'})
     summary['status'] = 'complete'
+
+    # Compute cycle durations from fills
+    durations = []
+    open_times = {}
+    for fill in result.fills:
+        s = fill['symbol']
+        if fill['side'] == 'BUY':
+            if s not in open_times:
+                open_times[s] = fill['time']
+        elif fill['side'] == 'SELL':
+            if s in open_times:
+                durations.append((fill['time'] - open_times[s]).total_seconds() / 3600.0)
+                del open_times[s]
+    summary['avg_holding_hours'] = float(sum(durations) / len(durations)) if durations else 0.0
+    summary['holding_durations'] = durations
     return summary
 
 
@@ -162,6 +201,8 @@ def evaluate_candidate_walk_forward(
     fold_probs: dict[str, pd.DataFrame],
     fold_eval_data: dict[str, dict],
     cfg,
+    *,
+    max_holding_hours: int | None = None,
 ) -> dict:
     """Run full walk-forward evaluation across all 3 folds for a candidate parameter set."""
     window_results = {}
@@ -188,6 +229,7 @@ def evaluate_candidate_walk_forward(
             fold_name,
             period,
             cost='base',
+            max_holding_hours=max_holding_hours,
         )
         window_results[fold_name] = summary
         
@@ -207,8 +249,16 @@ def evaluate_candidate_walk_forward(
     cyc_w2 = window_results['W2']['closed_cycles']
     cyc_25 = window_results['R2025']['closed_cycles']
     min_cycles = min(cyc_w1, cyc_w2, cyc_25)
+    tot_cycles = cyc_w1 + cyc_w2 + cyc_25
     
     floor_hits = sum(w['floor_triggers'] for w in window_results.values())
+    total_fees = float(sum(w['fees_usdt'] for w in window_results.values()))
+    total_turnover = float(sum(w['turnover_usdt'] for w in window_results.values()))
+    
+    all_durations = []
+    for w in window_results.values():
+        all_durations.extend(w.get('holding_durations', []))
+    avg_holding = float(sum(all_durations) / len(all_durations)) if all_durations else 0.0
     
     fitness = calculate_fitness_score(
         g_week=float(g_week) if g_week is not None else None,
@@ -223,6 +273,7 @@ def evaluate_candidate_walk_forward(
         'model_name': model_name,
         'threshold': threshold,
         'sizing_name': sizing_name,
+        'max_holding_hours': max_holding_hours,
         'favorable_weight': float(sizing.favorable_weight),
         'weak_alpha_weight': float(sizing.weak_alpha_weight),
         'weak_ordinary_weight': float(sizing.weak_ordinary_weight),
@@ -238,7 +289,11 @@ def evaluate_candidate_walk_forward(
         'cyc_w1': cyc_w1,
         'cyc_w2': cyc_w2,
         'cyc_2025': cyc_25,
+        'total_cycles': tot_cycles,
         'min_cycles': min_cycles,
+        'total_fees_usdt': total_fees,
+        'total_turnover_usdt': total_turnover,
+        'avg_holding_hours': avg_holding,
         'floor_triggers': floor_hits,
         'window_results': window_results,
     }
