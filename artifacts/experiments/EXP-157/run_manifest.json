@@ -1,0 +1,101 @@
+{
+  "experiment_id": "EXP-157",
+  "type": "alpha_comparison",
+  "status": "complete",
+  "started_at_utc": "2026-10-05T06:48:21.561445+00:00",
+  "command": "alpha-compare --research-config configs\\ninth_experiment.toml --state-experiment-id EXP-122 --selection-experiment-id EXP-150 --evaluated-experiment-ids EXP-141,EXP-142,EXP-143,EXP-144,EXP-145,EXP-146,EXP-147,EXP-148,EXP-149 --experiment-id EXP-157",
+  "research_config_hash": "23bc0a66648dabea62fc9d0ce8f413502358a5121426b398cee06ff5723830ce",
+  "execution_config_hash": "6a2568ac37f4fa5e970d7b7677d2effb8f2a2f934d9ceb026ab93626e5215b7b",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "2.3.3",
+      "pyarrow": "25.0.1",
+      "requests": "2.34.2",
+      "matplotlib": "3.11.2",
+      "pytest": "9.1.1",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0",
+      "narwhals": "2.26.0",
+      "cloudpickle": "3.1.2"
+    }
+  },
+  "budget": {
+    "total_used": 10,
+    "total_limit": 17,
+    "base_accounts_used": 9,
+    "base_accounts_limit": 9,
+    "pressure_accounts_used": 0,
+    "pressure_accounts_limit": 6,
+    "accounts_used": 9,
+    "accounts_limit": 15,
+    "records": [
+      {
+        "experiment_id": "EXP-141",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-142",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-143",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-144",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-145",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-146",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-147",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-148",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-149",
+        "type": "alpha_evaluation",
+        "status": "complete",
+        "cost": "base"
+      },
+      {
+        "experiment_id": "EXP-150",
+        "type": "alpha_selection",
+        "status": "complete",
+        "cost": null
+      }
+    ]
+  },
+  "source_hash": "b747aa196c92afdce7fb7d3132ff1aa50dd4edaf22cde4e258cc153e807a0f89",
+  "finished_at_utc": "2026-10-05T06:48:21.727627+00:00"
+}

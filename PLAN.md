@@ -51,6 +51,8 @@ EXP-062诊断后的第五轮研究见[成本感知标签方案](docs/superpowers
 
 第八轮基于 EXP-128 诊断沉淀并冻结[动态阈值与自适应仓位方案](docs/superpowers/specs/2026-10-05-dynamic-threshold-and-position-scaling-design.md)及[实施计划](docs/superpowers/plans/2026-10-05-dynamic-threshold-and-position-scaling-implementation.md)（D-036）：废弃二元粗暴开关，引入 R2（动态提阈值）、R3（自适应降仓）、R4（双重协同）三组变体，限定最多 9 个 Base 账户与 6 个压力账户预算，以可控实验验证能否兼顾牛市收益保留与震荡市防守。2026保留测试集继续严格封存。
 
+第九轮基于 EXP-140 经验沉淀并冻结[相对强弱与自适应配仓方案](docs/superpowers/specs/2026-10-05-relative-strength-and-adaptive-allocation-design.md)及[实施计划](docs/superpowers/plans/2026-10-05-relative-strength-and-adaptive-allocation-implementation.md)（D-038）：引入 72 小时超额收益（$\Delta R_{72h} > 0$ 且 $R_{72h} > 0$）解耦独立强势币种（SOL），构建 R5（Alpha 20%）、R6（Alpha 25%）与 R7（双自适应）三组变体。全流程回测（EXP-141~157）证实：R6 合成周收益首度历史性超越全仓基准 R0（+0.0994%/周 vs +0.0890%/周），2025 减亏防守创下历史最佳纪录（-1.92% 净亏损，回撤 11.10%）；全变体因 W1 缺 1 笔闭合周期及 W2 收益微差约 1.2% 严格判定失格，按冻结门禁坚决停止压力测试。2026 保留测试集继续严格封存。
+
 本文件旧第五轮“方法有效性通过”描述以STATUS和现场验收为准；第六轮产物已生成但strict W2未达到既定15%收益门槛，不能通过后续路线变更掩盖原失败。原实验与参数卡保留，后续研究使用新方案与新编号。
 
 完成标准：无已知的未来信息泄漏；实验配置和结果已登记；报告净收益、最大回撤、费用、交易次数与账户周收益；明确说明有效、无效或证据不足，并单列是否达到用户收益目标，不为了进入下一阶段挑选漂亮结果。

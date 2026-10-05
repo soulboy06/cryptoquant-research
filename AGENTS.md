@@ -42,6 +42,8 @@
 | [第八轮动态阈值与自适应仓位方案](docs/superpowers/specs/2026-10-05-dynamic-threshold-and-position-scaling-design.md) | 第八轮改进方案：动态提阈值与自适应降仓变体（R2/R3/R4），兼顾牛市动量与震荡防守 |
 | [第八轮动态阈值与自适应仓位实施计划](docs/superpowers/plans/2026-10-05-dynamic-threshold-and-position-scaling-implementation.md) | 动态目标生成、交易引擎多档仓位支持、Base回测与条件压力测试任务清单 |
 | [第八轮全景对比报告](artifacts/experiments/EXP-140/report.md) | R2/R3/R4动态响应全量9账户回测、基础筛选失格与三层结论最终评定 |
+| [第九轮相对强弱与自适应配仓方案](docs/superpowers/specs/2026-10-05-relative-strength-and-adaptive-allocation-design.md) | 第九轮改进方案：多币种相对强弱解耦与波动率自适应配仓（R5/R6/R7） |
+| [第九轮相对强弱与自适应配仓实施计划](docs/superpowers/plans/2026-10-05-relative-strength-and-adaptive-allocation-implementation.md) | 龙头判定、引擎多档仓位支持、Base回测与筛选评估任务清单 |
 
 ### 开始工作前
 

@@ -60,6 +60,20 @@ _FIXED_VALUES_V8 = dict(execution_config='second_experiment.toml', label_policie
                         max_account_runs=16, windows=list(RESEARCH_WINDOWS), exit_variants=['C2'],
                         dynamic_variants=['R2', 'R3', 'R4'], regime=dict(_FIXED_REGIME_PARAMETERS),
                         variants=dict(_FIXED_DYNAMIC_VARIANTS))
+_FIXED_ALPHA_VARIANTS = {
+    'R5': dict(name='alpha_decoupled_20', favorable_weight='0.30',
+               weak_alpha_weight='0.20', weak_ordinary_weight='0.10', threshold='0.50'),
+    'R6': dict(name='alpha_decoupled_25', favorable_weight='0.30',
+               weak_alpha_weight='0.25', weak_ordinary_weight='0.10', threshold='0.50'),
+    'R7': dict(name='alpha_multi_horizon', favorable_weight='0.30',
+               weak_alpha_accelerating_weight='0.25', weak_alpha_decelerating_weight='0.15',
+               weak_ordinary_weight='0.10', threshold='0.50'),
+}
+_FIXED_VALUES_V9 = dict(execution_config='second_experiment.toml', label_policies=['net_positive_base_v1'],
+                        C='0.1', thresholds=['0.50'], weekly_target='0.015',
+                        max_account_runs=16, windows=list(RESEARCH_WINDOWS), exit_variants=['C2'],
+                        alpha_variants=['R5', 'R6', 'R7'], regime=dict(_FIXED_REGIME_PARAMETERS),
+                        variants=dict(_FIXED_ALPHA_VARIANTS))
 
 
 @dataclass(frozen=True)
@@ -80,6 +94,7 @@ class ResearchConfig:
     regime_parameters: Mapping[str, str | int] | None = None
     dynamic_variants: tuple[str, ...] = ()
     variant_parameters: Mapping[str, Mapping[str, str | int]] | None = None
+    alpha_variants: tuple[str, ...] = ()
 
 
 def load_research_config(path, root=None):
@@ -97,6 +112,8 @@ def load_research_config(path, root=None):
     elif values == _FIXED_VALUES_V7:
         exit_variants = tuple(values['exit_variants'])
     elif values == _FIXED_VALUES_V8:
+        exit_variants = tuple(values['exit_variants'])
+    elif values == _FIXED_VALUES_V9:
         exit_variants = tuple(values['exit_variants'])
     else:
         raise ValueError('research fields or candidates differ from fixed research scope')
@@ -126,5 +143,6 @@ def load_research_config(path, root=None):
                           tuple(values.get('regime_variants', ())),
                           MappingProxyType(dict(values['regime'])) if 'regime' in values else None,
                           tuple(values.get('dynamic_variants', ())),
-                          MappingProxyType({k: MappingProxyType(v) for k, v in values['variants'].items()}) if 'variants' in values else None)
+                          MappingProxyType({k: MappingProxyType(v) for k, v in values['variants'].items()}) if 'variants' in values else None,
+                          tuple(values.get('alpha_variants', ())))
 

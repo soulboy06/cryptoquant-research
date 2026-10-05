@@ -1,0 +1,39 @@
+execution_config = "second_experiment.toml"
+label_policies = ["net_positive_base_v1"]
+C = "0.1"
+thresholds = ["0.50"]
+weekly_target = "0.015"
+max_account_runs = 16
+windows = ["W1", "W2", "R2025"]
+exit_variants = ["C2"]
+alpha_variants = ["R5", "R6", "R7"]
+
+[regime]
+symbol = "BTCUSDT"
+adx_period = 14
+adx_min = 20
+ema_period = 72
+slope_hours = 24
+history_hours = 744
+
+[variants.R5]
+name = "alpha_decoupled_20"
+favorable_weight = "0.30"
+weak_alpha_weight = "0.20"
+weak_ordinary_weight = "0.10"
+threshold = "0.50"
+
+[variants.R6]
+name = "alpha_decoupled_25"
+favorable_weight = "0.30"
+weak_alpha_weight = "0.25"
+weak_ordinary_weight = "0.10"
+threshold = "0.50"
+
+[variants.R7]
+name = "alpha_multi_horizon"
+favorable_weight = "0.30"
+weak_alpha_accelerating_weight = "0.25"
+weak_alpha_decelerating_weight = "0.15"
+weak_ordinary_weight = "0.10"
+threshold = "0.50"

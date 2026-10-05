@@ -272,3 +272,33 @@ EXP-062只分析EXP-049的冻结2025产物，不读行情分区、拟合模型�
 ```
 
 实际结果与全景对账见 [EXP-140报告](artifacts/experiments/EXP-140/report.md) 与 [STATUS.md](STATUS.md)。R3（自适应降仓）表现最优（2024牛市抓取55笔主升浪+13.66%，2025减亏+5.24U），但因W1微差1笔达到30笔门槛及W2收益微差1.34%达标15%而失格；按计划规则停止压力测试，2026测试集继续严格封存。
+
+### 第九轮：多币种相对强弱（Alpha）解耦与自适应配仓（R5 / R6 / R7）
+
+第九轮方案旨在解决大盘弱势期对独立强势标的（如 2024 年脱钩爆发的 SOL）“一刀切降仓”的机会代价。通过 $t-1\text{h}$ 闭合蜡烛计算 72 小时超额收益（$\Delta R_{72h} > 0$ 且 $R_{72h} > 0$）判定 Alpha 强势龙头，在弱势大盘中给予 20%~25% 优势配仓，弱势平庸币维持 10% 防守。
+
+下列为已完成的 9 组 Base 基础回测（EXP-141~EXP-149）、基础门槛筛选（EXP-150）与全景对比评估（EXP-157）命令：
+
+```powershell
+# 1. Base 基础回测（R5/R6/R7 跨三窗口，各独立 100 USDT 虚拟本金与 50 USDT 硬底线）
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R5 --window W1 --cost base --experiment-id EXP-141
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R5 --window W2 --cost base --experiment-id EXP-142
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R5 --window R2025 --cost base --experiment-id EXP-143
+
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R6 --window W1 --cost base --experiment-id EXP-144
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R6 --window W2 --cost base --experiment-id EXP-145
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R6 --window R2025 --cost base --experiment-id EXP-146
+
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R7 --window W1 --cost base --experiment-id EXP-147
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R7 --window W2 --cost base --experiment-id EXP-148
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-evaluate --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --variant R7 --window R2025 --cost base --experiment-id EXP-149
+
+# 2. 基础门槛筛选决选（EXP-150 判定全候选失格，坚决停止条件压力测试）
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-select --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --base-experiment-ids EXP-141,EXP-142,EXP-143,EXP-144,EXP-145,EXP-146,EXP-147,EXP-148,EXP-149 --experiment-id EXP-150
+
+# 3. 全景对比评估（EXP-157）
+& .\.venv\Scripts\python.exe -m cryptoquant alpha-compare --research-config configs/ninth_experiment.toml --state-experiment-id EXP-122 --selection-experiment-id EXP-150 --evaluated-experiment-ids EXP-141,EXP-142,EXP-143,EXP-144,EXP-145,EXP-146,EXP-147,EXP-148,EXP-149 --experiment-id EXP-157
+```
+
+实际结果与全景对账见 [EXP-157报告](artifacts/experiments/EXP-157/report.md) 与 [STATUS.md](STATUS.md)。R6 与 R5 合成周收益（+0.0994%/周 与 +0.0965%/周）历史性首度超越全仓裸跑基准 R0（+0.0890%/周），且 2025 减亏创下 -1.92% 历史最佳（较 R0 的 -12.91% 减少 85% 亏损）；全候选因 W1 周期 29 笔（缺 1 笔）与 W2 收益 13.82%（缺 1.18% 达到 15% 门槛）失格；按计划规则坚决停止压力测试，2026 保留测试集继续严格封存。
+

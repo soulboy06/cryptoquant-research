@@ -117,7 +117,7 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
             probability, weight = row['probability'], row['target_weight']
             if not pd.isna(probability) and (not math.isfinite(probability) or not 0 <= probability <= 1):
                 raise ValueError('invalid decision probability')
-            allowed_weights = {ZERO, amount('0.10'), amount('0.15'), config.weight_per_symbol}
+            allowed_weights = {ZERO, amount('0.10'), amount('0.15'), amount('0.20'), amount('0.25'), config.weight_per_symbol}
             if pd.isna(weight):
                 row['target_weight'] = None
             elif amount(weight) not in allowed_weights or pd.isna(probability):

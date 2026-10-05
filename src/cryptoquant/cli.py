@@ -181,8 +181,26 @@ def main(argv=None):
         if action == 'compare':
             dynamic.add_argument('--selection-experiment-id', required=True)
             dynamic.add_argument('--evaluated-experiment-ids', required=True)
+    for action in ('evaluate', 'select', 'compare'):
+        alpha = subcommands.add_parser('alpha-' + action)
+        alpha.add_argument('--research-config', type=Path, required=True)
+        alpha.add_argument('--experiment-id', required=True)
+        alpha.add_argument('--state-experiment-id', required=True)
+        if action == 'evaluate':
+            alpha.add_argument('--variant', choices=['R5', 'R6', 'R7'], required=True)
+            alpha.add_argument('--window', choices=['W1', 'W2', 'R2025'], required=True)
+            alpha.add_argument('--cost', choices=['base', 'higher_execution', 'strict'], default='base')
+            alpha.add_argument('--selection-experiment-id')
+        if action == 'select':
+            alpha.add_argument('--base-experiment-ids', required=True)
+        if action == 'compare':
+            alpha.add_argument('--selection-experiment-id', required=True)
+            alpha.add_argument('--evaluated-experiment-ids', required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command.startswith('alpha-'):
+            from cryptoquant.models import alpha_workflow
+            return getattr(alpha_workflow, 'execute_' + args.command.replace('-', '_'))(args, Path.cwd())
         if args.command.startswith('dynamic-'):
             from cryptoquant.models import dynamic_workflow
             return getattr(dynamic_workflow, 'execute_' + args.command.replace('-', '_'))(args, Path.cwd())
@@ -248,3 +266,8 @@ def run_data_step(args):
         raise
     print(f"{args.command} complete: {args.experiment_id}")
     return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
+

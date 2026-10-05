@@ -53,8 +53,8 @@ def test_dynamic_weights_acceptance_and_conservation():
 
 def test_dynamic_weights_illegal_rejection():
     frames, rules, config = fixture(hours=12, rising=True)
-    # 非法权重 0.25
-    illegal_map = {0: D('0.25')}
+    # 非法权重 0.35
+    illegal_map = {0: D('0.35')}
     targets = make_targets(config, illegal_map)
     with pytest.raises(ValueError, match="invalid decision target weight"):
         run_backtest(frames, rules, config, 'logistic_regression', 'base',

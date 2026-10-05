@@ -1,0 +1,120 @@
+# EXP-149 R7 R2025 base 评估报告
+
+- 变体：`R7`（alpha_multi_horizon）
+- 窗口：`R2025`，成本档位：`base`
+- 期末净值：`97.9875 USDT`，净收益：`-2.0125%`
+- 最大回撤：`11.1322%`
+- 闭合交易周期：`57` 笔，成交手续费：`3.2429 USDT`
+- 本金底线触发：`0` 次，单币硬止损：`3` 次
+- 状态分布：顺势决策点 `725/2189`
+- Alpha 龙头识别次数：`1700` 次
+
+```json
+{
+  "strategy": "logistic_regression",
+  "period": "validation",
+  "cost": "base",
+  "initial_equity": "100",
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2025-12-31 20:00:00+00:00",
+  "final_equity": "97.98747254142730000000",
+  "final_cash": "97.20567619242730000000",
+  "residual_value": "0.78179634900000000000",
+  "net_return": "-0.02012527458572700000",
+  "max_drawdown": "0.1113215688071993844163126512",
+  "longest_drawdown_hours": 8291.0,
+  "drawdown_unrecovered": true,
+  "fills": 120,
+  "rejected_orders": 6268,
+  "rejection_reasons": {
+    "zero_quantity": 6127,
+    "minimum_notional": 134,
+    "risk_blocked": 7
+  },
+  "fees_usdt": "3.24285973592535000000",
+  "turnover_usdt": "3242.85973592535000000",
+  "turnover_multiple": "32.42859735925350000",
+  "mean_hourly_open_exposure": "0.02148918797962690190925888455",
+  "closed_cycles": 57,
+  "floor_triggers": 0,
+  "stop_triggers": 3,
+  "permanent_buy_lock": false,
+  "stale_checkpoints": 0,
+  "realized_pnl": "-1.963759260480785534207667458",
+  "per_symbol": {
+    "BTCUSDT": {
+      "realized_pnl": "0.308621644967146565409147373",
+      "buy_fills": 10,
+      "sell_fills": 11,
+      "fees_usdt": "0.56805280805785000000",
+      "residual_quantity": "0.00000698",
+      "residual_value": "0.6110421130000000",
+      "residual_unrealized_pnl": "-0.01593093136284656540914742487"
+    },
+    "ETHUSDT": {
+      "realized_pnl": "-0.269365414632719666805621430",
+      "buy_fills": 33,
+      "sell_fills": 33,
+      "fees_usdt": "1.8116571082725000000",
+      "residual_quantity": "0.0000406",
+      "residual_value": "0.120629096000000",
+      "residual_unrealized_pnl": "-0.004463765049280333194378544658"
+    },
+    "SOLUSDT": {
+      "realized_pnl": "-2.003015490815212432811193401",
+      "buy_fills": 16,
+      "sell_fills": 17,
+      "fees_usdt": "0.863149819595000000",
+      "residual_quantity": "0.000403",
+      "residual_value": "0.05012514000000",
+      "residual_unrealized_pnl": "-0.02837350167978756718880653810"
+    }
+  },
+  "limitations": [
+    "本次只评价validation/R2025，没有打开保留测试，不是实时或真实收益。",
+    "当前公开规则快照近似历史规则；市价名义金额用模拟成交价检查，未重建参考价或分钟VWAP。",
+    "小时开盘近似成交；不还原盘口、排队、冲击或小时内路径；费用固定且无BNB优惠。",
+    "固定50 USDT底线在真实小时收盘观察，停机恢复首个真实开盘补查；触发不保证退出后仍有50。",
+    "停机／no_trade按已核验日历禁止成交，这是离线执行约束，不能从当根最终成交量提前产生在线信号。",
+    "模型特征在缺口后重启，744个连续观察之前保持持仓；风险退出独立生效。预测不fit评价数据。",
+    "净值与回撤来自交易前起点、小时收盘和成交后检查点；未识别小时内最大回撤。",
+    "每年是同一账户的连续分段；没有年度重置。开发结果没有用于搜索EMA或风险参数。"
+  ],
+  "window": "R2025",
+  "exit_variant": "C2",
+  "breakeven_triggers": 6,
+  "duration_triggers": 0,
+  "g_week": -0.0003900029429327878,
+  "total_window_hours": 8756.0,
+  "full_weeks_count": 52,
+  "losing_full_weeks_count": 26,
+  "losing_full_weeks_ratio": 0.5,
+  "worst_full_week_return": -0.033310425821762024,
+  "partial_week_present": true,
+  "experiment_id": "EXP-149",
+  "variant": "R7",
+  "state_experiment_id": "EXP-122",
+  "training_experiment_id": "EXP-094",
+  "prepared_experiment_id": "EXP-063",
+  "label_policy": "net_positive_base_v1",
+  "status": "complete",
+  "decision_regime_distribution": {
+    "weak": 4392,
+    "favorable": 2175
+  },
+  "target_weight_distribution": {
+    "0": 6377,
+    "0.30": 76,
+    "0.10": 105,
+    "0.25": 4,
+    "0.15": 5
+  },
+  "alpha_leader_distribution": {
+    "false": 4867,
+    "true": 1700
+  },
+  "alpha_accelerating_count": 1064,
+  "favorable_decisions": 725,
+  "total_decisions": 2189
+}
+```
