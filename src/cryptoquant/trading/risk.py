@@ -5,7 +5,6 @@ from datetime import timedelta
 
 from cryptoquant.data.calendar import can_execute
 from cryptoquant.trading.ledger import ZERO, amount
-from cryptoquant.trading.orders import sellable_quantity
 
 
 @dataclass
@@ -74,7 +73,10 @@ class RiskState:
                 position = portfolio.positions[symbol]
                 state = self.states[symbol]
                 if position.quantity and not state.exit_completed:
-                    state.holding_hours += 1
+                    if state.entry_time is not None:
+                        state.holding_hours = max(state.holding_hours, int((timestamp - state.entry_time).total_seconds() // 3600))
+                    else:
+                        state.holding_hours += 1
                     cost_basis = position.average_cost
                     if cost_basis > 0:
                         float_return = (marks[symbol] - cost_basis) / cost_basis
@@ -98,7 +100,7 @@ class RiskState:
 
     def register_buy(self, symbol, portfolio, reference, rules, cost, timestamp=None):
         state = self.states[symbol]
-        if not state.cycle_open and sellable_quantity(portfolio.positions[symbol].quantity, reference, rules, cost):
+        if not state.cycle_open and portfolio.positions[symbol].quantity > ZERO:
             state.cycle_open = True
             state.had_exit_fill = False
             state.exit_completed = False
@@ -114,8 +116,15 @@ class RiskState:
         if open_quote is None or not can_execute(open_quote):
             return False
         state = self.states[symbol]
-        if sellable_quantity(portfolio.positions[symbol].quantity, open_quote['open'], rules, cost):
+        if not state.cycle_open or state.exit_completed:
             return False
+        quantity = portfolio.positions[symbol].quantity
+        if quantity > ZERO:
+            if not state.had_exit_fill or quantity >= rules.step_size:
+                return False
+            dust = portfolio.write_off_precision_dust(symbol, rules.step_size, open_quote['open'])
+            self.emit('dust_written_off', timestamp, symbol=symbol,
+                      policy='post_exit_sub_step_writeoff_v1', quantity_step=rules.step_size, **dust)
         if state.cycle_open and state.had_exit_fill:
             self.closed_cycles += 1
             self.emit('cycle_closed', timestamp, symbol=symbol)

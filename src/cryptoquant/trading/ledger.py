@@ -32,6 +32,26 @@ class Portfolio:
         self.fees_usdt = ZERO
         self.realized_pnl = ZERO
         self.turnover_usdt = ZERO
+        self.dust_writeoff_value = ZERO
+        self.dust_writeoff_cost = ZERO
+
+    def write_off_precision_dust(self, symbol, step_size, mark):
+        """Explicit simulated abandonment, not a fill; only a sub-step quantity.
+
+        Caller must prove a real full-exit sell occurred. Cash/fees are unchanged,
+        cost becomes a realized loss and the actual simulated position is zero.
+        """
+        position = self.positions[symbol]
+        if not ZERO < position.quantity < amount(step_size) or amount(mark) <= ZERO:
+            raise ValueError('only strictly sub-step precision dust may be written off')
+        quantity = position.quantity
+        cost = quantity * position.average_cost
+        value = quantity * amount(mark)
+        self.realized_pnl -= cost
+        self.dust_writeoff_cost += cost
+        self.dust_writeoff_value += value
+        position.quantity, position.average_cost = ZERO, ZERO
+        return dict(quantity=quantity, cost_usdt=cost, value_usdt=value)
 
     def apply_fill(self, side, symbol, gross_quantity, execution_price, fee_rate):
         quantity, price, fee = map(amount, (gross_quantity, execution_price, fee_rate))

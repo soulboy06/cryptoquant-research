@@ -49,9 +49,18 @@ def summarize(result, config):
     replay = Portfolio(config.initial_cash, config.symbols)
     per_symbol = {s: dict(realized_pnl=ZERO, buy_fills=0, sell_fills=0, fees_usdt=ZERO) for s in config.symbols}
     cost = config.costs[result.cost_name]
+    dust_events = {}
+    for event in result.risk.events:
+        if event['event'] == 'dust_written_off':
+            dust_events.setdefault((event['time'], event['symbol']), []).append(event)
     for fill in result.fills:
         before = replay.realized_pnl
         replay.apply_fill(fill['side'], fill['symbol'], fill['quantity'], fill['price'], cost.fee)
+        # Apply explicit abandonment immediately after its real exit fill;
+        # later buys must not inherit an already cleared dust cost basis.
+        for event in dust_events.pop((fill['time'], fill['symbol']), []):
+            replay.write_off_precision_dust(fill['symbol'], event['quantity_step'],
+                                           event['value_usdt'] / event['quantity'])
         item = per_symbol[fill['symbol']]
         item['realized_pnl'] += replay.realized_pnl - before
         item['buy_fills' if fill['side'] == 'BUY' else 'sell_fills'] += 1
@@ -78,6 +87,9 @@ def summarize(result, config):
                    stop_triggers=result.risk.stop_triggers, permanent_buy_lock=result.risk.locked,
                    stale_checkpoints=sum(bool(r['stale_symbols']) for r in rows),
                    realized_pnl=result.book.realized_pnl, per_symbol=per_symbol, limitations=limitations)
+    summary.update(dust_policy='post_exit_sub_step_writeoff_v1',
+                   dust_writeoff_value=result.book.dust_writeoff_value,
+                   dust_writeoff_cost=result.book.dust_writeoff_cost)
     if result.window is not None:
         summary['window'] = result.window
     if getattr(result, 'exit_variant', None) is not None:

@@ -174,6 +174,9 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
         equity.append(row)
 
     def execute(intent, time, quotes, full_exit=False):
+        if full_exit and book.positions[intent.symbol].quantity > ZERO:
+            # Latch normal strategy exits too: a rejection is not an exit.
+            risk.request_exit(intent.symbol, intent.reason, time)
         decision = simulate_fill(intent, quotes.get(intent.symbol), rules[intent.symbol], cost, book)
         record = dict(time=time, symbol=intent.symbol, side=intent.side,
                       requested_quantity=intent.quantity, quantity=decision.quantity,
