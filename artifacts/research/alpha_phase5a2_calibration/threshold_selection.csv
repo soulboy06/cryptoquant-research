@@ -1,0 +1,4 @@
+feature_family,prediction_gate_passed,mean_delta_auc,mean_delta_pr_auc,mean_delta_logloss,mean_delta_brier,recalibration_permitted,selected_thresholds,pruning_decision,reason
+OI_ONLY,False,-0.00298,-0.00103,0.00067,0.00024,False,NONE_PRUNED,PRUNED_AT_PREDICTION_LAYER,No predictive rank or probability metric improvement across folds; threshold recalibration prohibited by Section 三 & 四.
+FLOW_ONLY,False,-0.0039,-0.00486,0.00082,0.00039,False,NONE_PRUNED,PRUNED_AT_PREDICTION_LAYER,No predictive rank or probability metric improvement across folds; threshold recalibration prohibited by Section 三 & 四.
+OI_FLOW,False,-0.00609,-0.00573,0.00142,0.00061,False,NONE_PRUNED,PRUNED_AT_PREDICTION_LAYER,No predictive rank or probability metric improvement across folds; threshold recalibration prohibited by Section 三 & 四.

@@ -1,6 +1,6 @@
 # 当前状态
 
-最后更新：2026-10-05（Asia/Shanghai）。本文件是当前进度的唯一摘要，历史操作及旧结论见WORKLOG／EXPERIMENTS。
+最后更新：2026-10-06（Asia/Shanghai）。本文件是当前进度的唯一摘要，历史操作及旧结论见WORKLOG／EXPERIMENTS。
 
 ## 本轮任务
 
@@ -67,7 +67,14 @@
   - 前沿判定：没有任何旧 Pareto Benchmark 被新候选严格支配，Pareto 前沿未产生有效外推；
   - 归因结论：Regime A~H 微观净收益差异仅 2~3 bps，不足以覆盖 0.30055% 双边摩擦，线性模型下稀释了核心 OHLCV 量价权重；
   - 终审定论：在当前数据定义、4h 决策尺度、LR 线性模型与交易体系下，本轮 OI / Taker Flow 未表现出稳定增量 Alpha。
-- **单测体系**：`tests/test_derivatives_flow_phase5a.py`、`test_champion_selection_audit.py`、`test_optimization_pipeline.py`、`test_research_reporting.py`、`test_holdout_guard.py` 等测试全部通过。
+- **第五阶段 A2（衍生品特征校准与阈值稳健性审计 Phase 5A2）已完成（D-057）**：
+  - 产物目录：`artifacts/research/alpha_phase5a2_calibration/`（含 `prediction_shift_audit.csv`, `calibration_comparison.csv`, `threshold_selection.csv`, `trading_metrics.csv`, `results.json`, `comparison_report.md`）；
+  - 终审科学裁决：**【结论 A】新特征预测层和交易层均无改善，正式剪枝**；
+  - 只读预测层审计：四大 Benchmark × 3 Fold 全景评估中，`OI_ONLY`、`FLOW_ONLY`、`OI_FLOW` 的 $\Delta \text{ROC-AUC} \le 0$ 出现率 **100%**（改善率 0/12），Log Loss、Brier Score 与 ECE 全面恶化；新特征在线性模型下未提供任何排序能力；
+  - 行为失配机制归因：新特征放大了概率方差（$\Delta \text{std} \approx +0.005 \sim +0.012$），使 PPR 虚高（+0.1% ~ +0.5%），诱发 10~25 笔额外的伪突破低胜率交易，放大手续费摩擦与回撤；恶化核心为信噪比稀释而非旧阈值失配；
+  - 严格剪枝执行：0 特征组通过预测门槛，**严格禁止 Lane B 阈值重选（No Threshold Sweep）**；
+  - OI 时间戳因果审计：全量 35,808 小时（2021-12 至 2025-12）核验，BTCUSDT, ETHUSDT, SOLUSDT 全部 **0 违规**，最大时间前导误差 **0.0s**，严格无未来泄露；
+  - 单测体系：`tests/test_derivatives_calibration_phase5a2.py` 与 `test_derivatives_flow_phase5a.py` 等 10 项核心测试全部 100% PASS。
 
 ## 当前限制与长期边界
 
@@ -78,7 +85,7 @@
 
 ## 下一行动与交接
 
-1. **Phase 5A 受控实验圆满结束**：已生成全部 11 项报告与产物，完成 12 项核心科学问题裁决，并登记 D-056。
-2. **严守停止纪律**：本阶段工作已完成，立即停止，不自动进入 Phase 5B。等待用户对后续研究方向的明确指令。
+1. **Phase 5A2 审计圆满闭环**：完成核心科学问题解答、只读预测审计、因果时间戳审查与正式剪枝，登记 D-057。
+2. **严守停止纪律**：本阶段工作已完成，立即停止，**不自动进入 Phase 5B**。等待用户对后续研究方向的明确指令。
 
 

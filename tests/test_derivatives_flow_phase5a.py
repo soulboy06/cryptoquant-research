@@ -85,7 +85,7 @@ def test_no_future_leakage_in_feature_construction(tmp_path):
     feat_mod = build_derivatives_features_for_symbol('TEST', data_dir=tmp_path)
 
     # All decision rows strictly prior to index 100 (decision_time <= dates[99] + 1h) must be completely identical
-    cutoff_time = dates[98] + pd.Timedelta(hours=1)
+    cutoff_time = dates[98] + pd.to_timedelta(1, unit='h')
     orig_sub = feat_orig[feat_orig['decision_time'] <= cutoff_time].reset_index(drop=True)
     mod_sub = feat_mod[feat_mod['decision_time'] <= cutoff_time].reset_index(drop=True)
     pd.testing.assert_frame_equal(orig_sub, mod_sub)
@@ -162,7 +162,7 @@ def test_holdout_guard_active():
     scripts_dir = ROOT / 'scripts'
     if str(scripts_dir) not in sys.path:
         sys.path.insert(0, str(scripts_dir))
-    from verify_cycle_repair import reject_holdout
+    from verify_cycle_repair import reject_holdout  # type: ignore
 
     with reject_holdout(ROOT):
         p_2026 = ROOT / 'data/processed/test/EXP-003/attempt-001/BTCUSDT.parquet'

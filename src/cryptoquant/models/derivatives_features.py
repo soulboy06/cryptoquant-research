@@ -98,11 +98,11 @@ def build_derivatives_features_for_symbol(symbol: str, data_dir: Path | None = N
     )
 
     # 对齐至 decision_time
-    df["decision_time"] = df["open_time"] + pd.Timedelta(hours=1)
+    df["decision_time"] = df["open_time"] + pd.to_timedelta(1, unit='h')
     
     keep_cols = ["decision_time"] + OI_FEATURES + FLOW_FEATURES
-    out = df[keep_cols].copy().sort_values("decision_time").reset_index(drop=True)
-    return out
+    res = pd.DataFrame(df[keep_cols])
+    return res.sort_values("decision_time").reset_index(drop=True)
 
 
 def attach_derivatives_features(

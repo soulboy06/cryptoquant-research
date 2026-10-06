@@ -590,6 +590,33 @@
 - 替代关系：明确否定了在线性模型下直接引入 OI 与 Taker Flow 能够推动 Pareto Front 的假设，固化 Phase 5A 实证产物。
 - 需要同步的文件：`STATUS.md`, `WORKLOG.md`。
 
+## D-057：Phase 5A2 衍生品特征校准与阈值稳健性审计（Derivatives Calibration / Threshold Robustness Audit）终审定论：新特征预测层与交易层均无改善，全面触发剪枝规则（结论 A），正式剪枝当前定义的 Open Interest 与 Taker Flow
+
+- 日期：2026-10-06（Asia/Shanghai）；状态：有效。
+- 来源：用户 Phase 5A2 指令、剪枝规则（Section 三 & 四）与 `artifacts/research/alpha_phase5a2_calibration/` 全量实证产物。
+- 选择：
+  1. **核心科学问题裁决**：
+     - Phase 5A 中 OI / Flow 表现变差，**核心原因在于新特征在当前 4h 尺度、LR 线性模型与定义下，本身没有任何预测增量**，而非简单的旧阈值失配；
+  2. **只读预测层审计实证（四大 Benchmark × 3 Fold 全景覆盖）**：
+     - `OI_ONLY`: $\Delta \text{ROC-AUC} \le 0$（改善率 0/12，均值 -0.0030）；Log Loss 全部上升（均值 +0.0007）；Brier Score 全部上升（均值 +0.0002）；
+     - `FLOW_ONLY`: $\Delta \text{ROC-AUC} \le 0$（改善率 0/12，均值 -0.0039）；Log Loss 全部上升（均值 +0.0008）；Brier Score 全部上升（均值 +0.0004）；
+     - `OI_FLOW`: $\Delta \text{ROC-AUC} \le 0$（改善率 0/12，均值 -0.0061）；Log Loss 全部上升（均值 +0.0014）；Brier Score 全部上升（均值 +0.0006）；
+     - 预测质量全面劣化，新特征不仅没有提供有效的排序能力，反而破坏了模型对样本概率的校准质量；
+  3. **概率分布漂移与交易行为失配机制归因**：
+     - 新增特征在线性逻辑回归中使预测概率标准差微幅增大（$\Delta \text{std} \approx +0.005 \sim +0.012$），将更多处于临界区边缘的样本轻微推入 $\ge 0.48$ 的买入线（PPR 增加 +0.1% ~ +0.5%）；
+     - 由此诱发了 10~25 笔额外的伪突破交易。由于新特征并未提升真实胜率，这些额外交易带来了更低胜率和更多交易费用，导致收益和回撤双双劣化；
+  4. **硬性剪枝规则执行（Section 三 & 四）**：
+     - 三大特征组在 ROC-AUC、PR-AUC、Log Loss、Brier 四项指标上无一改善，且交易结果更差；
+     - 零特征组通过预测准入门槛，**严格禁止进入 Lane B 阈值重选（No Threshold Sweep）**，坚决避免以事后“找阈值”掩盖特征缺乏 Alpha 的伪优化；
+     - 终审判定为**【结论 A】：“新特征预测层和交易层均无改善，正式剪枝该 Feature Family”**；
+  5. **持仓量 (OI) 时间戳对齐因果性严格审计（Section 九）**：
+     - 对全量 35,808 小时（2021-12 至 2025-12）时序行进行逐行时间戳检验；
+     - BTCUSDT、ETHUSDT、SOLUSDT 全部 0 违规，最大时间前导误差严格为 0.0s。`max_source_timestamp_used <= decision_time` 严格成立，不存在任何未来信息泄露；
+  6. **科学严谨边界（Section 十）**：
+     - 结论严格表述为：“在当前 OI/Flow 定义、4h 尺度、LR 模型及严格校准条件下，未发现稳定可交易增量”；禁止过度解释为“衍生品无用”或“数据是噪声”。
+- 替代关系：深化并终结 Phase 5A 衍生品特征探索，正式剪枝该方向，为后续真正的 Phase 5B 奠定坚实依据。
+- 需要同步的文件：`STATUS.md`, `WORKLOG.md`。
+
 ## 后续记录模板
 
 本节仅为模板，不计入实际决策。

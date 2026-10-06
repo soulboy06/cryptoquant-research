@@ -1291,6 +1291,37 @@
 - 遗留与交接事项：
   - 本轮实验已圆满结束，终止 Phase 5A，立即停止，不自动进入 Phase 5B。
 
+### WL-068: 2026-10-06 14:10:00+08:00 Phase 5A2 衍生品特征校准与阈值稳健性审计圆满完成（达成结论 A，正式剪枝）
+
+- 用户任务：
+  1. 进入 Phase 5A2：Derivatives Feature Calibration / Threshold Robustness Audit；
+  2. 回答核心科学问题：Phase 5A 变差是特征无增量还是概率分布/校准改变导致旧阈值失配；
+  3. 严格冻结纪律：仅限 BASE_12, OI_ONLY, FLOW_ONLY, OI_FLOW 四组特征与 LR 模型，四大 Pareto Benchmark（OPT-0005, OPT-0001, OPT-0026, OPT-0056），禁止调参及使用 2026；
+  4. 第一步只读预测层审计：核验 ROC-AUC, PR-AUC, LogLoss, Brier, Precision, Recall, PPR 与概率各分位数；
+  5. 严格执行剪枝规则（Section 三 & 四）：若预测层无改善直接剪枝，严禁执行 Lane B 阈值重选；
+  6. 严格审查 OI 时间戳因果对齐（Section 九）：检验全量原始 OI 时间戳 `source_timestamp <= decision_time`；
+  7. 产物输出至 `artifacts/research/alpha_phase5a2_calibration/`，回答 10 项核心问题后停止，不自动进入 Phase 5B。
+- 实际改动与涉及文件：
+  1. **审计主控与因果验证**：
+     - 编写 `scripts/run_phase5a2_calibration_audit.py`；
+     - 显式验证全量 35,808 小时（2021-12 至 2025-12）BTCUSDT, ETHUSDT, SOLUSDT 的原始 OI 快照时间戳，0 违规，最大前导误差 0.0s，严格因果对齐；
+     - 全量提取 4 Benchmark × 4 Feature Family × 3 Fold 预测概率分布与真实标签，计算一阶矩、二阶矩、P10~P90 分位数与 ECE 期望校准误差；
+  2. **剪枝门槛评估与产物生成**：
+     - 计算三大候选特征组相比 BASE_12 的各项指标差值；
+     - 确认 0 特征组通过门槛，严格锁定禁止 Lane B 阈值搜索，生成 `threshold_selection.csv` 与保留交易指标 `trading_metrics.csv`；
+     - 输出全套 6 项产物：`prediction_shift_audit.csv`, `calibration_comparison.csv`, `threshold_selection.csv`, `trading_metrics.csv`, `results.json`, `comparison_report.md`；
+  3. **单元测试与文档同步**：
+     - 编写 `tests/test_derivatives_calibration_phase5a2.py`，覆盖 OI 因果性、负增量实证、剪枝门槛生效与产物完整性；
+     - 更新 `DECISIONS.md`（登记 D-057）；
+     - 更新 `STATUS.md`（记录 Phase 5A2 完成与结论 A 裁决）。
+- 检查与证据：
+  - 预测层无增量实证：三大新特征组在 12 次评估中 $\Delta \text{ROC-AUC} \le 0$ 出现率 100%（均值 -0.0030 至 -0.0061），Log Loss 与 Brier 全面上涨；
+  - 概率方差轻度放大（$\Delta \text{std} \approx +0.005 \sim +0.012$），使 PPR 虚高（+0.1% ~ +0.5%），诱发 10~25 笔伪突破低胜率交易，产生额外手续费；恶化核心为信噪比稀释而非旧阈值失配；
+  - 单测通过：`tests/test_derivatives_calibration_phase5a2.py` 与 `tests/test_derivatives_flow_phase5a.py` 10 passed 100% (0.73s, 0 warnings)；
+  - 裁决生效：正式判定为【结论 A】，正式剪枝当前定义的 Open Interest 与 Taker Flow。
+- 遗留与交接事项：
+  - 本阶段任务已圆满结束，立即停止，不自动进入 Phase 5B。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

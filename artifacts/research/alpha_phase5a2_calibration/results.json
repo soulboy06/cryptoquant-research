@@ -1,0 +1,67 @@
+{
+  "phase": "Phase 5A2: Derivatives Calibration & Threshold Robustness Audit",
+  "execution_time_seconds": 10.18,
+  "timestamp_utc": "2026-10-06T06:05:57.528126+00:00",
+  "oi_timestamp_audit": {
+    "total_violations": 0,
+    "max_lead_seconds": 0.0,
+    "symbols": {
+      "BTCUSDT": {
+        "total_rows": 35808,
+        "valid_aligned_rows": 35807,
+        "violations_count": 0,
+        "max_timestamp_lead_seconds": 0.0,
+        "status": "PASSED"
+      },
+      "ETHUSDT": {
+        "total_rows": 35808,
+        "valid_aligned_rows": 35807,
+        "violations_count": 0,
+        "max_timestamp_lead_seconds": 0.0,
+        "status": "PASSED"
+      },
+      "SOLUSDT": {
+        "total_rows": 35808,
+        "valid_aligned_rows": 35807,
+        "violations_count": 0,
+        "max_timestamp_lead_seconds": 0.0,
+        "status": "PASSED"
+      }
+    },
+    "verdict": "PERFECT_CAUSAL_ALIGNMENT"
+  },
+  "prediction_gating_summary": {
+    "OI_ONLY": {
+      "passed_gate": false,
+      "mean_delta_auc": -0.00298,
+      "mean_delta_pr_auc": -0.00103,
+      "mean_delta_logloss": 0.00067,
+      "mean_delta_brier": 0.00024,
+      "auc_improved_count": 0,
+      "total_fold_evals": 12,
+      "action": "DIRECT_PRUNE_NO_THRESHOLD_SWEEP"
+    },
+    "FLOW_ONLY": {
+      "passed_gate": false,
+      "mean_delta_auc": -0.0039,
+      "mean_delta_pr_auc": -0.00486,
+      "mean_delta_logloss": 0.00082,
+      "mean_delta_brier": 0.00039,
+      "auc_improved_count": 0,
+      "total_fold_evals": 12,
+      "action": "DIRECT_PRUNE_NO_THRESHOLD_SWEEP"
+    },
+    "OI_FLOW": {
+      "passed_gate": false,
+      "mean_delta_auc": -0.00609,
+      "mean_delta_pr_auc": -0.00573,
+      "mean_delta_logloss": 0.00142,
+      "mean_delta_brier": 0.00061,
+      "auc_improved_count": 0,
+      "total_fold_evals": 12,
+      "action": "DIRECT_PRUNE_NO_THRESHOLD_SWEEP"
+    }
+  },
+  "final_conclusion": "CONCLUSION_A_DIRECT_PRUNE",
+  "verdict_summary": "新特征预测层（ROC-AUC, PR-AUC, LogLoss, Brier）与交易层均无改善，正式剪枝该 Feature Family，禁止进行无效阈值调参。"
+}
