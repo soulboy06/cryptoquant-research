@@ -1,0 +1,30 @@
+{
+  "trade_pnl_mean_usdt": 0.08,
+  "trade_pnl_bootstrap_95ci": [
+    -0.0312,
+    0.1877
+  ],
+  "trade_win_rate_obs": 0.5529,
+  "trade_win_rate_bootstrap_95ci": [
+    0.4808,
+    0.6202
+  ],
+  "multi_prediction_dependency": {
+    "total_decisions": 19725,
+    "unique_trade_entries": 208,
+    "holding_continuation_decisions": 89,
+    "holding_exit_decisions": 28,
+    "unexecuted_restricted_buys": 163
+  },
+  "tail_concentration_impact": {
+    "top_3_profitable_trades_pnl": 8.0686,
+    "top_3_profitable_trades_share_pct": 48.52,
+    "top_3_loss_trades_pnl": -8.2868
+  },
+  "methodological_constraints": [
+    "2023~2025 \u6570\u636e\u5df2\u88ab\u591a\u8f6e\u7814\u7a76\u67e5\u770b\uff0c\u5b58\u5728\u4e8b\u540e\u7b5b\u9009\u504f\u5dee",
+    "\u6301\u4ed3\u5c55\u671f\u51b3\u7b56\u95f4\u5b58\u5728\u5f3a\u65f6\u95f4\u5e8f\u5217\u81ea\u76f8\u5173",
+    "\u591a\u5e01\u79cd\uff08BTC/ETH/SOL\uff09\u53d7\u5168\u5e02\u573a\u5b8f\u89c2\u6d41\u52a8\u6027\u4e3b\u5bfc\uff0c\u5177\u6709\u8f83\u5f3a\u622a\u9762\u76f8\u5173\u6027",
+    "2026 \u6d4b\u8bd5\u96c6\u7269\u7406 0 \u8bfb\u53d6\u3001\u672a\u7528\u4e8e\u8bad\u7ec3\u6216\u8bc4\u4f30"
+  ]
+}

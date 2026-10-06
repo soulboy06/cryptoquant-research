@@ -1448,7 +1448,39 @@
   - 单测通过：`pytest tests/test_market_regime_phase6b.py tests/test_regime_execution.py tests/test_market_regime_phase6a.py` 24 passed (2.22s) 100% PASS。
 - 遗留与交接事项：
   - 三个过滤器全部未能满足 Challenger 准入标准，本轮正式宣告失败并予以全面剪枝；
-  - 基准严格维持原 OPT-0005_BASE_12；禁止擅自进行 A+B 混编或进入 Phase 6C；
+## 2026-10-06 记录：Phase 7A 预测目标与真实交易结果一致性审计（WL-073）
+
+- 用户任务：执行 Phase 7A：Prediction-to-Execution Alignment Audit。审计模型预测目标（net_positive_base_v1，4h）与真实交易系统（C2出场、动态保本、硬止损、资金限制、多币共享资金）的一致性。审计训练标签定义，复现基准 OPT-0005，建立 19,725 次决策与 208 笔交易严格对应关系，分析预测正确却亏损案例、持仓时间错配、预测能力与盈利能力解耦、分年份与分币种分析及统计可靠性，给出四选一最终结论，回答 9 大核心问题。
+- 实际改动与涉及文件：
+  - 编写并执行全流程审计脚本 `scripts/run_phase7a_prediction_execution_audit.py`，全流程受 `reject_holdout` 严格保护；
+  - 产出全套 11 项指定交付产物至 `artifacts/research/prediction_execution_phase7a/`：
+    - `label_definition_audit.md`：训练标签彻底审计报告（代码位置、价格选取、摩擦模型、判定公式及 8 大问题详解）；
+    - `benchmark_replication.json`：OPT-0005 严格零误差基准复现记录与逐年账本对账流水；
+    - `prediction_decision_alignment.csv`：全量 19,725 次 4 小时决策点与真实执行状态严格对账总表（A/B/C/D 四类严格划分）；
+    - `executed_trade_alignment.csv`：208 笔真实闭合交易全生命周期、4h 标签对应与对齐状态明细表；
+    - `prediction_execution_mismatch.csv`：17 笔错配交易微观归因与根本原因排查表；
+    - `holding_period_analysis.csv`：持仓时间分布分位数（P10~P90）与三大时长区间（<4h, ==4h, >4h）盈亏结构对照表；
+    - `probability_pnl_analysis.csv`：预测概率固定分箱（<0.40 至 >=0.55）与实际成交胜率、损益及手续费解耦透视表；
+    - `symbol_year_comparison.csv`：分年份（2023/2024/2025）与分币种（BTC/ETH/SOL）预测能力 vs 交易损益交叉对比表；
+    - `statistical_uncertainty.json`：Block Bootstrap 不确定性分析、多重决策依赖与尾部集中度评估结果；
+    - `results.json`：结构化全流程量化结果汇总与 Choice C 终审裁决；
+    - `comparison_report.md`：综合评估报告，系统性解答用户 9 大核心问题；
+  - 编写并运行单元测试 `tests/test_prediction_execution_phase7a.py`；
+  - 更新 `DECISIONS.md`（登记 D-062 审计裁决）；
+  - 更新 `STATUS.md`（记录 Phase 7A 完成状态与核心实证发现）；
+  - 更新 `WORKLOG.md`（追加 WL-073）；
+  - 更新 `EXPERIMENTS.md`（登记 EXP-199）。
+- 检查与证据：
+  - 基准复现核验：OPT-0005 零误差复现 $g_{\text{week}}=+0.1371\%$/w（年化 $+7.38\%$），208 周期（2023: $+8.83\%$, 2024: $+18.50\%$, 2025: $-3.91\%$），Worst MDD $11.60\%$；
+  - 标签一致性高：208 笔交易中 191 笔盈亏方向与未来 4h 净收益标签完全一致，一致率高达 **91.8%**（4h 为正时胜率 92.2%，4h 为负时亏损率 91.3%）；
+  - 假说 B 彻底证伪：“4h 预测正确却被提前止损导致亏损”仅发生 9 次（占 4.3%），累计亏损仅 -3.16 USDT；
+  - 持仓时间错配重大发现：严格持仓 4h 出场交易（153 笔，73.6%）狂赚 **+32.73 USDT**（胜率 63.4%）；展期持仓 >4h 交易（48 笔，23.1%）巨亏 **-14.01 USDT**（胜率 33.3%）。在 2025 年，严格 4h 交易依然盈利 +4.68 USDT，亏损完全来自 14 笔 >4h 交易（-10.73 USDT）；
+  - 概率反向失真发现：中等置信度 $0.50 \sim 0.55$ 贡献最大利润（+16.28 USDT），极端高置信度 $\ge 0.55$ 累计亏损 **-7.54 USDT**（胜率 50.0%），形成超买赶顶追高陷阱；
+  - 2025 年亏损真实归因：模型 AUC 降至 0.5647，开仓假阳性率升至 51.2%（82 笔中 42 笔 4h 收益为负），亏损源于模型错误开仓与手续费磨损，而非执行错配；
+  - 单元测试：`pytest tests/test_prediction_execution_phase7a.py` 7 passed (0.50s)，全套回归测试 26 passed (2.13s) 100% PASS。
+- 遗留与交接事项：
+  - 正式采纳结论【C】：“模型本身缺乏足够预测能力（真实交易表现不佳主要不是标签与执行错配造成）”；
+  - 基准严格维持原 OPT-0005_BASE_12；严禁自动进入 Phase 7B，严禁擅自修改模型架构或标签；
   - 立即停止，等待用户指示下一步。
 
 ## 后续追加格式

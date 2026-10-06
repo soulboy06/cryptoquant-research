@@ -1,0 +1,84 @@
+{
+  "candidate_id": "OPT-0005_BASE_12",
+  "replicated_timestamp_utc": "2026-10-06T09:11:55.152692+00:00",
+  "target_metrics": {
+    "g_week_pct": 0.1371,
+    "annualized_pct": 7.38,
+    "ret_2023_pct": 8.83,
+    "ret_2024_pct": 18.5,
+    "ret_2025_pct": -3.91,
+    "worst_mdd_pct": 11.6,
+    "closed_cycles": 208
+  },
+  "observed_metrics": {
+    "g_week_pct": 0.1371,
+    "annualized_pct": 7.38,
+    "ret_2023_pct": 8.83,
+    "ret_2024_pct": 18.5,
+    "ret_2025_pct": -3.91,
+    "worst_mdd_pct": 11.6,
+    "closed_cycles": 208,
+    "cycles_by_window": {
+      "W1": 38,
+      "W2": 88,
+      "R2025": 82
+    }
+  },
+  "accounting_reconciliation": [
+    {
+      "window": "W1",
+      "initial_cash_usdt": 100.0,
+      "final_equity_usdt": 108.8322,
+      "final_cash_usdt": 108.454,
+      "residual_dust_value_usdt": 0.3782,
+      "net_account_return_pct": 8.8322,
+      "net_equity_change_usdt": 8.8322,
+      "book_realized_pnl_usdt": 8.7705,
+      "unrealized_pnl_usdt": 0.0617,
+      "total_fees_usdt": 1.8629,
+      "gross_wins_net_of_fees_usdt": 14.6267,
+      "gross_losses_net_of_fees_usdt": -5.8562,
+      "gross_pnl_before_fees_usdt": 10.6334,
+      "buy_fills_count": 38,
+      "sell_fills_count": 38,
+      "reconciliation_diff_usdt": 0.0
+    },
+    {
+      "window": "W2",
+      "initial_cash_usdt": 100.0,
+      "final_equity_usdt": 118.5001,
+      "final_cash_usdt": 117.9739,
+      "residual_dust_value_usdt": 0.5262,
+      "net_account_return_pct": 18.5001,
+      "net_equity_change_usdt": 18.5001,
+      "book_realized_pnl_usdt": 18.4799,
+      "unrealized_pnl_usdt": 0.0202,
+      "total_fees_usdt": 3.4589,
+      "gross_wins_net_of_fees_usdt": 31.3676,
+      "gross_losses_net_of_fees_usdt": -12.8877,
+      "gross_pnl_before_fees_usdt": 21.9388,
+      "buy_fills_count": 88,
+      "sell_fills_count": 91,
+      "reconciliation_diff_usdt": 0.0
+    },
+    {
+      "window": "R2025",
+      "initial_cash_usdt": 100.0,
+      "final_equity_usdt": 96.0852,
+      "final_cash_usdt": 95.2058,
+      "residual_dust_value_usdt": 0.8794,
+      "net_account_return_pct": -3.9148,
+      "net_equity_change_usdt": -3.9148,
+      "book_realized_pnl_usdt": -3.8851,
+      "unrealized_pnl_usdt": -0.0297,
+      "total_fees_usdt": 4.7125,
+      "gross_wins_net_of_fees_usdt": 19.8991,
+      "gross_losses_net_of_fees_usdt": -23.7842,
+      "gross_pnl_before_fees_usdt": 0.8273,
+      "buy_fills_count": 82,
+      "sell_fills_count": 84,
+      "reconciliation_diff_usdt": 0.0
+    }
+  ],
+  "replication_status": "EXACT_MATCH"
+}

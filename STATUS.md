@@ -115,6 +115,18 @@
   - **终审裁决**：**三个过滤器全部未能满足 Challenger 准入标准，本轮正式宣告失败并予以全面剪枝。基准严格维持原 `OPT-0005_BASE_12`**；
   - 单测体系：`tests/test_market_regime_phase6b.py` 11 项专用单测及相关回归测试 24 passed 100% PASS。
 
+- **第七阶段 A（预测目标与真实交易结果一致性审计 Phase 7A）已圆满完成（D-062）**：
+  - 产物目录：`artifacts/research/prediction_execution_phase7a/`（含 `label_definition_audit.md`, `benchmark_replication.json`, `prediction_decision_alignment.csv`, `executed_trade_alignment.csv`, `prediction_execution_mismatch.csv`, `holding_period_analysis.csv`, `probability_pnl_analysis.csv`, `symbol_year_comparison.csv`, `statistical_uncertainty.json`, `results.json`, `comparison_report.md` 共 11 项完整交付物）；
+  - **基准精确零误差复现**：OPT-0005 严格复现 208 周期，$g_{\text{week}} = +0.1371\%$/w，年化复利 $+7.38\%$，Worst MDD $11.60\%$（2023: +8.83%, 2024: +18.50%, 2025: -3.91%）；
+  - **标签与交易一致率极高（91.8% 一致率）**：208 笔交易中 191 笔的盈亏方向与未来 4h 成本后标签完全一致（4h 为正时交易胜率 92.2%，4h 为负时交易亏损率 91.3%）；
+  - **假说 B 彻底证伪**：“4h 预测正确却被提前止损导致大额亏损”仅发生 9 次（占 4.3%），累计亏损仅 -3.16 USDT，彻底排除了假说 B；
+  - **持仓时长错配重大实证发现**：
+    - 严格 4h 出场交易（153 笔，73.6%）：狂赚 **+32.73 USDT**，胜率 **63.4%**，是全策略核心盈利来源；
+    - 展期持仓 >4h 交易（48 笔，23.1%）：巨亏 **-14.01 USDT**，胜率崩塌至 **33.3%**；2025 年严格 4h 依然盈利 +4.68 USDT，亏损完全来自 14 笔 >4h 交易（-10.73 USDT）；
+  - **概率反向失真重大实证发现**：中等置信度 $0.50 \sim 0.55$ 贡献最大盈利（+16.28 USDT），而极端高置信度 $\ge 0.55$ 累计亏损 **-7.54 USDT**（胜率仅 50.0%），表现为极端超买赶顶追高陷阱；
+  - **终审裁定**：**正式采纳结论【C】：“模型本身缺乏足够预测能力（真实交易表现不佳主要不是标签与执行错配造成）”**；
+  - 单测体系：`tests/test_prediction_execution_phase7a.py` 7 项专用测试及回归测试 26 passed 100% PASS。
+
 ## 当前限制与长期边界
 
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
@@ -124,7 +136,7 @@
 
 ## 下一行动与交接
 
-1. **Phase 6B 市场状态过滤器与风控优化实验圆满闭环**：全套 14 项产物生成，D-061 裁决剪枝生效，严格维持原 OPT-0005 Benchmark。
-2. **严守停止纪律**：本阶段宣告闭环，坚决不擅自进入 Phase 6C 或自动测试新规则，立即停止，等待用户指示下一步研究方向。
+1. **Phase 7A 预测目标与真实交易结果一致性审计圆满闭环**：全套 11 项产物生成，D-062 裁决生效（采纳结论 C），严格维持原 OPT-0005 Benchmark。
+2. **严守停止纪律**：本阶段宣告闭环，坚决不擅自进入 Phase 7B 或自动修改模型与策略，立即停止，等待用户指示下一步研究方向。
 
 
