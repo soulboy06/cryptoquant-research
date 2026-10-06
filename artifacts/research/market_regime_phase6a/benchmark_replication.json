@@ -1,0 +1,15 @@
+{
+  "candidate_id": "OPT-0005_BASE_12",
+  "g_week_pct": 0.1371,
+  "annualized_pct": 7.38,
+  "ret_2023_pct": 8.83,
+  "ret_2024_pct": 18.5,
+  "ret_2025_pct": -3.91,
+  "worst_mdd_pct": 11.6,
+  "total_closed_cycles": 208,
+  "cycles_per_year": {
+    "2023": 38,
+    "2024": 88,
+    "2025": 82
+  }
+}

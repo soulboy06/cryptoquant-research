@@ -1,0 +1,11 @@
+dimension,regime_state,trades_2023,pnl_2023,winrate_2023,trades_2024,pnl_2024,winrate_2024,trades_2025,pnl_2025,winrate_2025,total_pnl_usdt,consistent_profitable,consistent_losing
+Dim1_Trend,DOWNTREND,6,-0.07,33.3,45,4.02,68.9,6,1.7,66.7,5.64,False,False
+Dim1_Trend,SIDEWAYS,26,6.93,57.7,30,10.64,63.3,62,-3.08,48.4,14.5,False,False
+Dim1_Trend,UPTREND,6,0.66,50.0,13,1.59,38.5,14,-5.77,42.9,-3.51,False,False
+Dim2_VolLevel,HIGH_VOL,37,6.67,51.4,87,15.78,62.1,72,-5.48,50.0,16.97,False,False
+Dim2_VolLevel,MED_VOL,1,0.86,100.0,1,0.48,100.0,10,-1.67,40.0,-0.34,False,False
+Dim3_VolDynamic,VOL_CONTRACTING,7,0.91,57.1,7,2.02,71.4,16,3.2,50.0,6.14,True,False
+Dim3_VolDynamic,VOL_EXPANDING,31,6.61,51.6,81,14.23,61.7,66,-10.35,48.5,10.49,False,False
+Dim4_PriceStructure,BREAKOUT,0,0.0,0.0,2,1.77,50.0,1,-2.93,0.0,-1.16,False,False
+Dim4_PriceStructure,NORMAL,18,-0.97,33.3,67,6.08,61.2,35,1.05,48.6,6.16,False,False
+Dim4_PriceStructure,PULLBACK,20,8.49,70.0,19,8.41,68.4,46,-5.27,50.0,11.63,False,False

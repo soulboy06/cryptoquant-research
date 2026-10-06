@@ -1,0 +1,7 @@
+loss_mechanism,loss_trades_count,total_loss_pnl_usdt,share_of_gross_losses_pct,avg_loss_per_trade_usdt
+CHOP_WHIPSAW_STOP,31,-14.157,54.94,-0.4567
+HIGH_VOL_DEEP_LOSS,6,-7.7707,30.15,-1.2951
+FALSE_BREAKOUT_TRAP,1,-2.9307,11.37,-2.9307
+COUNTER_TREND_TRAP,2,-0.5794,2.25,-0.2897
+OTHER_STOP,1,-0.2929,1.14,-0.2929
+FRICTION_DRAG,1,-0.0389,0.15,-0.0389

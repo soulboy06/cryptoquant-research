@@ -86,6 +86,26 @@
   - **处置决议**：**严禁自动晋升 Benchmark**，保留为 `Statistical Challenger` 归档。
   - 单测体系：`tests/test_phase5b2_context_audit.py` 6 passed，总计 24 项测试 100% PASS。
 
+- **第六阶段 A（市场状态与策略亏损归因研究 Phase 6A）已圆满完成（D-060）**：
+  - 产物目录：`artifacts/research/market_regime_phase6a/`（含 `regime_definitions.json`, `benchmark_replication.json`, `regime_performance_by_dimension.csv`, `regime_performance_by_symbol_year.csv`, `loss_attribution_2025.csv`, `loss_mechanism_breakdown.csv`, `regime_cross_year_stability.csv`, `phase6a_diagnostic_report.md`）；
+  - **严格复现核验**：OPT-0005 严格零误差复现 $g_{\text{week}} = +0.1371\%/\text{w}$（年化 $+7.38\%$），最差回撤 $11.60\%$，208 闭合周期（2023 年 $+8.83\%$ 38笔，2024 年 $+18.50\%$ 88笔，2025 年 $-3.91\%$ 82笔）；
+  - **4 维度市场状态因果性拟合**：趋势状态（UPTREND/SIDEWAYS/DOWNTREND）、波动率水平（LOW/MED/HIGH_VOL）、波动率动态（VOL_EXPANDING/VOL_CONTRACTING）、价格结构（BREAKOUT/PULLBACK/NORMAL）。所有分位数门槛严格在对应 Fold 训练集内拟合（严格零未来泄露）；
+  - **微观收益结构重大发现（打破直觉偏见）**：
+    - OPT-0005 本质上是“震荡低吸与主趋势回调”策略，而非顺强趋势突破策略：全周期净利润中，`SIDEWAYS` 贡献 $+14.50\text{ USDT}$（占比 $87.2\%$），`PULLBACK` 贡献 $+11.63\text{ USDT}$（占比 $70.0\%$），`DOWNTREND`（超跌反弹）贡献 $+5.64\text{ USDT}$（$33.9\%$）；
+    - 相反，强顺势追涨（`UPTREND`）累计净亏损 $-3.51\text{ USDT}$（胜率仅 $42.4\%$），追突破（`BREAKOUT`）累计净亏损 $-1.16\text{ USDT}$（胜率 $33.3\%$），追涨极易买在波段顶部；
+  - **2025 年亏损核心归因**：
+    - 2025 年 82 笔交易中，胜率 $48.8\%$（40 胜 42 负），净实现损益 $-7.15\text{ USDT}$（期末收益率 $-3.91\%$），手续费达 $4.71\text{ USDT}$；
+    - **频繁震荡止损（`CHOP_WHIPSAW_STOP`）** 贡献毛亏损的 **$54.9\%$**（-14.16 USDT，31 笔交易）；在横盘区虽产生 62 笔交易，但价格短促无持续性，在 4~8 小时内频繁被动平仓/保本退出并付出高额摩擦；
+    - **高波剧烈下杀（`HIGH_VOL_DEEP_LOSS`）** 贡献毛亏损的 **$30.1\%$**（-7.77 USDT，6 笔交易）；
+    - **假突破追高（`FALSE_BREAKOUT_TRAP`）** 贡献毛亏损的 **$11.4\%$**（-2.93 USDT，1 笔单笔大亏）；
+    - 前两项合计解释了 2025 年 **$85.1\%$** 的毛亏损；
+  - **跨年稳定性与币种异质性**：
+    - `VOL_CONTRACTING`（波动率收缩）是**全周期唯一跨三年全部保持正收益的状态**（2023: $+0.91$, 2024: $+2.02$, 2025: $+3.20\text{ USDT}$，累计 $+6.14\text{ USDT}$，胜率 $56.7\%$）；
+    - `VOL_EXPANDING`（波动率扩张）在 2025 年发生系统性失效，单年亏损高达 **$-10.35\text{ USDT}$**；
+    - 币种层面：2025 年亏损重灾区为 **ETHUSDT**（42 笔交易净亏损 $-3.44\text{ USDT}$，手续费支出 $2.42\text{ USDT}$）和 **SOLUSDT**（30 笔交易净亏损 $-3.07\text{ USDT}$，手续费 $1.73\text{ USDT}$）；BTC 相对可控（$-0.64\text{ USDT}$）；
+  - **Phase 6B 研究建议**：强烈支持研究状态过滤器（Regime Filter），重点方向为：(1) 过滤高位追涨信号（`UPTREND / BREAKOUT`）；(2) 在 `VOL_EXPANDING` 高波剧烈放大时开启风控刹车或降仓；(3) 抑制 ETH 无序震荡的高频摩擦。
+  - 单测体系：`tests/test_market_regime_phase6a.py` 5 项测试 100% PASS。
+
 ## 当前限制与长期边界
 
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
@@ -95,7 +115,7 @@
 
 ## 下一行动与交接
 
-1. **Phase 5B2 深度审计圆满闭环**：完成逐笔归因、极端月份集中度分析、成本压力测试与 Bootstrap 不确定性量化，登记 D-059。
-2. **严守停止纪律**：严禁自动晋升 Benchmark，不开发新特征、不调参、不碰 2026 数据；**立即停止，等待用户指示后续研究方向**。
+1. **Phase 6A 市场状态与策略亏损归因研究圆满闭环**：完成基准复现、4 维度训练集分位数状态划分、2025 亏损机制归因、跨年稳定性检验与全套 8 项产物归档，登记 D-060 与 WL-071。
+2. **严守停止纪律**：本阶段只做客观诊断，不开发新模型、不新增交易规则、不调参、不搜阈值、不碰 2026 数据；**立即停止，等待用户指示下一步指令（如 Phase 6B 过滤器方案制定）**。
 
 

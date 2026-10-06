@@ -1382,6 +1382,35 @@
   - 严禁自动晋升 Benchmark，保留为 `Statistical Challenger` 归档；
   - 立即停止，等待用户指示下一步。
 
+## 2026-10-06 记录：Phase 6A 市场状态与策略亏损归因研究（WL-071）
+
+- 用户任务：执行 Phase 6A：市场状态与策略亏损归因研究。解释为什么 OPT-0005 在 2023、2024 年盈利，而在 2025 年亏损，并判断亏损是否与市场状态有关。只进行诊断，不开发新模型，不新增交易规则，不调整参数，严格隔离 2026 数据。
+- 实际改动与涉及文件：
+  - 编写并执行全流程诊断脚本 `scripts/run_phase6a_regime_diagnosis.py`，全流程受 `reject_holdout` 严格保护；
+  - 产出全套 8 项标准诊断产物至 `artifacts/research/market_regime_phase6a/`：
+    - `regime_definitions.json`：4 大维度定义与各 Fold 训练集严格分位数门槛；
+    - `benchmark_replication.json`：OPT-0005 严格零误差基准复现记录；
+    - `regime_performance_by_dimension.csv`：4 维度市场状态交易表现全景表；
+    - `regime_performance_by_symbol_year.csv`：币种×年份×状态交叉统计表；
+    - `loss_attribution_2025.csv`：2025 年 42 笔亏损交易逐笔微观归因表；
+    - `loss_mechanism_breakdown.csv`：2025 年 6 大亏损机制聚合占比表；
+    - `regime_cross_year_stability.csv`：跨年份一致性与稳定性评级表；
+    - `phase6a_diagnostic_report.md`：综合实证诊断与用户 5 大问题解答报告；
+  - 编写并运行单元测试 `tests/test_market_regime_phase6a.py`；
+  - 更新 `DECISIONS.md`（登记 D-060）；
+  - 更新 `STATUS.md`（记录 Phase 6A 诊断完成与核心结论）；
+  - 更新 `WORKLOG.md`（追加 WL-071）。
+- 检查与证据：
+  - 基准复现核验：OPT-0005 严格零误差复现 $g_{\text{week}}=+0.1371\%$/w（年化 $+7.38\%$），208 周期（2023: $+8.83\%$ 38笔, 2024: $+18.50\%$ 88笔, 2025: $-3.91\%$ 82笔），最差回撤 $11.60\%$；
+  - 市场状态因果性：4 维度分位数门槛在对应训练集（W1: 2022, W2: 2022-2023, R2025: 2022-2024）拟合，严格零未来泄露；
+  - 策略收益机制反直觉实证：全周期净利润中，`SIDEWAYS` 贡献 $+14.50\text{ USDT}$（占比 $87.2\%$），`PULLBACK` 贡献 $+11.63\text{ USDT}$（占比 $70.0\%$），`DOWNTREND` 贡献 $+5.64\text{ USDT}$（占比 $33.9\%$）；相反，顺强趋势追涨（`UPTREND`）累计亏损 $-3.51\text{ USDT}$，追突破（`BREAKOUT`）累计亏损 $-1.16\text{ USDT}$；
+  - 2025 年亏损拆解：82 笔交易胜率 $48.8\%$，净实现损益 $-7.15\text{ USDT}$，手续费 $4.71\text{ USDT}$。频繁震荡止损（`CHOP_WHIPSAW_STOP`）占毛亏损 **$54.9\%$**（-14.16 USDT，31 笔），高波剧烈下杀（`HIGH_VOL_DEEP_LOSS`）占 **$30.1\%$**（-7.77 USDT，6 笔），两者合计占 **$85.1\%$**；
+  - 跨年与跨币种结论：`VOL_CONTRACTING`（波动率收缩）是唯一连续三年稳定盈利状态（$+6.14\text{ USDT}$）；`VOL_EXPANDING` 在 2025 年大幅亏损 $-10.35\text{ USDT}$；ETHUSDT 在 2025 年为最大失血点（$-3.44\text{ USDT}$，手续费 $2.42\text{ USDT}$）；
+  - 单元测试：`pytest tests/test_market_regime_phase6a.py` 5 passed (0.47s)，全套 19 项测试 100% PASS。
+- 遗留与交接事项：
+  - 保持代码与策略完全冻结，不修改原策略、不搜参数、不碰 2026 数据；
+  - 立即停止，等待用户指示下一步指令（如 Phase 6B 状态过滤器方案制定）。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

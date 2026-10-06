@@ -1,0 +1,11 @@
+dimension,regime_state,trades_count,win_trades,loss_trades,win_rate_pct,total_net_pnl_usdt,pnl_share_pct,avg_win_usdt,avg_loss_usdt,profit_loss_ratio,total_fees_usdt,avg_holding_hours
+Dim1_Trend,DOWNTREND,57,37,20,64.91,5.6433,33.93,0.3351,-0.3377,0.99,1.5828,6.91
+Dim1_Trend,SIDEWAYS,118,64,54,54.24,14.4998,87.19,0.6151,-0.4605,1.34,6.4451,5.54
+Dim1_Trend,UPTREND,33,14,19,42.42,-3.5131,-21.13,0.8301,-0.7965,1.04,2.0063,6.52
+Dim2_VolLevel,HIGH_VOL,196,109,87,55.61,16.9674,102.03,0.5536,-0.4985,1.11,9.3325,6.2
+Dim2_VolLevel,MED_VOL,12,6,6,50.0,-0.3374,-2.03,0.5081,-0.5644,0.9,0.7018,4.0
+Dim3_VolDynamic,VOL_CONTRACTING,30,17,13,56.67,6.1377,36.91,0.7108,-0.4573,1.55,1.6542,5.5
+Dim3_VolDynamic,VOL_EXPANDING,178,98,80,55.06,10.4922,63.09,0.5235,-0.5101,1.03,8.38,6.17
+Dim4_PriceStructure,BREAKOUT,3,1,2,33.33,-1.1643,-7.0,2.0803,-1.6223,1.28,0.1883,9.0
+Dim4_PriceStructure,NORMAL,120,64,56,53.33,6.1605,37.04,0.4856,-0.445,1.09,4.9404,6.26
+Dim4_PriceStructure,PULLBACK,85,50,35,58.82,11.6337,69.96,0.6045,-0.5312,1.14,4.9056,5.71

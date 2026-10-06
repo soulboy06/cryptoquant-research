@@ -1,0 +1,110 @@
+{
+  "dimensions": {
+    "dim1_trend_regime": {
+      "description": "Trend direction based on EMA24 vs EMA72 momentum and price position",
+      "states": [
+        "UPTREND",
+        "SIDEWAYS",
+        "DOWNTREND"
+      ],
+      "formula": "d_ema = (EMA24 - EMA72)/EMA72; dist_ema24 = (close - EMA24)/EMA24"
+    },
+    "dim2_vol_level": {
+      "description": "24h Realized Volatility Level based on train-split terciles",
+      "states": [
+        "LOW_VOL",
+        "MED_VOL",
+        "HIGH_VOL"
+      ],
+      "formula": "vol24 = std(log(close/close_prev), 24)"
+    },
+    "dim3_vol_dynamic": {
+      "description": "Short-term vs medium-term volatility shift",
+      "states": [
+        "VOL_EXPANDING",
+        "VOL_CONTRACTING"
+      ],
+      "formula": "vol_ratio = vol24 / vol72 > median(train)"
+    },
+    "dim4_price_structure": {
+      "description": "Donchian 24h channel relative position & 4h momentum",
+      "states": [
+        "BREAKOUT",
+        "PULLBACK",
+        "NORMAL"
+      ],
+      "formula": "pos24 = (close - low24)/(high24 - low24); pos24 >= 0.90 & ret4h > 0 -> BREAKOUT; pos24 <= 0.50 & EMA24 > EMA72 -> PULLBACK"
+    }
+  },
+  "train_split_thresholds": {
+    "W1": {
+      "BTCUSDT": {
+        "q33_trend": -0.006430454472505244,
+        "q66_trend": 0.001974421502142135,
+        "q33_vol": 0.004325318951035927,
+        "q66_vol": 0.0063522082358054965,
+        "q50_vr": 0.9537185793462917
+      },
+      "ETHUSDT": {
+        "q33_trend": -0.008920268396705452,
+        "q66_trend": 0.005209239679429772,
+        "q33_vol": 0.005876613376039021,
+        "q66_vol": 0.008658300956920405,
+        "q50_vr": 0.9641607911977779
+      },
+      "SOLUSDT": {
+        "q33_trend": -0.016253139810080988,
+        "q66_trend": 0.0027867677556606815,
+        "q33_vol": 0.00792543636067987,
+        "q66_vol": 0.01173176049242312,
+        "q50_vr": 0.9595995133307886
+      }
+    },
+    "W2": {
+      "BTCUSDT": {
+        "q33_trend": -0.0037733414467163036,
+        "q66_trend": 0.0032958912127254523,
+        "q33_vol": 0.0033130080609011766,
+        "q66_vol": 0.00534987637477221,
+        "q50_vr": 0.9473803678684369
+      },
+      "ETHUSDT": {
+        "q33_trend": -0.004770535759541114,
+        "q66_trend": 0.004765268079106377,
+        "q33_vol": 0.004026694248370698,
+        "q66_vol": 0.006731566665835449,
+        "q50_vr": 0.9614435479235548
+      },
+      "SOLUSDT": {
+        "q33_trend": -0.011069153194662878,
+        "q66_trend": 0.007535786008311171,
+        "q33_vol": 0.007035609408263844,
+        "q66_vol": 0.010767029287271431,
+        "q50_vr": 0.9562295812632714
+      }
+    },
+    "R2025": {
+      "BTCUSDT": {
+        "q33_trend": -0.0037112936928084266,
+        "q66_trend": 0.004472546872731445,
+        "q33_vol": 0.0035264656784146204,
+        "q66_vol": 0.005407587401116467,
+        "q50_vr": 0.9502405735528506
+      },
+      "ETHUSDT": {
+        "q33_trend": -0.004628431118943146,
+        "q66_trend": 0.005495141978447181,
+        "q33_vol": 0.004310143018155361,
+        "q66_vol": 0.006627639235622512,
+        "q50_vr": 0.958536714467735
+      },
+      "SOLUSDT": {
+        "q33_trend": -0.009861688395401073,
+        "q66_trend": 0.008385180144475009,
+        "q33_vol": 0.0069624029965120555,
+        "q66_vol": 0.010314302164369916,
+        "q50_vr": 0.958524367963157
+      }
+    }
+  }
+}
