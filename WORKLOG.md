@@ -1255,6 +1255,42 @@
   - 2026 数据完全物理封存，零读取零评估；
   - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
 
+### WL-067: 2026-10-06 13:50:00+08:00 Phase 5A 新 Alpha 信息源：Open Interest + Taker Flow 受控消融实验圆满完成
+
+- 用户任务：
+  1. 正式进入 Phase 5A：新 Alpha 信息源——Open Interest + Taker Flow 受控实验；
+  2. 第一步做数据可行性审计，生成 `artifacts/research/alpha_phase5a_derivatives_flow/data_quality_report.md`，若不完整立即停止；
+  3. 严格数据边界：2026 物理保留集封存，严格无未来信息泄露；
+  4. 新特征严格限定 3 个 Feature Family（OI_ONLY, FLOW_ONLY, OI_FLOW），比较 BASE_12, OI_ONLY, FLOW_ONLY, OI_FLOW 4 组消融；
+  5. 模型冻结为 Logistic Regression，禁止更换或调参；四 Benchmark 全部测试（OPT-0005, OPT-0001, OPT-0026, OPT-0056）；
+  6. 严格时序 Walk-Forward（W1, W2, R2025）；
+  7. 输出预测层指标、交易层指标、Alpha 归因分析（8 种微观状态未来 4h 净收益期望）与 Pareto Front Before vs After；
+  8. 建立产物目录 `artifacts/research/alpha_phase5a_derivatives_flow/`，同步项目文档并回答 12 项核心问题后立即停止。
+- 实际改动与涉及文件：
+  1. **数据审计与对齐模块**：
+     - 编写 `scripts/audit_and_prepare_phase5a_data.py`：对 Binance 现货历史逐小时归档中的 Taker Flow 与 Binance Vision S3 官方归档中的 Open Interest 进行 11 维度质量审查；
+     - 生成三币时序清洗缓存 `data/processed/derivatives_flow/{symbol}_flow_oi.parquet`（覆盖 2021-12 至 2025-12 全部 35,808 小时，finite 比例 100.0%）；
+     - 生成质量报告 `artifacts/research/alpha_phase5a_derivatives_flow/data_quality_report.md`，确认数据完整度达 99.97%~100.0%，支撑严格回测；
+  2. **特征工程与实验配置**：
+     - 编写 `src/cryptoquant/models/derivatives_features.py`：因果构造 3 项 OI 特征与 4 项 Flow 特征，严格对齐至 `decision_time`；
+     - 编写 `artifacts/research/alpha_phase5a_derivatives_flow/feature_definitions.json` 与 `experiment_config.json`；
+     - 更新 `src/cryptoquant/optimization/engine.py`：支持 `fit_and_predict_fold` 动态传入特征列，并在回测中精准跟踪每笔闭合周期的胜负情况与平均持仓敞口；
+  3. **实验主控脚本与产物生成**：
+     - 编写并运行 `scripts/run_phase5a_derivatives_experiment.py`，全量执行 16 候选 Walk-Forward 模拟（4 Benchmark × 4 Feature Family）、预测层诊断、Alpha 归因分析与 Pareto 前沿评估；
+     - 生成 11 项完整实验产物（`prediction_metrics.csv`, `trading_metrics.csv`, `benchmark_comparison.csv`, `alpha_attribution.csv`, `pareto_front_before.csv`, `pareto_front_after.csv`, `results.json`, `comparison_report.md` 等）；
+  4. **治理更新与单元测试**：
+     - 更新 `DECISIONS.md`（登记 D-056）；
+     - 更新 `STATUS.md`（记录 Phase 5A 结论与下一步纪律）；
+     - 编写 `tests/test_derivatives_flow_phase5a.py`，覆盖特征列数、无未来泄露、复利公式、四大基准精准复现、配置冻结与 2026 守卫 6 项严密测试。
+- 检查与证据：
+  - 核心基准零误差复现：四组 BASE_12 候选与原 Benchmark 成绩完全吻合（OPT-0005: +0.1371%/w, OPT-0001: +0.1311%/w, OPT-0026: +0.1293%/w, OPT-0056: +0.1024%/w）；
+  - 消融全量实证：所有加入 OI 或 Flow 的候选长期周收益全部跑输原 BASE_12 基准；
+  - 前沿演化：没有旧 Pareto Benchmark 被新候选严格支配，Pareto 前沿未有效外推；
+  - 归因数据：2022~2025 全量 26,395 个 4h 决策点下，微观状态之间的未来 4h 扣费净收益差异仅 2~3 bps，不足以覆盖 0.30055% 摩擦；
+  - 单测通过：`tests/test_derivatives_flow_phase5a.py` 6 passed；相关单测（`test_optimization_pipeline.py`, `test_research_reporting.py`, `test_holdout_guard.py` 等）17 passed 100%。
+- 遗留与交接事项：
+  - 本轮实验已圆满结束，终止 Phase 5A，立即停止，不自动进入 Phase 5B。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

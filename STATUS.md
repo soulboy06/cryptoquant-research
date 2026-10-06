@@ -60,21 +60,25 @@
 - **第四阶段 B（横截面 Top-K / 相对强弱分配受控实验）**：产物见 `artifacts/research/topk_phase4b/`。
 - **第四阶段 B2（横截面择优 + 资本重分配受控实验）**：产物见 `artifacts/research/reallocation_phase4b2/`。
 - **Champion 选择与基准审计（Champion Selection Audit）**：产物见 `artifacts/research/champion_selection_audit/`。
-- **单测体系**：`tests/test_champion_selection_audit.py`、`test_reallocation_phase4b2.py`、`test_topk_phase4b.py`、`test_no_trade_phase4a.py`、`test_model_family_phase3.py`、`test_holdout_guard.py`、`test_optimization_pipeline.py`、`test_dynamic_execution.py`、`test_alpha_execution.py` 共计 37 项 pytest 100% 通过。
+- **第五阶段 A（衍生品持仓量与主动买卖流消融实验 Phase 5A）已完成（D-056）**：
+  - 产物目录：`artifacts/research/alpha_phase5a_derivatives_flow/`（含 `data_quality_report.md`, `feature_definitions.json`, `experiment_config.json`, `prediction_metrics.csv`, `trading_metrics.csv`, `benchmark_comparison.csv`, `alpha_attribution.csv`, `pareto_front_before.csv`, `pareto_front_after.csv`, `results.json`, `comparison_report.md`）；
+  - 数据质量：Binance 现货 1h Taker Flow 覆盖率 99.9971%；Binance Vision S3 官方 UM OI 覆盖率 99.97%~100.0%，严格无未来泄露；2026 数据完全封存（0 读取）；
+  - 16 组全景 Walk-Forward 比较：4 大 Pareto Benchmark 精确零误差复现；加入 OI 或 Flow 的所有候选长期周收益全部弱于对应原基准；
+  - 前沿判定：没有任何旧 Pareto Benchmark 被新候选严格支配，Pareto 前沿未产生有效外推；
+  - 归因结论：Regime A~H 微观净收益差异仅 2~3 bps，不足以覆盖 0.30055% 双边摩擦，线性模型下稀释了核心 OHLCV 量价权重；
+  - 终审定论：在当前数据定义、4h 决策尺度、LR 线性模型与交易体系下，本轮 OI / Taker Flow 未表现出稳定增量 Alpha。
+- **单测体系**：`tests/test_derivatives_flow_phase5a.py`、`test_champion_selection_audit.py`、`test_optimization_pipeline.py`、`test_research_reporting.py`、`test_holdout_guard.py` 等测试全部通过。
 
 ## 当前限制与长期边界
 
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
 - 面对实验事实实事求是接受，坚决不进行事后反向调参。
 - 100 USDT 虚拟资金、三币共用账户、固定 50 USDT 底线、普通现货/无杠杆边界保持不变。
-- 四大 Pareto Benchmark 作为当前实证权衡基准，距离 1.5%/week 目标仍有约 11.6 倍数量级差距。
+- 四大 Pareto Benchmark 作为当前实证权衡基准，当前最佳周收益为 OPT-0005 的 +0.1371%/w（年化 +7.38%），距离 1.5%/week 目标仍有约 10.9 倍周收益差距。
 
 ## 下一行动与交接
 
-1. **年化数学口径与四大 Pareto Benchmark 体系已全面确立，治理审计圆满完成。**
-2. **Phase 5 启动准备就绪**：
-   - 遵守新评估范式：新 Alpha 信息源将在同一 Walk-Forward 架构下，与四大 Pareto Benchmark（OPT-0005, OPT-0001, OPT-0026, OPT-0056）全面对齐评估；
-   - 严守数据红线：2026 物理 0 读取，不漏未来数据；
-   - 等待用户指令正式进入 Phase 5。
+1. **Phase 5A 受控实验圆满结束**：已生成全部 11 项报告与产物，完成 12 项核心科学问题裁决，并登记 D-056。
+2. **严守停止纪律**：本阶段工作已完成，立即停止，不自动进入 Phase 5B。等待用户对后续研究方向的明确指令。
 
 

@@ -558,6 +558,38 @@
 - 替代关系：补充并深化 D-054，从根本上升级 Phase 5 的评估方法论，由单一基准对抗升级为前沿拓展多目标评价。
 - 需要同步的文件：`STATUS.md`, `WORKLOG.md`, `src/cryptoquant/models/research_reporting.py`, `scripts/run_champion_audit.py`。
 
+## D-056：Phase 5A 衍生品持仓量与主动买卖流（Open Interest + Taker Flow）消融实验结论：未表现出稳定增量 Alpha，旧 Pareto 前沿继续保持
+
+- 日期：2026-10-06（Asia/Shanghai）；状态：有效。
+- 来源：用户 Phase 5A 受控消融实验指令与 `artifacts/research/alpha_phase5a_derivatives_flow/` 全量实证产物。
+- 选择：
+  1. **数据源完整性与可行性审计**：
+     - Binance 现货历史逐小时归档提取 Taker Buy/Sell Quote Volume，2022~2025 全时序覆盖率达 99.9971%（仅缺失 2023-03-24 13:00 币安系统停机小时）；
+     - Binance Vision S3 官方归档提取 USDT-M 逐日指标（`sum_open_interest`），2021-12 至 2025-12 全部 1492 天无断档，时序对齐覆盖率达 99.97%~100.0%；
+     - 严格时序因果对齐：在决策时点 $t$ 仅使用刚闭合的 1h Taker Flow 与最近整点 OI，滚动窗口严格使用过去数据，无未来泄露；2026 数据完全物理封存（0 读取、0 评估）；
+  2. **四大 Benchmark × 4 特征组全量消融比较（16 组全景 Walk-Forward 回测）**：
+     - 基准体系：OPT-0005（高收益）、OPT-0001（次高收益）、OPT-0026（平衡型）、OPT-0056（防守型）；
+     - 消融特征组：BASE_12（12项）、OI_ONLY（15项）、FLOW_ONLY（16项）、OI_FLOW（19项）；模型锁定为 Logistic Regression；
+     - **BASE_12 零误差复现**：四组 BASE_12 候选精确复现原 Benchmark 成绩（OPT-0005: +0.1371%/w, OPT-0001: +0.1311%/w, OPT-0026: +0.1293%/w, OPT-0056: +0.1024%/w）；
+     - **全组衰退实证**：所有加入 OI 或 Flow 的候选在合成周收益上**无一例外全部弱于原 BASE_12 基准**：
+       - OPT-0005: BASE_12 (+0.1371%/w) -> OI_ONLY (+0.1223%/w), FLOW_ONLY (+0.1160%/w), OI_FLOW (+0.0874%/w)；
+       - OPT-0001: BASE_12 (+0.1311%/w) -> OI_ONLY (+0.1202%/w), FLOW_ONLY (+0.1174%/w), OI_FLOW (+0.0909%/w)；
+       - OPT-0026: BASE_12 (+0.1293%/w) -> OI_ONLY (+0.0811%/w), FLOW_ONLY (+0.1220%/w), OI_FLOW (+0.1004%/w)；
+       - OPT-0056: BASE_12 (+0.1024%/w) -> OI_ONLY (+0.0847%/w), FLOW_ONLY (+0.0706%/w), OI_FLOW (+0.0815%/w)；
+  3. **Pareto 前沿与旧基准支配性判定**：
+     - **没有任何旧 Pareto Benchmark 被新候选严格支配**；
+     - 仅 `OPT-0026_FLOW_ONLY` 以最差 MDD 11.4905%（微降 0.0026%）进入三维非支配集，但周收益下降至 +0.1220%/w，属于典型的“以收益换防守”权衡，并未产生前沿扩张；
+  4. **Alpha 微观归因事实**：
+     - 2022~2025 全量 26,395 个 4h 决策点的扣费净收益分布显示：
+       - Regime A（价格涨+OI涨）对比 Regime B（价格涨+OI跌），未来 4h 扣费净收益仅高出 3.1 bps（-0.2731% vs -0.3040%），胜率高 1.05%；
+       - Regime E（价格涨+买盘强）对比 Regime F（价格涨+卖盘强），未来 4h 扣费净收益仅高出 2.0 bps（-0.2803% vs -0.3004%），胜率高 2.40%；
+       - 边际微观差异（2~3 bps）远不足以克服双边摩擦（0.30055%）；在线性模型下反而稀释了核心 OHLCV 量价因子的拟合权重；
+  5. **终审定论**：
+     - “在当前数据定义、4h 决策尺度、Logistic Regression 线性模型与交易体系下，本轮 Open Interest 与 Taker Flow **未表现出稳定增量 Alpha**”；
+     - 终止 Phase 5A，旧四大 Pareto Benchmark 全部保留；严禁在缺乏非线性交互的情况下盲目向线性模型堆砌同质衍生品特征。
+- 替代关系：明确否定了在线性模型下直接引入 OI 与 Taker Flow 能够推动 Pareto Front 的假设，固化 Phase 5A 实证产物。
+- 需要同步的文件：`STATUS.md`, `WORKLOG.md`。
+
 ## 后续记录模板
 
 本节仅为模板，不计入实际决策。

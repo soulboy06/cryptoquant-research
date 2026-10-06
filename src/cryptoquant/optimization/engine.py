@@ -29,14 +29,15 @@ def fit_and_predict_fold(
     train_samples: dict[str, pd.DataFrame],
     eval_features: dict[str, pd.DataFrame],
     symbols: tuple[str, ...],
+    feature_cols: list[str] | None = None,
 ) -> pd.DataFrame:
     """Train models on the fold training slice and predict probabilities on evaluation features."""
-    feature_cols = ALL_FEATURE_NAMES
+    cols = feature_cols if feature_cols is not None else ALL_FEATURE_NAMES
     records = []
     
     for s in symbols:
         train_df = train_samples[s]
-        X_train = train_df.loc[:, feature_cols].astype('float64')
+        X_train = train_df.loc[:, cols].astype('float64')
         y_train = train_df['label'].astype('int64')
         
         eval_df = eval_features[s]
@@ -44,7 +45,7 @@ def fit_and_predict_fold(
         probs_series = pd.Series(np.nan, index=eval_df.index, dtype='float64')
         
         if ready.any():
-            X_eval_ready = eval_df.loc[ready, feature_cols].astype('float64')
+            X_eval_ready = eval_df.loc[ready, cols].astype('float64')
             if model_candidate.family == 'logistic_regression':
                 model = Pipeline([
                     ('scaler', StandardScaler()),
@@ -171,20 +172,35 @@ def evaluate_window_simulation(
     summary.update({k: v for k, v in weekly.items() if k != 'weekly_records'})
     summary['status'] = 'complete'
 
-    # Compute cycle durations from fills
+    # Compute cycle durations and win/loss from fills
     durations = []
     open_times = {}
+    pos_costs = {}
+    wins = 0
+    losses = 0
     for fill in result.fills:
         s = fill['symbol']
+        notional = float(fill['notional'])
+        fee = float(fill['fee_usdt'])
         if fill['side'] == 'BUY':
             if s not in open_times:
                 open_times[s] = fill['time']
+            pos_costs[s] = pos_costs.get(s, 0.0) + notional + fee
         elif fill['side'] == 'SELL':
             if s in open_times:
                 durations.append((fill['time'] - open_times[s]).total_seconds() / 3600.0)
                 del open_times[s]
+            if s in pos_costs:
+                pnl = (notional - fee) - pos_costs[s]
+                if pnl > 0:
+                    wins += 1
+                else:
+                    losses += 1
+                del pos_costs[s]
     summary['avg_holding_hours'] = float(sum(durations) / len(durations)) if durations else 0.0
     summary['holding_durations'] = durations
+    summary['wins'] = wins
+    summary['losses'] = losses
     return summary
 
 
@@ -262,6 +278,9 @@ def evaluate_candidate_walk_forward(
     cyc_25 = window_results['R2025']['closed_cycles']
     min_cycles = min(cyc_w1, cyc_w2, cyc_25)
     tot_cycles = cyc_w1 + cyc_w2 + cyc_25
+    tot_wins = sum(w.get('wins', 0) for w in window_results.values())
+    win_rate = (tot_wins / tot_cycles * 100.0) if tot_cycles > 0 else 0.0
+    avg_exp = float(np.mean([float(w.get('mean_hourly_open_exposure', 0.0)) for w in window_results.values()])) * 100.0
     
     floor_hits = sum(w['floor_triggers'] for w in window_results.values())
     total_fees = float(sum(w['fees_usdt'] for w in window_results.values()))
@@ -307,6 +326,8 @@ def evaluate_candidate_walk_forward(
         'total_turnover_usdt': total_turnover,
         'avg_holding_hours': avg_holding,
         'floor_triggers': floor_hits,
+        'overall_win_rate': win_rate,
+        'avg_exposure_pct': avg_exp,
         'window_results': window_results,
     }
 

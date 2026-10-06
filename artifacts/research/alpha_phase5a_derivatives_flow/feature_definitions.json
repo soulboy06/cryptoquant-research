@@ -1,0 +1,105 @@
+{
+  "feature_families": {
+    "BASE_12": {
+      "count": 12,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore"
+      ],
+      "description": "原 12 项连续特征（9 项 OHLCV 量价特征 + 3 项合约资金费率特征）"
+    },
+    "OI_ONLY": {
+      "count": 15,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "oi_change_4h",
+        "oi_change_24h",
+        "oi_zscore_72h"
+      ],
+      "description": "原 12 特征 + 3 项持仓量（Open Interest）特征"
+    },
+    "FLOW_ONLY": {
+      "count": 16,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "taker_imbalance_1h",
+        "taker_imbalance_4h",
+        "taker_imbalance_24h",
+        "taker_imbalance_zscore_72h"
+      ],
+      "description": "原 12 特征 + 4 项主动买卖流（Taker Buy/Sell Flow）特征"
+    },
+    "OI_FLOW": {
+      "count": 19,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "oi_change_4h",
+        "oi_change_24h",
+        "oi_zscore_72h",
+        "taker_imbalance_1h",
+        "taker_imbalance_4h",
+        "taker_imbalance_24h",
+        "taker_imbalance_zscore_72h"
+      ],
+      "description": "原 12 特征 + 3 项持仓量特征 + 4 项主动买卖流特征全量组合"
+    }
+  },
+  "mathematical_definitions": {
+    "oi_change_4h": "OI_t / OI_{t-4h} - 1.0，决策时刻 t 瞬时持仓量相比 4 小时前的相对变化率",
+    "oi_change_24h": "OI_t / OI_{t-24h} - 1.0，决策时刻 t 瞬时持仓量相比 24 小时前的相对变化率",
+    "oi_zscore_72h": "(OI_t - mean(OI_{t-71h:t})) / std(OI_{t-71h:t}, ddof=1)，过去 72 小时滚动 Z-score（样本标准差 <= 1e-8 时填 0）",
+    "taker_imbalance_1h": "2 * (taker_buy_quote_volume_1h / total_quote_volume_1h) - 1.0，过去 1 小时主动买入失衡度，取值范围 [-1.0, 1.0]",
+    "taker_imbalance_4h": "2 * (sum_{4h}(taker_buy_quote_volume) / sum_{4h}(total_quote_volume)) - 1.0，过去 4 小时多周期主动买入失衡度",
+    "taker_imbalance_24h": "2 * (sum_{24h}(taker_buy_quote_volume) / sum_{24h}(total_quote_volume)) - 1.0，过去 24 小时大周期主动买入失衡度",
+    "taker_imbalance_zscore_72h": "(taker_imbalance_1h - mean_{72h}(taker_imbalance_1h)) / std_{72h}(taker_imbalance_1h, ddof=1)，过去 72 小时失衡度滚动 Z 分数"
+  },
+  "leakage_prevention": {
+    "zero_future_leakage": true,
+    "physical_holdout_2026": "2026 年数据完全未用于特征构建、统计估计或回测",
+    "centered_rolling_allowed": false,
+    "backward_fill_allowed": false
+  }
+}
