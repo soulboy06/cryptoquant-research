@@ -1,5 +1,20 @@
 # 实验登记与结果
 
+## Phase 6B：市场状态过滤器与风控优化实验（2026-10-06，Asia/Shanghai）
+
+基于 Phase 6A 诊断发现的亏损特征，按用户指令开展受控过滤器实验（EXP-172），以 `OPT-0005_BASE_12`（LR C=0.05, th=0.48, alpha_high30, C2）为冻结基准。
+
+| 编号 | 候选/任务 | 窗口 | 状态与结论 |
+| --- | --- | --- | --- |
+| EXP-172-Audit | 第一阶段财务账目对账终审 | W1/W2/R2025 | 完成：官方账本数学 100% 严谨，逐年误差 0.0000；2025 年净亏损严格为 -3.91%（-3.9148 USDT），-7.15 USDT 纯属离线辅助函数未计入精度零头回款的口径偏差；通过终审门禁 |
+| EXP-172-Control | Control (OPT-0005) | 全 3 年 Walk-Forward | 完成：基准零漂移复现（$g_{\text{week}}=+0.1371\%$/w, Ann +7.38%, 2023: +8.83%, 2024: +18.50%, 2025: -3.91%, MDD 11.60%, 208 周期） |
+| EXP-172-A | Filter A (`NoUptrend`) | 全 3 年 Walk-Forward | 完成：失格剪枝（$g_{\text{week}}=+0.0999\%$/w, Ann +5.33%, 2024 利润从 +18.50% 跌至 +16.30%, 2025 亏损扩大至 -7.63%, Worst MDD 恶化至 18.84%） |
+| EXP-172-B | Filter B (`DownsizeVolExp`) | 全 3 年 Walk-Forward | 完成：失格剪枝（$g_{\text{week}}=+0.0572\%$/w, Ann +3.02%, 2024 降至 +15.97%, 2025 亏损放大至 -8.95%；本质为降仓防守，单位敞口收益下降） |
+| EXP-172-C | Filter C (`NoVolExp`) | 全 3 年 Walk-Forward | 完成：失格剪枝（$g_{\text{week}}=+0.0467\%$/w, Ann +2.46%, 2024 利润崩塌至 +1.62%；灾难性踏空，扼杀 82.2% 交易机会） |
+| EXP-172-Stress | 1.0x / 1.5x / 2.0x 成本压力测试 | 全 3 年 Walk-Forward | 完成：摩擦加剧下 Control 仍保持 +2.41% 年化，所有过滤器候选均劣于 Control |
+| EXP-172-Bootstrap | Stationary Block Bootstrap 检验 | 全 3 年 Walk-Forward | 完成：所有候选配对周收益差额 95% CI 均跨 0 甚至显著为负（Filter B $p=0.0415$ 显著跑输） |
+| EXP-172-Pareto | 3 维 Pareto 综合对比与终审裁决 | 全 3 年 Walk-Forward | 完成：无候选推进 Pareto 边界；正式裁决【实验失败，全线剪枝】，维持 OPT-0005 基准；报告详见 [Phase 6B 综合评估报告](artifacts/research/market_regime_phase6b/comparison_report.md) |
+
 ## 第十一轮事前登记（2026-10-05，Asia/Shanghai）
 
 在核实当前 R6/R8 Alpha Leader 基础定义已内置自身 72h 收益 > 0（候选 B 重复剔除）后，严格以候选 A“真 Alpha 在 24h 回踩（R24h<0）时恢复 30%”作为唯一 R11 候选，按[冻结方案](docs/eleventh-experiment-design-2026-10-05.md)和 `configs/eleventh_experiment.json` 登记；下表在任何第十一轮账户运行前写入。父策略为修复 R6，不重拟合模型、不扫描参数、不调阈值，最多 3 个 Base + 6 个条件压力账户、11 项登记预算。若失格实事求是接受，不追加候选；2026 继续严格物理封存。

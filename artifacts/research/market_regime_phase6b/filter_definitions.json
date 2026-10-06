@@ -1,0 +1,20 @@
+{
+  "Control": {
+    "description": "Original OPT-0005 without regime filtering"
+  },
+  "Filter_A": {
+    "name": "Filter_A_NoUptrend",
+    "description": "When trend_regime == UPTREND, prohibit opening NEW long positions. Existing positions held until normal exit.",
+    "mechanism": "buy_permission (allow_buy = trend_regime != UPTREND)"
+  },
+  "Filter_B": {
+    "name": "Filter_B_DownsizeVolExp",
+    "description": "When vol_dynamic == VOL_EXPANDING, multiply target weight by 0.5 (30% -> 15%). Normal rules otherwise.",
+    "mechanism": "target_weight scaling in build_candidate_targets"
+  },
+  "Filter_C": {
+    "name": "Filter_C_NoVolExp",
+    "description": "When vol_dynamic == VOL_EXPANDING, prohibit opening NEW long positions. VOL_CONTRACTING trades normally.",
+    "mechanism": "buy_permission (allow_buy = vol_dynamic != VOL_EXPANDING)"
+  }
+}

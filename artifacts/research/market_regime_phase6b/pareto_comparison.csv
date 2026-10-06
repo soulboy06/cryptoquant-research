@@ -1,0 +1,9 @@
+candidate_id,category,g_week_pct,annualized_pct,ret_2025_pct,worst_mdd_pct,is_pareto_optimal,dominated_by
+OPT-0005 (Control),Base Benchmark,0.1371,7.38,-3.91,11.6,True,None
+Filter_A_NoUptrend,Phase 6B Candidate,0.0999,5.33,-7.63,18.84,False,"OPT-0005 (Control), OPT-0001 (R6 Sizing), OPT-0026 (Balanced), OPT-0060 (Conservative High), OPT-0056 (Max Defense)"
+Filter_B_DownsizeVolExp,Phase 6B Candidate,0.0572,3.02,-8.95,10.52,True,None
+Filter_C_NoVolExp,Phase 6B Candidate,0.0467,2.46,4.95,2.48,True,None
+OPT-0001 (R6 Sizing),Historical Benchmark,0.1311,7.05,-3.59,11.49,True,None
+OPT-0026 (Balanced),Historical Benchmark,0.1293,6.95,-2.7,11.51,True,None
+OPT-0060 (Conservative High),Historical Benchmark,0.1074,5.74,-2.88,11.24,True,None
+OPT-0056 (Max Defense),Historical Benchmark,0.1024,5.47,-2.44,11.21,True,None

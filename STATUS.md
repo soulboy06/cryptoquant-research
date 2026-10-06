@@ -103,19 +103,28 @@
     - `VOL_CONTRACTING`（波动率收缩）是**全周期唯一跨三年全部保持正收益的状态**（2023: $+0.91$, 2024: $+2.02$, 2025: $+3.20\text{ USDT}$，累计 $+6.14\text{ USDT}$，胜率 $56.7\%$）；
     - `VOL_EXPANDING`（波动率扩张）在 2025 年发生系统性失效，单年亏损高达 **$-10.35\text{ USDT}$**；
     - 币种层面：2025 年亏损重灾区为 **ETHUSDT**（42 笔交易净亏损 $-3.44\text{ USDT}$，手续费支出 $2.42\text{ USDT}$）和 **SOLUSDT**（30 笔交易净亏损 $-3.07\text{ USDT}$，手续费 $1.73\text{ USDT}$）；BTC 相对可控（$-0.64\text{ USDT}$）；
-  - **Phase 6B 研究建议**：强烈支持研究状态过滤器（Regime Filter），重点方向为：(1) 过滤高位追涨信号（`UPTREND / BREAKOUT`）；(2) 在 `VOL_EXPANDING` 高波剧烈放大时开启风控刹车或降仓；(3) 抑制 ETH 无序震荡的高频摩擦。
-  - 单测体系：`tests/test_market_regime_phase6a.py` 5 项测试 100% PASS。
+- **第六阶段 B（市场状态过滤器与风控优化实验 Phase 6B）已圆满完成（D-061）**：
+  - 产物目录：`artifacts/research/market_regime_phase6b/`（含 `accounting_audit.md`, `accounting_reconciliation.csv`, `experiment_config.json`, `filter_definitions.json`, `trading_metrics.csv`, `monthly_comparison.csv`, `symbol_comparison.csv`, `filter_decision_audit.csv`, `exposure_comparison.csv`, `cost_stress_test.csv`, `bootstrap_results.json`, `pareto_comparison.csv`, `results.json`, `comparison_report.md` 共 14 项完整交付物）；
+  - **第一阶段财务审计彻底核准**：官方回测账本数学计算 100% 严谨无误，逐年对账误差为严格 0.0000；2025 年真实净亏损严格为 **-3.91%**（-3.9148 USDT），Phase 6A 中的 -7.15 USDT 纯属离线辅助函数将 step-size 精度零头视作 100% 灭失的统计偏差；
+  - **三大过滤器实验实证定论**：
+    - Control (`OPT-0005`): $g_{\text{week}} = +0.1371\%$/w, Ann +7.38%, 2023: +8.83%, 2024: +18.50%, 2025: -3.91%, MDD 11.60%, 208 周期;
+    - Filter A (`NoUptrend`): $g_{\text{week}} = +0.0999\%$/w, Ann +5.33%, 2023: +8.84%, 2024: +16.30%, 2025: -7.63%, MDD 18.84%, 163 周期（2025 亏损扩大，回撤恶化至 18.84%，严重跑输）;
+    - Filter B (`DownsizeVolExp`): $g_{\text{week}} = +0.0572\%$/w, Ann +3.02%, 2023: +3.56%, 2024: +15.97%, 2025: -8.95%, MDD 10.52%, 299 周期（本质为降仓防守，平均持仓敞口压缩至 1.63%，单位敞口收益下降，2025 亏损放大）;
+    - Filter C (`NoVolExp`): $g_{\text{week}} = +0.0467\%$/w, Ann +2.46%, 2023: +0.88%, 2024: +1.62%, 2025: +4.95%, MDD 2.48%, 37 周期（灾难性踏空，扼杀 82.2% 交易机会，2024 利润归零）;
+  - **统计检验与成本压力**：Block Bootstrap 检验中 Filter B 与 Filter C 显著跑输基准；在 2.0x 交易成本下 Control 保持 +2.41% 年化正收益，所有候选均被 Control 击败；
+  - **终审裁决**：**三个过滤器全部未能满足 Challenger 准入标准，本轮正式宣告失败并予以全面剪枝。基准严格维持原 `OPT-0005_BASE_12`**；
+  - 单测体系：`tests/test_market_regime_phase6b.py` 11 项专用单测及相关回归测试 24 passed 100% PASS。
 
 ## 当前限制与长期边界
 
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
-- 面对实验事实实事求是接受，坚决不进行事后反向调参。
+- 面对实验事实实事求是接受，坚决不进行事后反向调参，不擅自混编新规则。
 - 100 USDT 虚拟资金、三币共用账户、固定 50 USDT 底线、普通现货/无杠杆边界保持不变。
-- 四大 Pareto Benchmark 作为当前实证权衡基准，当前最佳周收益仍以具有稳健预测支撑的 OPT-0005 (+0.1371%/w，年化 +7.38%) 为主，距离 1.5%/week 目标仍有约 10.9 倍周收益差距。
+- 四大 Pareto Benchmark 体系中，当前最佳周收益仍以具有稳健预测支撑的 OPT-0005 (+0.1371%/w，年化 +7.38%) 为主。
 
 ## 下一行动与交接
 
-1. **Phase 6A 市场状态与策略亏损归因研究圆满闭环**：完成基准复现、4 维度训练集分位数状态划分、2025 亏损机制归因、跨年稳定性检验与全套 8 项产物归档，登记 D-060 与 WL-071。
-2. **严守停止纪律**：本阶段只做客观诊断，不开发新模型、不新增交易规则、不调参、不搜阈值、不碰 2026 数据；**立即停止，等待用户指示下一步指令（如 Phase 6B 过滤器方案制定）**。
+1. **Phase 6B 市场状态过滤器与风控优化实验圆满闭环**：全套 14 项产物生成，D-061 裁决剪枝生效，严格维持原 OPT-0005 Benchmark。
+2. **严守停止纪律**：本阶段宣告闭环，坚决不擅自进入 Phase 6C 或自动测试新规则，立即停止，等待用户指示下一步研究方向。
 
 

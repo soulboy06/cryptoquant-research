@@ -1,0 +1,35 @@
+{
+  "experiment_id": "Phase_6B_Market_Regime_Filter",
+  "benchmark": "OPT-0005_BASE_12",
+  "model": "logistic_regression (C=0.05)",
+  "threshold": 0.48,
+  "sizing": "alpha_high30 (target 30%)",
+  "exit_variant": "C2 (Breakeven + Stop Loss)",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT"
+  ],
+  "initial_cash": 100.0,
+  "equity_floor": 50.0,
+  "costs": {
+    "base": {
+      "fee": 0.001,
+      "adverse_price": 0.0005
+    },
+    "cost_1.5x": {
+      "fee": 0.0015,
+      "adverse_price": 0.00075
+    },
+    "cost_2.0x": {
+      "fee": 0.002,
+      "adverse_price": 0.001
+    }
+  },
+  "candidates": [
+    "Control_OPT0005",
+    "Filter_A_NoUptrend",
+    "Filter_B_DownsizeVolExp",
+    "Filter_C_NoVolExp"
+  ]
+}

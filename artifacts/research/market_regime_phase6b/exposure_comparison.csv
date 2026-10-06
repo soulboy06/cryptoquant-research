@@ -1,0 +1,5 @@
+candidate_id,annualized_return_pct,worst_mdd_pct,mean_exposure_pct,avg_exposure_pct,total_closed_cycles,closed_cycles,return_per_unit_exposure,mdd_per_unit_exposure,calmar_ratio
+Control_OPT-0005,7.38,11.6,1.65,1.65,208,208,4.475,7.034,0.636
+Filter_A_NoUptrend,5.33,18.84,3.21,3.21,163,163,1.662,5.879,0.283
+Filter_B_DownsizeVolExp,3.02,10.52,1.63,1.63,299,299,1.851,6.456,0.287
+Filter_C_NoVolExp,2.46,2.48,0.81,0.81,37,37,3.022,3.049,0.991

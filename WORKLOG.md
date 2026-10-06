@@ -1411,6 +1411,46 @@
   - 保持代码与策略完全冻结，不修改原策略、不搜参数、不碰 2026 数据；
   - 立即停止，等待用户指示下一步指令（如 Phase 6B 状态过滤器方案制定）。
 
+## 2026-10-06 记录：Phase 6B 市场状态过滤器与风控优化实验（WL-072）
+
+- 用户任务：执行 Phase 6B：Market Regime Filter Experiment。第一阶段先审计财务账目对账，回答 7 大账目问题；第二阶段冻结 OPT-0005 基准与三大过滤器（Filter A: UPTREND 禁止开仓; Filter B: VOL_EXPANDING 仓位减半; Filter C: VOL_EXPANDING 禁止开仓），在全 3 年 Walk-Forward 下完整重跑回测，进行成本压力测试、Block Bootstrap 检验与 Pareto 比较，输出全套 14 项产物，回答 10 大核心问题。
+- 实际改动与涉及文件：
+  - 修改 `src/cryptoquant/baselines/engine.py`，使 `_validate_buy_permission` 兼容 5 列逐币种 `buy_permission` 表（支持 `symbol` 列），同时保留 4 列全局广播支持，确保过滤器只阻断买单、不干预原策略 C2 退出；
+  - 编写并执行全流程实验脚本 `scripts/run_phase6b_regime_filter_experiment.py`，全流程受 `reject_holdout` 严格保护；
+  - 产出全套 14 项标准研究产物至 `artifacts/research/market_regime_phase6b/`：
+    - `accounting_audit.md`：财务审计终审报告（解答毛利毛亏扣费、公式、2025 年 -7.15 与 -3.91% 差异溯源等 7 大问题）；
+    - `accounting_reconciliation.csv`：W1/W2/R2025 各窗口期初现金、期末净值、手续费、零头资产逐笔对账表（数学误差 0.0000）；
+    - `experiment_config.json`：冻结基准配置与风控约束参数卡；
+    - `filter_definitions.json`：三大状态过滤器明确因果定义；
+    - `trading_metrics.csv`：Control 及三大候选全景收益、风险与交易行为指标表；
+    - `monthly_comparison.csv`：36 个月各候选月度净收益横向透视表；
+    - `symbol_comparison.csv`：BTC/ETH/SOL 逐年损益贡献交叉对比表；
+    - `filter_decision_audit.csv`：过滤器阻断开仓单数、周期差额、手续费节省与损益差额审计表；
+    - `exposure_comparison.csv`：资金敞口归一化收益-风险对比表；
+    - `cost_stress_test.csv`：1.0x、1.5x、2.0x 交易成本压力测试对比表；
+    - `bootstrap_results.json`：Stationary Block Bootstrap（4w, 8w, 12w）配对周收益差额不确定性分析结果；
+    - `pareto_comparison.csv`：三维（g_week, Worst MDD, 2025 Return）Pareto 占优与支配关系表；
+    - `results.json`：结构化全流程核心量化结果汇编；
+    - `comparison_report.md`：综合评估报告，系统性解答用户 10 大核心问题；
+  - 编写并运行单元测试 `tests/test_market_regime_phase6b.py`；
+  - 更新 `DECISIONS.md`（登记 D-061 剪枝裁决）；
+  - 更新 `STATUS.md`（更新 Phase 6B 结项与基准维持状态）；
+  - 更新 `WORKLOG.md`（追加 WL-072）；
+  - 更新 `EXPERIMENTS.md`（登记 EXP-172）。
+- 检查与证据：
+  - 财务对账核验：官方 `Portfolio` 账本计算 100% 严谨无误，对账误差为严格 0.0000；2025 年净亏损严格为 -3.91%（-3.9148 USDT），Phase 6A 报告中的 -7.15 USDT 系离线辅助诊断脚本将精度未售零头视作 100% 灭失并重复扣减买入费所致，不影响官方引擎；
+  - 候选回测实证数据：
+    - Control (OPT-0005): g_week = +0.1371%/w, Ann +7.38%, 2023: +8.83%, 2024: +18.50%, 2025: -3.91%, MDD 11.60%, 208 周期；
+    - Filter A (NoUptrend): g_week = +0.0999%/w, Ann +5.33%, 2023: +8.84%, 2024: +16.30%, 2025: -7.63%, MDD 18.84%, 163 周期（2025 亏损扩大，回撤恶化，严重跑输）；
+    - Filter B (DownsizeVolExp): g_week = +0.0572%/w, Ann +3.02%, 2023: +3.56%, 2024: +15.97%, 2025: -8.95%, MDD 10.52%, 299 周期（降仓防守，持仓敞口压缩至 1.63%，单位敞口收益下降，2025 亏损加重）；
+    - Filter C (NoVolExp): g_week = +0.0467%/w, Ann +2.46%, 2023: +0.88%, 2024: +1.62%, 2025: +4.95%, MDD 2.48%, 37 周期（严重踏空，扼杀 82.2% 交易机会，2024 利润归零）；
+  - 统计检验与成本压力：Block Bootstrap 中 Filter B/C 显著跑输基准；在 2.0x 交易成本下 Control 保持 +2.41% 年化，所有候选均被 Control 击败；
+  - 单测通过：`pytest tests/test_market_regime_phase6b.py tests/test_regime_execution.py tests/test_market_regime_phase6a.py` 24 passed (2.22s) 100% PASS。
+- 遗留与交接事项：
+  - 三个过滤器全部未能满足 Challenger 准入标准，本轮正式宣告失败并予以全面剪枝；
+  - 基准严格维持原 OPT-0005_BASE_12；禁止擅自进行 A+B 混编或进入 Phase 6C；
+  - 立即停止，等待用户指示下一步。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

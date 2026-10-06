@@ -1,0 +1,5 @@
+candidate_id,filter_type,blocked_buy_orders,blocked_signals_count,executed_cycles,total_closed_cycles,actual_cycles_delta,fees_saved_usdt,net_pnl_delta_usdt
+Control_OPT-0005,Control,0,0,208,208,0,0.0,-0.0
+Filter_A_NoUptrend,Filter_A,48,48,163,163,-45,2.7003,-5.9652
+Filter_B_DownsizeVolExp,Filter_B,0,0,299,299,91,0.4422,-12.9061
+Filter_C_NoVolExp,Filter_C,395,395,37,37,-171,8.1583,-16.2305

@@ -58,32 +58,58 @@ def validate_frames(frames, config, period='development', *, window=None):
     return grid, records
 
 
-def _validate_buy_permission(permission, strategy, grid, start, end):
+def _validate_buy_permission(permission, strategy, grid, start, end, symbols=None):
     """唯一完整的共同UTC许可；只消费交易字段，不能携带标签或未来信息。"""
     if permission is None:
         return None
-    columns = ['decision_time', 'available_time', 'state_valid', 'allow_buy']
     if strategy != 'logistic_regression':
         raise ValueError('buy permission requires model strategy')
-    if not isinstance(permission, pd.DataFrame) or list(permission.columns) != columns:
-        raise ValueError('invalid buy permission columns; no labels allowed')
+    if not isinstance(permission, pd.DataFrame):
+        raise ValueError('buy permission must be a DataFrame')
     if permission.empty:
         raise ValueError('empty buy permission cannot disable filtering; use None')
-    for column in ['decision_time', 'available_time']:
-        if str(getattr(permission[column].dtype, 'tz', None)) != 'UTC' or permission[column].isna().any():
-            raise ValueError('buy permission times must be nonmissing UTC datetime')
-    times = pd.DatetimeIndex(permission.decision_time)
-    expected = grid[(grid >= start) & (grid < end) & (grid.hour % 4 == 0)]
-    if not times.is_unique or not times.equals(expected):
-        raise ValueError('buy permission requires complete unique four-hour decision grid')
-    if (permission.available_time > permission.decision_time).any():
-        raise ValueError('buy permission exposes future availability')
-    for column in ['state_valid', 'allow_buy']:
-        if not pd.api.types.is_bool_dtype(permission[column].dtype) or permission[column].isna().any():
-            raise ValueError('buy permission flags must be nonmissing booleans')
-    if (~permission.state_valid & permission.allow_buy).any():
-        raise ValueError('invalid buy permission state cannot allow buying')
-    return dict(zip(times, permission.allow_buy))
+
+    if 'symbol' in permission.columns:
+        columns = ['decision_time', 'symbol', 'available_time', 'state_valid', 'allow_buy']
+        if list(permission.columns) != columns:
+            raise ValueError('invalid per-symbol buy permission columns; no labels allowed')
+        for column in ['decision_time', 'available_time']:
+            if str(getattr(permission[column].dtype, 'tz', None)) != 'UTC' or permission[column].isna().any():
+                raise ValueError('buy permission times must be nonmissing UTC datetime')
+        if bool((permission.available_time > permission.decision_time).any()):
+            raise ValueError('buy permission exposes future availability')
+        for column in ['state_valid', 'allow_buy']:
+            if not pd.api.types.is_bool_dtype(permission[column].dtype) or bool(permission[column].isna().any()):
+                raise ValueError('buy permission flags must be nonmissing booleans')
+        if bool((~permission.state_valid & permission.allow_buy).any()):
+            raise ValueError('invalid buy permission state cannot allow buying')
+        expected_times = grid[(grid >= start) & (grid < end) & (grid.hour % 4 == 0)]
+        target_symbols = sorted(symbols or permission.symbol.unique())
+        for sym in target_symbols:
+            sub = permission[permission.symbol == sym]
+            sub_times = pd.DatetimeIndex(sub.decision_time)
+            if not sub_times.is_unique or not sub_times.equals(expected_times):
+                raise ValueError(f'buy permission requires complete unique four-hour decision grid for symbol {sym}')
+        return dict(zip(zip(pd.DatetimeIndex(permission.decision_time), permission.symbol), permission.allow_buy))
+    else:
+        columns = ['decision_time', 'available_time', 'state_valid', 'allow_buy']
+        if list(permission.columns) != columns:
+            raise ValueError('invalid buy permission columns; no labels allowed')
+        for column in ['decision_time', 'available_time']:
+            if str(getattr(permission[column].dtype, 'tz', None)) != 'UTC' or bool(permission[column].isna().any()):
+                raise ValueError('buy permission times must be nonmissing UTC datetime')
+        times = pd.DatetimeIndex(permission.decision_time)
+        expected = grid[(grid >= start) & (grid < end) & (grid.hour % 4 == 0)]
+        if not times.is_unique or not times.equals(expected):
+            raise ValueError('buy permission requires complete unique four-hour decision grid')
+        if bool((permission.available_time > permission.decision_time).any()):
+            raise ValueError('buy permission exposes future availability')
+        for column in ['state_valid', 'allow_buy']:
+            if not pd.api.types.is_bool_dtype(permission[column].dtype) or bool(permission[column].isna().any()):
+                raise ValueError('buy permission flags must be nonmissing booleans')
+        if bool((~permission.state_valid & permission.allow_buy).any()):
+            raise ValueError('invalid buy permission state cannot allow buying')
+        return dict(zip(times, permission.allow_buy))
 
 
 def run_backtest(frames, rules, config, strategy, cost_name, period='development', decision_targets=None, *, window=None,
@@ -102,7 +128,7 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
     if window is not None and strategy == 'ema_trend':
         raise ValueError('ema_trend window requires continuous EMA history; unsupported')
     grid, rows = validate_frames(frames, config, period, window=window)
-    permitted = _validate_buy_permission(buy_permission, strategy, grid, start, end)
+    permitted = _validate_buy_permission(buy_permission, strategy, grid, start, end, symbols=config.symbols)
     external = {}
     if strategy == 'logistic_regression':
         columns = ['symbol', 'decision_time', 'probability', 'target_weight']
@@ -270,7 +296,7 @@ def run_backtest(frames, rules, config, strategy, cost_name, period='development
                 if intent.side == 'BUY' and not risk.can_buy(intent.symbol, time):
                     orders.append(dict(time=time, symbol=intent.symbol, side='BUY', requested_quantity=intent.quantity,
                                        accepted=False, reason='risk_blocked', intent_reason=intent.reason, quantity=ZERO, price=ZERO))
-                elif intent.side == 'BUY' and permitted is not None and not permitted[time]:
+                elif intent.side == 'BUY' and permitted is not None and not permitted.get((time, intent.symbol), permitted.get(time, True)):
                     orders.append(dict(time=time, symbol=intent.symbol, side='BUY', requested_quantity=intent.quantity,
                                        accepted=False, reason='regime_blocked', intent_reason=intent.reason, quantity=ZERO, price=ZERO))
                 else:
