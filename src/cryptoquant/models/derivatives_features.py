@@ -34,6 +34,27 @@ FEATURE_FAMILIES = {
     "OI_FLOW": BASE_12_FEATURES + OI_FEATURES + FLOW_FEATURES,
 }
 
+# Phase 5B 交互特征定义 (严格限额 8 项，禁止裸特征进入模型)
+INTERACTION_8_FEATURES = [
+    "price_oi_4h",
+    "price_oi_24h",
+    "price_flow_4h",
+    "price_flow_24h",
+    "oi_flow_confirmation_4h",
+    "oi_flow_confirmation_24h",
+    "trend_oi_confirmation",
+    "volatility_flow",
+]
+
+PHASE5B_FEATURE_FAMILIES = {
+    "BASE_12": BASE_12_FEATURES,
+    "INTERACTION_PRICE_OI": BASE_12_FEATURES + ["price_oi_4h", "price_oi_24h"],
+    "INTERACTION_PRICE_FLOW": BASE_12_FEATURES + ["price_flow_4h", "price_flow_24h"],
+    "INTERACTION_OI_FLOW": BASE_12_FEATURES + ["oi_flow_confirmation_4h", "oi_flow_confirmation_24h"],
+    "INTERACTION_CONTEXT": BASE_12_FEATURES + ["trend_oi_confirmation", "volatility_flow"],
+    "INTERACTION_ALL": BASE_12_FEATURES + INTERACTION_8_FEATURES,
+}
+
 
 def build_derivatives_features_for_symbol(symbol: str, data_dir: Path | None = None) -> pd.DataFrame:
     """计算单个币种的 3 项持仓量特征与 4 项主动买卖流特征，并按 decision_time 对齐。"""
@@ -112,3 +133,54 @@ def attach_derivatives_features(
     """将衍生品特征合并到现有训练样本或评估特征 DataFrame 中。"""
     merged = pd.merge(base_df, derivatives_df, on="decision_time", how="left")
     return merged
+
+
+def compute_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
+    """计算 8 个冻结交互特征。
+    
+    输入 df 包含 base 特征与 derivatives 特征。
+    """
+    out = df.copy()
+    ret_4h = out["return_4h"].astype(float)
+    ret_24h = out["return_24h"].astype(float)
+    oi_4h = out["oi_change_4h"].astype(float)
+    oi_24h = out["oi_change_24h"].astype(float)
+    flow_4h = out["taker_imbalance_4h"].astype(float)
+    flow_24h = out["taker_imbalance_24h"].astype(float)
+    ema24_dist = out["ema24_distance"].astype(float)
+    vol_24h = out["volatility_24h"].astype(float)
+
+    # 1. price_oi_4h = return_4h * oi_change_4h
+    out["price_oi_4h"] = (ret_4h * oi_4h).fillna(0.0)
+
+    # 2. price_oi_24h = return_24h * oi_change_24h
+    out["price_oi_24h"] = (ret_24h * oi_24h).fillna(0.0)
+
+    # 3. price_flow_4h = return_4h * taker_imbalance_4h
+    out["price_flow_4h"] = (ret_4h * flow_4h).fillna(0.0)
+
+    # 4. price_flow_24h = return_24h * taker_imbalance_24h
+    out["price_flow_24h"] = (ret_24h * flow_24h).fillna(0.0)
+
+    # 5. oi_flow_confirmation_4h = oi_change_4h * taker_imbalance_4h
+    out["oi_flow_confirmation_4h"] = (oi_4h * flow_4h).fillna(0.0)
+
+    # 6. oi_flow_confirmation_24h = oi_change_24h * taker_imbalance_24h
+    out["oi_flow_confirmation_24h"] = (oi_24h * flow_24h).fillna(0.0)
+
+    # 7. trend_oi_confirmation = ema24_distance * oi_change_4h
+    out["trend_oi_confirmation"] = (ema24_dist * oi_4h).fillna(0.0)
+
+    # 8. volatility_flow = volatility_24h * taker_imbalance_4h
+    out["volatility_flow"] = (vol_24h * flow_4h).fillna(0.0)
+
+    return out
+
+
+def attach_interaction_features(
+    base_df: pd.DataFrame,
+    derivatives_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """合并衍生品特征并直接计算 8 个交互特征。"""
+    merged = attach_derivatives_features(base_df, derivatives_df)
+    return compute_interaction_features(merged)

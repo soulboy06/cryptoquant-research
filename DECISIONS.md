@@ -617,6 +617,32 @@
 - 替代关系：深化并终结 Phase 5A 衍生品特征探索，正式剪枝该方向，为后续真正的 Phase 5B 奠定坚实依据。
 - 需要同步的文件：`STATUS.md`, `WORKLOG.md`。
 
+## D-058：Phase 5B 衍生品持仓量与主动买卖流交互特征（OI / Flow Interaction Features）实验结论：微观状态存在统计差异，但无法转化为稳健可交易 Alpha，四大 Benchmark 维持统治地位
+
+- 日期：2026-10-06（Asia/Shanghai）；状态：有效。
+- 来源：用户 Phase 5B 指令与 `artifacts/research/alpha_phase5b_interactions/` 全量实证产物。
+- 选择：
+  1. **实验范围与冻结定义**：
+     - 严格冻结 8 项事前定义的交互特征（`price_oi_4h`, `price_oi_24h`, `price_flow_4h`, `price_flow_24h`, `oi_flow_confirmation_4h`, `oi_flow_confirmation_24h`, `trend_oi_confirmation`, `volatility_flow`）；
+     - 严格禁止裸 OI / Flow 特征进入最终模型特征集；
+     - 6 组特征族（BASE_12, INTERACTION_PRICE_OI, INTERACTION_PRICE_FLOW, INTERACTION_OI_FLOW, INTERACTION_CONTEXT, INTERACTION_ALL）× 四大 Pareto Benchmark 全景 Walk-Forward 仿真（24 组候选）；
+  2. **预测层 vs 交易层分离实证定论**：
+     - `INTERACTION_PRICE_OI` 与 `INTERACTION_OI_FLOW` 在预测层表现出微弱正增量（W2 与 R2025 中 AUC/PR-AUC 提升 +0.05~+0.25 bps），通过预测门槛；但在交易层中因时机与手续费磨损，周收益反而衰退 2~4 bps/week（如 OPT-0005 周收益从 +0.1371% 降至 +0.0951% 和 +0.1053%）；
+     - `INTERACTION_CONTEXT` 在交易层表现出周收益微幅提升（OPT-0005 周收益从 +0.1371%/w 升至 +0.1453%/w，年化从 +7.38% 升至 +7.84%），但在预测层 3 个 Fold 中 AUC/PR-AUC 均无改善（0/3 胜率），表明交易层的小幅超额收益缺乏稳健的预测层泛化能力支撑，存在样本噪音波动风险；
+     - `INTERACTION_PRICE_FLOW` 与 `INTERACTION_ALL` 交易层严重恶化（2025 亏损扩大至 -12% ~ -13%，MDD 飙升至 14%~15%）；
+  3. **市场象限与三变量联合状态诊断**：
+     - Price × OI 4 象限中，Q1（价涨+OI涨）相比 Q2（价涨+OI跌）未来 4h 扣费净收益仅高出 4.26 bps（-0.2689% vs -0.3115%）；
+     - Price × Flow 4 象限中，Q1（价涨+主动买盘）与 Q2（价涨+主动卖盘）未来 4h 净收益差异不足 1 bps（-0.2918% vs -0.2824%）；
+     - 三变量 8 状态中，所谓的“真突破共振”S1（价格↑/OI↑/Flow买）未来 4h 扣费净收益为 -0.2646%，与最差状态 S5（价格↓/OI↑/Flow买，-0.3416%）相比仅相差 7.7 bps，全量状态在扣除 30 bps 双边摩擦后均为负期望；
+  4. **Pareto 前沿评估**：
+     - 四大旧 Pareto Benchmark（OPT-0005, OPT-0001, OPT-0026, OPT-0056）并未被任何具有稳定统计预测增量的候选严格支配；
+  5. **终审定论与科学停止**：
+     - “在当前 4h 尺度、Logistic Regression 线性模型与执行体系下，事前冻结的 8 个交互特征未能产生稳定可交易 Alpha”；
+     - 正式结束当前 Open Interest 与 Taker Flow 的直接与交互特征研究路线，严禁盲目调参、扩大窗口或构建复杂人工规则；
+     - 严格停止，等待用户指示后续研究方向。
+- 替代关系：深化并终结 Phase 5B 交互特征研究，彻底澄清衍生品特征在线性模型下的效能边界。
+- 需要同步的文件：`STATUS.md`, `WORKLOG.md`。
+
 ## 后续记录模板
 
 本节仅为模板，不计入实际决策。

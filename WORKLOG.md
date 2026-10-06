@@ -1322,6 +1322,36 @@
 - 遗留与交接事项：
   - 本阶段任务已圆满结束，立即停止，不自动进入 Phase 5B。
 
+### WL-069: 2026-10-06 14:35:00+08:00 Phase 5B OI / Taker Flow 交互特征 Alpha 实验圆满完成（登记 D-058）
+
+- 用户任务：
+  1. 正式进入 Phase 5B：OI / Taker Flow 交互特征 Alpha 实验；
+  2. 核心科学问题：衍生品数据价值是否只在特定价格环境（Price / Trend / Volatility × OI / Flow 交互）下出现；
+  3. 严格冻结纪律：仅限事前冻结的 8 个交互特征（`price_oi_4h`, `price_oi_24h`, `price_flow_4h`, `price_flow_24h`, `oi_flow_confirmation_4h`, `oi_flow_confirmation_24h`, `trend_oi_confirmation`, `volatility_flow`），严禁裸特征进入最终模型，LR 线性模型，2026 物理封存；
+  4. 6 组特征族消融 × 四大 Benchmark（OPT-0005, OPT-0001, OPT-0026, OPT-0056）共 24 候选 Walk-Forward 回测；
+  5. 产出交互特征只读诊断、Price × OI 四象限、Price × Flow 四象限与三变量 8 状态诊断表；
+  6. 评估预测准入门槛、Pareto 前沿演化，产物归档至 `artifacts/research/alpha_phase5b_interactions/`；
+  7. 新增针对 10 项严密要求的单测，回答 14 项核心问题后停止，不自动进入后续阶段。
+- 实际改动与涉及文件：
+  1. **特征工程与函数扩展**：
+     - 在 `src/cryptoquant/models/derivatives_features.py` 中增加 `INTERACTION_8_FEATURES`、`PHASE5B_FEATURE_FAMILIES`、`compute_interaction_features` 与 `attach_interaction_features`；
+  2. **实验主控与状态诊断**：
+     - 编写并运行 `scripts/run_phase5b_interactions_experiment.py`（回测执行耗时 200.23s，全量 24 候选顺利跑通）；
+     - 生成全套 13 项产物：`feature_definitions.json`, `experiment_config.json`, `interaction_diagnostic.csv`, `price_oi_quadrants.csv`, `price_flow_quadrants.csv`, `triple_state_analysis.csv`, `prediction_metrics.csv`, `trading_metrics.csv`, `benchmark_comparison.csv`, `pareto_front_before.csv`, `pareto_front_after.csv`, `results.json`, `comparison_report.md`；
+  3. **单元测试与文档同步**：
+     - 编写 `tests/test_derivatives_interactions_phase5b.py`，覆盖 10 项核心要求（因果性、公式精确性、BASE_12 精准复现、配置冻结、2026 保护、复利年化、零裸特征泄漏、象限状态分类与产物完整性）；
+     - 更新 `DECISIONS.md`（登记 D-058）；
+     - 更新 `STATUS.md`（记录 Phase 5B 完成状态与下一行动）。
+- 检查与证据：
+  - 核心基准精准零误差复现：OPT-0005 (+0.1371%/w), OPT-0001 (+0.1311%/w), OPT-0026 (+0.1293%/w), OPT-0056 (+0.1024%/w)；
+  - 预测层 vs 交易层分离事实：
+    - `INTERACTION_PRICE_OI` 和 `INTERACTION_OI_FLOW` 通过预测门槛（AUC 微增 0.05~0.25 bps），但在交易层中由于微小摩擦与时机错配，周收益反而衰退 2~4 bps/week；
+    - `INTERACTION_CONTEXT` 交易层周收益微增至 +0.1453%/w（年化 +7.84%），但预测层 3 个 Fold 中 AUC/PR-AUC 均无改善（0/3 胜率），缺乏稳健的预测层泛化能力支撑；
+  - 象限与状态诊断：Price × OI 状态差异仅 4.26 bps，Price × Flow 差异不足 1 bps，三变量 8 状态极差仅 7.7 bps，全量状态在扣除 30 bps 双边摩擦后均为负期望；
+  - 单测通过：`tests/test_derivatives_interactions_phase5b.py` 8 passed (0.77s)，总计 18 项衍生品测试 100% PASS。
+- 遗留与交接事项：
+  - 正式结束当前 Open Interest 与 Taker Flow 研究路线；立即停止，不自动进入后续阶段。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

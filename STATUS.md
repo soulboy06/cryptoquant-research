@@ -68,24 +68,32 @@
   - 归因结论：Regime A~H 微观净收益差异仅 2~3 bps，不足以覆盖 0.30055% 双边摩擦，线性模型下稀释了核心 OHLCV 量价权重；
   - 终审定论：在当前数据定义、4h 决策尺度、LR 线性模型与交易体系下，本轮 OI / Taker Flow 未表现出稳定增量 Alpha。
 - **第五阶段 A2（衍生品特征校准与阈值稳健性审计 Phase 5A2）已完成（D-057）**：
-  - 产物目录：`artifacts/research/alpha_phase5a2_calibration/`（含 `prediction_shift_audit.csv`, `calibration_comparison.csv`, `threshold_selection.csv`, `trading_metrics.csv`, `results.json`, `comparison_report.md`）；
-  - 终审科学裁决：**【结论 A】新特征预测层和交易层均无改善，正式剪枝**；
-  - 只读预测层审计：四大 Benchmark × 3 Fold 全景评估中，`OI_ONLY`、`FLOW_ONLY`、`OI_FLOW` 的 $\Delta \text{ROC-AUC} \le 0$ 出现率 **100%**（改善率 0/12），Log Loss、Brier Score 与 ECE 全面恶化；新特征在线性模型下未提供任何排序能力；
-  - 行为失配机制归因：新特征放大了概率方差（$\Delta \text{std} \approx +0.005 \sim +0.012$），使 PPR 虚高（+0.1% ~ +0.5%），诱发 10~25 笔额外的伪突破低胜率交易，放大手续费摩擦与回撤；恶化核心为信噪比稀释而非旧阈值失配；
-  - 严格剪枝执行：0 特征组通过预测门槛，**严格禁止 Lane B 阈值重选（No Threshold Sweep）**；
-  - OI 时间戳因果审计：全量 35,808 小时（2021-12 至 2025-12）核验，BTCUSDT, ETHUSDT, SOLUSDT 全部 **0 违规**，最大时间前导误差 **0.0s**，严格无未来泄露；
-  - 单测体系：`tests/test_derivatives_calibration_phase5a2.py` 与 `test_derivatives_flow_phase5a.py` 等 10 项核心测试全部 100% PASS。
+  - 产物目录：`artifacts/research/alpha_phase5a2_calibration/`；
+  - 终审科学裁决：【结论 A】新特征预测层和交易层均无改善，正式剪枝；
+  - 单测体系：`tests/test_derivatives_calibration_phase5a2.py` 与 `test_derivatives_flow_phase5a.py` 等测试全部通过。
+- **第五阶段 B（衍生品持仓量与主动买卖流交互特征受控实验 Phase 5B）已完成（D-058）**：
+  - 产物目录：`artifacts/research/alpha_phase5b_interactions/`（含 `feature_definitions.json`, `experiment_config.json`, `interaction_diagnostic.csv`, `prediction_metrics.csv`, `trading_metrics.csv`, `price_oi_quadrants.csv`, `price_flow_quadrants.csv`, `triple_state_analysis.csv`, `benchmark_comparison.csv`, `pareto_front_before.csv`, `pareto_front_after.csv`, `results.json`, `comparison_report.md`）；
+  - 终审科学裁决：**微观状态存在 4~8 bps 统计差异，但在当前 4h 尺度、LR 线性模型与现货手续费摩擦下，交互特征未能产生稳定可交易 Alpha，四大 Benchmark 维持统治地位**；
+  - 预测层 vs 交易层分离：
+    - `INTERACTION_PRICE_OI` 和 `INTERACTION_OI_FLOW` 满足预测门槛（在 W2/R2025 中 AUC/PR-AUC 微增 +0.05~+0.25 bps），但在交易层中因微小摩擦与时机错配，周收益反而衰退 2~4 bps/week；
+    - `INTERACTION_CONTEXT` 在交易层表现出周收益微增（OPT-0005 周收益从 +0.1371%/w 升至 +0.1453%/w，年化从 +7.38% 升至 +7.84%），但在预测层 3 个 Fold 中 AUC/PR-AUC 均无改善（0/3 胜率），缺乏稳健的预测层统计支撑，存在过拟合/样本扰动风险；
+  - 象限与三变量联合状态：
+    - Price × OI 4 象限中，Q1（价涨+OI涨）相比 Q2（价涨+OI跌）未来 4h 净收益高 4.26 bps；
+    - Price × Flow 差异不足 1 bps；
+    - 三变量 8 状态中，S1 与最差状态 S5 相比仅相差 7.7 bps，全量状态在扣除 30 bps 双边摩擦后均为负期望；
+  - Pareto 前沿评估：四大旧 Benchmark（OPT-0005, OPT-0001, OPT-0026, OPT-0056）未被任何具有稳定统计预测增量的候选严格支配；
+  - 单测体系：`tests/test_derivatives_interactions_phase5b.py` 8 passed，总计 18 项衍生品测试 100% PASS。
 
 ## 当前限制与长期边界
 
 - 2026 年数据继续严格隔离，未用于训练、特征计算、阈值选择或评估（严格执行 no future leakage；test 分区物理 0 读取）。
 - 面对实验事实实事求是接受，坚决不进行事后反向调参。
 - 100 USDT 虚拟资金、三币共用账户、固定 50 USDT 底线、普通现货/无杠杆边界保持不变。
-- 四大 Pareto Benchmark 作为当前实证权衡基准，当前最佳周收益为 OPT-0005 的 +0.1371%/w（年化 +7.38%），距离 1.5%/week 目标仍有约 10.9 倍周收益差距。
+- 四大 Pareto Benchmark 作为当前实证权衡基准，当前最佳周收益仍以具有稳健预测支撑的 OPT-0005 (+0.1371%/w，年化 +7.38%) 为主，距离 1.5%/week 目标仍有约 10.9 倍周收益差距。
 
 ## 下一行动与交接
 
-1. **Phase 5A2 审计圆满闭环**：完成核心科学问题解答、只读预测审计、因果时间戳审查与正式剪枝，登记 D-057。
-2. **严守停止纪律**：本阶段工作已完成，立即停止，**不自动进入 Phase 5B**。等待用户对后续研究方向的明确指令。
+1. **Phase 5B 交互特征探索圆满闭环**：完成 8 项交互特征、象限分析、三变量状态诊断与 24 候选 Walk-Forward 回测，登记 D-058。
+2. **严守停止纪律**：正式结束当前 Open Interest 与 Taker Flow 研究路线；立即停止，**不自动进入后续阶段，等待用户指令**。
 
 

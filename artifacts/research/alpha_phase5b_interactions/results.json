@@ -1,0 +1,37 @@
+{
+  "phase": "Phase 5B: OI / Taker Flow Interaction Alpha Experiment",
+  "execution_time_seconds": 200.23,
+  "timestamp_utc": "2026-10-06T06:31:34.459881+00:00",
+  "num_candidates": 24,
+  "prediction_gated_passed_count": 8,
+  "prediction_gated_passed_candidates": [
+    "OPT-0001_INTERACTION_OI_FLOW",
+    "OPT-0001_INTERACTION_PRICE_OI",
+    "OPT-0005_INTERACTION_OI_FLOW",
+    "OPT-0005_INTERACTION_PRICE_OI",
+    "OPT-0026_INTERACTION_OI_FLOW",
+    "OPT-0026_INTERACTION_PRICE_OI",
+    "OPT-0056_INTERACTION_OI_FLOW",
+    "OPT-0056_INTERACTION_PRICE_OI"
+  ],
+  "best_overall_candidate": "OPT-0005_INTERACTION_CONTEXT",
+  "best_overall_g_week_pct": 0.1453,
+  "best_overall_annualized_pct": 7.8405,
+  "opt0005_base_g_week_pct": 0.1371,
+  "refreshed_opt0005_gweek": true,
+  "pareto_front_before_count": 4,
+  "pareto_front_after_count": 7,
+  "pareto_front_after_candidates": [
+    "OPT-0005_INTERACTION_CONTEXT",
+    "OPT-0001_INTERACTION_CONTEXT",
+    "OPT-0026_BASE_12",
+    "OPT-0056_INTERACTION_PRICE_FLOW",
+    "OPT-0056_BASE_12",
+    "OPT-0056_INTERACTION_OI_FLOW",
+    "OPT-0056_INTERACTION_PRICE_OI"
+  ],
+  "dominated_old_benchmarks": [
+    "OPT-0005_BASE_12",
+    "OPT-0001_BASE_12"
+  ]
+}

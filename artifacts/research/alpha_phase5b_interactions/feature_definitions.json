@@ -1,0 +1,188 @@
+{
+  "interaction_features": {
+    "price_oi_4h": {
+      "formula": "return_4h * oi_change_4h",
+      "description": "Price momentum and Open Interest momentum interaction over 4h horizon",
+      "inputs": [
+        "return_4h",
+        "oi_change_4h"
+      ]
+    },
+    "price_oi_24h": {
+      "formula": "return_24h * oi_change_24h",
+      "description": "Daily Price momentum and Open Interest change interaction over 24h horizon",
+      "inputs": [
+        "return_24h",
+        "oi_change_24h"
+      ]
+    },
+    "price_flow_4h": {
+      "formula": "return_4h * taker_imbalance_4h",
+      "description": "Price momentum confirmed by taker buy/sell imbalance over 4h",
+      "inputs": [
+        "return_4h",
+        "taker_imbalance_4h"
+      ]
+    },
+    "price_flow_24h": {
+      "formula": "return_24h * taker_imbalance_24h",
+      "description": "Daily Price momentum confirmed by taker imbalance over 24h",
+      "inputs": [
+        "return_24h",
+        "taker_imbalance_24h"
+      ]
+    },
+    "oi_flow_confirmation_4h": {
+      "formula": "oi_change_4h * taker_imbalance_4h",
+      "description": "Open Interest expansion accompanied by aggressive taker buying/selling over 4h",
+      "inputs": [
+        "oi_change_4h",
+        "taker_imbalance_4h"
+      ]
+    },
+    "oi_flow_confirmation_24h": {
+      "formula": "oi_change_24h * taker_imbalance_24h",
+      "description": "Daily Open Interest expansion confirmed by daily taker flow",
+      "inputs": [
+        "oi_change_24h",
+        "taker_imbalance_24h"
+      ]
+    },
+    "trend_oi_confirmation": {
+      "formula": "ema24_distance * oi_change_4h",
+      "description": "Trend divergence vs Open Interest expansion (trend confirmation vs crowding)",
+      "inputs": [
+        "ema24_distance",
+        "oi_change_4h"
+      ]
+    },
+    "volatility_flow": {
+      "formula": "volatility_24h * taker_imbalance_4h",
+      "description": "Taker flow impact conditioned on 24h realized volatility environment",
+      "inputs": [
+        "volatility_24h",
+        "taker_imbalance_4h"
+      ]
+    }
+  },
+  "feature_families": {
+    "BASE_12": {
+      "count": 12,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore"
+      ]
+    },
+    "INTERACTION_PRICE_OI": {
+      "count": 14,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "price_oi_4h",
+        "price_oi_24h"
+      ]
+    },
+    "INTERACTION_PRICE_FLOW": {
+      "count": 14,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "price_flow_4h",
+        "price_flow_24h"
+      ]
+    },
+    "INTERACTION_OI_FLOW": {
+      "count": 14,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "oi_flow_confirmation_4h",
+        "oi_flow_confirmation_24h"
+      ]
+    },
+    "INTERACTION_CONTEXT": {
+      "count": 14,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "trend_oi_confirmation",
+        "volatility_flow"
+      ]
+    },
+    "INTERACTION_ALL": {
+      "count": 20,
+      "columns": [
+        "return_1h",
+        "return_4h",
+        "return_24h",
+        "return_72h",
+        "volatility_24h",
+        "range_fraction",
+        "quote_volume_change",
+        "ema24_distance",
+        "ema72_distance",
+        "funding_rate_latest",
+        "funding_rate_ma3",
+        "funding_rate_zscore",
+        "price_oi_4h",
+        "price_oi_24h",
+        "price_flow_4h",
+        "price_flow_24h",
+        "oi_flow_confirmation_4h",
+        "oi_flow_confirmation_24h",
+        "trend_oi_confirmation",
+        "volatility_flow"
+      ]
+    }
+  }
+}

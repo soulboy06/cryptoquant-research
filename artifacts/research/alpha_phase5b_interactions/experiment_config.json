@@ -1,0 +1,25 @@
+{
+  "phase": "Phase 5B: OI / Taker Flow Interaction Features Alpha Experiment",
+  "model_family": "logistic_regression",
+  "benchmarks": [
+    "OPT-0005",
+    "OPT-0001",
+    "OPT-0026",
+    "OPT-0056"
+  ],
+  "feature_families": [
+    "BASE_12",
+    "INTERACTION_PRICE_OI",
+    "INTERACTION_PRICE_FLOW",
+    "INTERACTION_OI_FLOW",
+    "INTERACTION_CONTEXT",
+    "INTERACTION_ALL"
+  ],
+  "folds": [
+    "W1",
+    "W2",
+    "R2025"
+  ],
+  "cost_multiplier": 1.0030055082611389,
+  "holdout_2026_status": "PHYSICALLY_SEALED_ZERO_READ"
+}
