@@ -1349,8 +1349,38 @@
     - `INTERACTION_CONTEXT` 交易层周收益微增至 +0.1453%/w（年化 +7.84%），但预测层 3 个 Fold 中 AUC/PR-AUC 均无改善（0/3 胜率），缺乏稳健的预测层泛化能力支撑；
   - 象限与状态诊断：Price × OI 状态差异仅 4.26 bps，Price × Flow 差异不足 1 bps，三变量 8 状态极差仅 7.7 bps，全量状态在扣除 30 bps 双边摩擦后均为负期望；
   - 单测通过：`tests/test_derivatives_interactions_phase5b.py` 8 passed (0.77s)，总计 18 项衍生品测试 100% PASS。
+### WL-070: 2026-10-06 15:05:00+08:00 Phase 5B2 INTERACTION_CONTEXT 收益来源与稳健性深度审计圆满完成（登记 D-059）
+
+- 用户任务：
+  1. 正式进入 Phase 5B2：INTERACTION_CONTEXT 收益来源与稳健性审计；
+  2. 严格审计对象：Control (`OPT-0005_BASE_12`) vs Challenger (`OPT-0005_INTERACTION_CONTEXT`)；
+  3. 六步深度审计要求：
+     - 第一步：严格复现两组历史回测，核对所有参数、手续费、滑点、资金曲线及交易明细；
+     - 第二步：逐笔对比交易，分析新增、取消、入场/出场时间变化、仓位变化收益差异，使用完整组合资金曲线计算真实收益贡献；
+     - 第三步：统计 BTC、ETH、SOL 在 2023、2024、2025 各年和各月表现，检查是否存在少数异常月份或交易主导收益提升；
+     - 第四步：进行预先固定的 1.0x、1.5x、2.0x 交易成本压力测试；
+     - 第五步：深入解释为什么 AUC 下降但交易收益上升，比较新增与变动交易的实际盈亏分布；
+     - 第六步：时间分块（Block Bootstrap）估计收益改善不确定性，评估序列相关性与多重策略筛选偏差；
+  4. 回答六大核心科学问题，产物归档至 `artifacts/research/alpha_phase5b2_context_audit/`，更新日志，不要自动晋升 Benchmark，2026 继续封存，完成后停止。
+- 实际改动与涉及文件：
+  1. **审计主控与逐笔归因算法**：
+     - 编写 `scripts/run_phase5b2_context_audit.py`，完整执行 Walk-Forward 复现、基于 `cycle_closed` 事件精确切分交易周期，建立 5 大事件类别组合资金曲线真实归因（ADDED_CYCLE, EXIT_SHIFT, ENTRY_SHIFT, REMOVED_CYCLE, IDENTICAL）；
+     - 生成全套 8 项产物：`audit_summary.json`, `cycle_comparison.csv`, `trade_level_attribution.csv`, `monthly_performance_breakdown.csv`, `cost_stress_test.csv`, `threshold_region_diagnostics.csv`, `block_bootstrap_results.json`, `audit_report.md`；
+  2. **单元测试与文档同步**：
+     - 编写 `tests/test_phase5b2_context_audit.py`，覆盖产物完整性、复现零漂移、周期闭合守恒、集中度异常验证、成本压力测试场景与 Bootstrap 置信区间断言；
+     - 更新 `DECISIONS.md`（登记 D-059）；
+     - 更新 `STATUS.md`（记录 Phase 5B2 深度审计完成与结论）。
+- 检查与证据：
+  - 基准精准零误差复现：Control `OPT-0005_BASE_12` (+0.1371%/w, 年化 +7.38%, 208 周期)；Challenger `OPT-0005_INTERACTION_CONTEXT` (+0.1453%/w, 年化 +7.84%, 222 周期)；
+  - 真实组合收益归因：总超额净损益为 +1.22 USDT；新增交易贡献 +1.38 USDT，出场时机微调贡献 +2.30 USDT，但被入场偏移（-1.21 USDT）与错失交易（-1.81 USDT）大幅对冲；
+  - 极端异常月份暴露（数据铁证）：**2023 年 11 月单月** 超额损益达到 **+3.72 USDT（占总超额收益的 304.8%）**，主要为 SOL 顺势大涨；Top 3 月份超额收益占比高达 **394.9%**；若剔除 2023 年 11 月，其余月份累计跑输基准 -2.50 USDT；单笔交易层面，Top 3 笔单笔交易贡献了 **369.7%** 的超额收益；
+  - 成本压力测试：在 2.0x (60 bps 双边) 成本下，年化收益腰斩至 +2.94%，2025 年亏损扩大至 -9.19%，回撤升至 15.76%，手续费多消耗 +1.10 USDT；
+  - AUC 与收益脱节根因：低概率区（占比超 80%）的噪声扰动拉低了全局 AUC，高置信度切点（$p \ge 0.48$）胜率未提升，超额收益来自于新增交易偶然踩中了 2023 年底顺势肥尾的“极值运气溢价”；
+  - 统计显著性定论：Block Bootstrap（4w, 8w, 12w 块长）95% 置信区间包含 0（$[-3.27, +5.58]\text{ bps}$），单侧 $p$-value 达 0.377~0.415，经 Bonferroni 多重检验校正后彻底不显著；
+  - 单测通过：`tests/test_phase5b2_context_audit.py` 6 passed (0.47s)，全量 24 项测试 100% PASS。
 - 遗留与交接事项：
-  - 正式结束当前 Open Interest 与 Taker Flow 研究路线；立即停止，不自动进入后续阶段。
+  - 严禁自动晋升 Benchmark，保留为 `Statistical Challenger` 归档；
+  - 立即停止，等待用户指示下一步。
 
 ## 后续追加格式
 

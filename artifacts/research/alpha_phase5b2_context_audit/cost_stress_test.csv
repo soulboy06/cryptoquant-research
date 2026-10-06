@@ -1,0 +1,4 @@
+cost_scenario,description,ctrl_g_week_pct,chal_g_week_pct,delta_g_week_bps,ctrl_annualized_pct,chal_annualized_pct,ctrl_ret_2023_pct,chal_ret_2023_pct,ctrl_ret_2024_pct,chal_ret_2024_pct,ctrl_ret_2025_pct,chal_ret_2025_pct,ctrl_worst_mdd_pct,chal_worst_mdd_pct,ctrl_fees_usdt,chal_fees_usdt,delta_fees_usdt,advantage_retained
+1.0x_Base,0.10% fee + 0.05% slip (30 bps roundtrip),0.1371,0.1453,0.82,7.38,7.84,8.83,12.38,18.5,15.86,-3.91,-3.6,11.6,11.6,10.03,10.75,0.72,True
+1.5x_Cost,0.15% fee + 0.075% slip (45 bps roundtrip),0.0906,0.099,0.84,4.82,5.28,6.9,10.33,15.79,13.42,-6.9,-6.69,12.87,12.87,14.33,15.17,0.84,True
+2.0x_Cost,0.20% fee + 0.10% slip (60 bps roundtrip),0.0458,0.0558,1.0,2.41,2.94,4.76,7.78,13.42,11.5,-9.58,-9.19,15.76,15.76,18.7,19.79,1.1,True

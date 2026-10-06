@@ -1,0 +1,198 @@
+{
+  "audit_phase": "Phase 5B2: INTERACTION_CONTEXT Yield Source & Robustness Audit",
+  "timestamp_utc": "2026-10-06T06:59:32.989839+00:00",
+  "execution_time_seconds": 73.47,
+  "baseline_control": {
+    "candidate_id": "OPT-0005_BASE_12",
+    "g_week_pct": 0.1371,
+    "annualized_pct": 7.38,
+    "worst_mdd_pct": 11.6,
+    "closed_cycles": 208,
+    "total_fees_usdt": 10.03,
+    "net_profit_usdt": 23.42
+  },
+  "challenger": {
+    "candidate_id": "OPT-0005_INTERACTION_CONTEXT",
+    "g_week_pct": 0.1453,
+    "annualized_pct": 7.84,
+    "worst_mdd_pct": 11.6,
+    "closed_cycles": 222,
+    "total_fees_usdt": 10.75,
+    "net_profit_usdt": 24.64
+  },
+  "delta_g_week_bps": 0.82,
+  "delta_net_profit_usdt": 1.22,
+  "attribution_by_category": [
+    {
+      "attribution_category": "ADDED_CYCLE",
+      "cycle_count": 21,
+      "ctrl_realized_pnl_usdt": 0.0,
+      "chal_realized_pnl_usdt": 1.3822,
+      "delta_pnl_usdt": 1.3822,
+      "pct_of_total_delta_pnl": 113.25,
+      "mean_delta_per_cycle_usdt": 0.0658
+    },
+    {
+      "attribution_category": "ENTRY_SHIFT",
+      "cycle_count": 9,
+      "ctrl_realized_pnl_usdt": 6.2741,
+      "chal_realized_pnl_usdt": 5.0665,
+      "delta_pnl_usdt": -1.2076,
+      "pct_of_total_delta_pnl": -98.94,
+      "mean_delta_per_cycle_usdt": -0.1342
+    },
+    {
+      "attribution_category": "EXIT_SHIFT",
+      "cycle_count": 6,
+      "ctrl_realized_pnl_usdt": 2.005,
+      "chal_realized_pnl_usdt": 4.3041,
+      "delta_pnl_usdt": 2.2991,
+      "pct_of_total_delta_pnl": 188.38,
+      "mean_delta_per_cycle_usdt": 0.3832
+    },
+    {
+      "attribution_category": "IDENTICAL",
+      "cycle_count": 186,
+      "ctrl_realized_pnl_usdt": 6.544,
+      "chal_realized_pnl_usdt": 7.0594,
+      "delta_pnl_usdt": 0.5153,
+      "pct_of_total_delta_pnl": 42.22,
+      "mean_delta_per_cycle_usdt": 0.0028
+    },
+    {
+      "attribution_category": "REMOVED_CYCLE",
+      "cycle_count": 7,
+      "ctrl_realized_pnl_usdt": 1.8068,
+      "chal_realized_pnl_usdt": 0.0,
+      "delta_pnl_usdt": -1.8068,
+      "pct_of_total_delta_pnl": -148.04,
+      "mean_delta_per_cycle_usdt": -0.2581
+    }
+  ],
+  "monthly_concentration": {
+    "top1_month": "2023-11",
+    "top1_month_pnl_usdt": 3.72,
+    "top1_month_share_pct": 304.8,
+    "top3_months_pnl_usdt": 4.82,
+    "top3_months_share_pct": 394.93,
+    "top5_months_pnl_usdt": 5.38,
+    "top5_months_share_pct": 440.81
+  },
+  "trade_concentration": {
+    "top1_trade_pnl_usdt": 1.61,
+    "top1_trade_share_pct": 131.68,
+    "top3_trades_pnl_usdt": 4.51,
+    "top3_trades_share_pct": 369.69,
+    "top5_trades_pnl_usdt": 6.53,
+    "top5_trades_share_pct": 534.79
+  },
+  "cost_stress_summary": [
+    {
+      "cost_scenario": "1.0x_Base",
+      "description": "0.10% fee + 0.05% slip (30 bps roundtrip)",
+      "ctrl_g_week_pct": 0.1371,
+      "chal_g_week_pct": 0.1453,
+      "delta_g_week_bps": 0.82,
+      "ctrl_annualized_pct": 7.38,
+      "chal_annualized_pct": 7.84,
+      "ctrl_ret_2023_pct": 8.83,
+      "chal_ret_2023_pct": 12.38,
+      "ctrl_ret_2024_pct": 18.5,
+      "chal_ret_2024_pct": 15.86,
+      "ctrl_ret_2025_pct": -3.91,
+      "chal_ret_2025_pct": -3.6,
+      "ctrl_worst_mdd_pct": 11.6,
+      "chal_worst_mdd_pct": 11.6,
+      "ctrl_fees_usdt": 10.03,
+      "chal_fees_usdt": 10.75,
+      "delta_fees_usdt": 0.72,
+      "advantage_retained": true
+    },
+    {
+      "cost_scenario": "1.5x_Cost",
+      "description": "0.15% fee + 0.075% slip (45 bps roundtrip)",
+      "ctrl_g_week_pct": 0.0906,
+      "chal_g_week_pct": 0.099,
+      "delta_g_week_bps": 0.84,
+      "ctrl_annualized_pct": 4.82,
+      "chal_annualized_pct": 5.28,
+      "ctrl_ret_2023_pct": 6.9,
+      "chal_ret_2023_pct": 10.33,
+      "ctrl_ret_2024_pct": 15.79,
+      "chal_ret_2024_pct": 13.42,
+      "ctrl_ret_2025_pct": -6.9,
+      "chal_ret_2025_pct": -6.69,
+      "ctrl_worst_mdd_pct": 12.87,
+      "chal_worst_mdd_pct": 12.87,
+      "ctrl_fees_usdt": 14.33,
+      "chal_fees_usdt": 15.17,
+      "delta_fees_usdt": 0.84,
+      "advantage_retained": true
+    },
+    {
+      "cost_scenario": "2.0x_Cost",
+      "description": "0.20% fee + 0.10% slip (60 bps roundtrip)",
+      "ctrl_g_week_pct": 0.0458,
+      "chal_g_week_pct": 0.0558,
+      "delta_g_week_bps": 1.0,
+      "ctrl_annualized_pct": 2.41,
+      "chal_annualized_pct": 2.94,
+      "ctrl_ret_2023_pct": 4.76,
+      "chal_ret_2023_pct": 7.78,
+      "ctrl_ret_2024_pct": 13.42,
+      "chal_ret_2024_pct": 11.5,
+      "ctrl_ret_2025_pct": -9.58,
+      "chal_ret_2025_pct": -9.19,
+      "ctrl_worst_mdd_pct": 15.76,
+      "chal_worst_mdd_pct": 15.76,
+      "ctrl_fees_usdt": 18.7,
+      "chal_fees_usdt": 19.79,
+      "delta_fees_usdt": 1.1,
+      "advantage_retained": true
+    }
+  ],
+  "bootstrap_summary": {
+    "block_size_4w": {
+      "block_size_weeks": 4,
+      "num_bootstraps": 2000,
+      "observed_delta_gweek_bps": 0.82,
+      "bootstrap_mean_delta_bps": 0.83,
+      "bootstrap_se_bps": 2.25,
+      "ci_95_lower_bps": -3.27,
+      "ci_95_upper_bps": 5.58,
+      "ci_contains_zero": true,
+      "p_value_one_sided_le_zero": 0.377,
+      "statistically_significant_at_005": false
+    },
+    "block_size_8w": {
+      "block_size_weeks": 8,
+      "num_bootstraps": 2000,
+      "observed_delta_gweek_bps": 0.82,
+      "bootstrap_mean_delta_bps": 0.74,
+      "bootstrap_se_bps": 2.31,
+      "ci_95_lower_bps": -3.24,
+      "ci_95_upper_bps": 5.71,
+      "ci_contains_zero": true,
+      "p_value_one_sided_le_zero": 0.415,
+      "statistically_significant_at_005": false
+    },
+    "block_size_12w": {
+      "block_size_weeks": 12,
+      "num_bootstraps": 2000,
+      "observed_delta_gweek_bps": 0.82,
+      "bootstrap_mean_delta_bps": 0.77,
+      "bootstrap_se_bps": 2.33,
+      "ci_95_lower_bps": -3.18,
+      "ci_95_upper_bps": 5.85,
+      "ci_contains_zero": true,
+      "p_value_one_sided_le_zero": 0.4045,
+      "statistically_significant_at_005": false
+    },
+    "multiple_testing_adjustment": {
+      "num_interaction_candidates_screened": 20,
+      "bonferroni_adjusted_alpha": 0.0025,
+      "bonferroni_significant": false,
+      "snooping_warning": "Evaluation performed on multi-round examined 2023-2025 data; not a fresh independent OOS dataset."
+    }
+  }
+}

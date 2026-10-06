@@ -72,17 +72,19 @@
   - 终审科学裁决：【结论 A】新特征预测层和交易层均无改善，正式剪枝；
   - 单测体系：`tests/test_derivatives_calibration_phase5a2.py` 与 `test_derivatives_flow_phase5a.py` 等测试全部通过。
 - **第五阶段 B（衍生品持仓量与主动买卖流交互特征受控实验 Phase 5B）已完成（D-058）**：
-  - 产物目录：`artifacts/research/alpha_phase5b_interactions/`（含 `feature_definitions.json`, `experiment_config.json`, `interaction_diagnostic.csv`, `prediction_metrics.csv`, `trading_metrics.csv`, `price_oi_quadrants.csv`, `price_flow_quadrants.csv`, `triple_state_analysis.csv`, `benchmark_comparison.csv`, `pareto_front_before.csv`, `pareto_front_after.csv`, `results.json`, `comparison_report.md`）；
-  - 终审科学裁决：**微观状态存在 4~8 bps 统计差异，但在当前 4h 尺度、LR 线性模型与现货手续费摩擦下，交互特征未能产生稳定可交易 Alpha，四大 Benchmark 维持统治地位**；
-  - 预测层 vs 交易层分离：
-    - `INTERACTION_PRICE_OI` 和 `INTERACTION_OI_FLOW` 满足预测门槛（在 W2/R2025 中 AUC/PR-AUC 微增 +0.05~+0.25 bps），但在交易层中因微小摩擦与时机错配，周收益反而衰退 2~4 bps/week；
-    - `INTERACTION_CONTEXT` 在交易层表现出周收益微增（OPT-0005 周收益从 +0.1371%/w 升至 +0.1453%/w，年化从 +7.38% 升至 +7.84%），但在预测层 3 个 Fold 中 AUC/PR-AUC 均无改善（0/3 胜率），缺乏稳健的预测层统计支撑，存在过拟合/样本扰动风险；
-  - 象限与三变量联合状态：
-    - Price × OI 4 象限中，Q1（价涨+OI涨）相比 Q2（价涨+OI跌）未来 4h 净收益高 4.26 bps；
-    - Price × Flow 差异不足 1 bps；
-    - 三变量 8 状态中，S1 与最差状态 S5 相比仅相差 7.7 bps，全量状态在扣除 30 bps 双边摩擦后均为负期望；
-  - Pareto 前沿评估：四大旧 Benchmark（OPT-0005, OPT-0001, OPT-0026, OPT-0056）未被任何具有稳定统计预测增量的候选严格支配；
-  - 单测体系：`tests/test_derivatives_interactions_phase5b.py` 8 passed，总计 18 项衍生品测试 100% PASS。
+  - 产物目录：`artifacts/research/alpha_phase5b_interactions/`；
+  - 终审科学裁决：微观状态存在 4~8 bps 统计差异，但在当前 4h 尺度、LR 线性模型与现货手续费摩擦下，交互特征未能产生稳定可交易 Alpha，四大 Benchmark 维持统治地位。
+- **第五阶段 B2（INTERACTION_CONTEXT 收益来源与稳健性深度审计 Phase 5B2）已完成（D-059）**：
+  - 产物目录：`artifacts/research/alpha_phase5b2_context_audit/`（含 `audit_summary.json`, `cycle_comparison.csv`, `trade_level_attribution.csv`, `monthly_performance_breakdown.csv`, `cost_stress_test.csv`, `threshold_region_diagnostics.csv`, `block_bootstrap_results.json`, `audit_report.md`）；
+  - **核心复现核验**：Control (`OPT-0005_BASE_12`, +0.1371%/w, 208 cycles) 与 Challenger (`OPT-0005_INTERACTION_CONTEXT`, +0.1453%/w, 222 cycles) 严格零误差复现，周收益差额 $\Delta g_{\text{week}} = +0.82\text{ bps/w}$（总净收益差额 $+1.22\text{ USDT}$）；
+  - **交易归因与集中度定论**：
+    - 组合真实归因证实，超额收益来自新增交易（+1.38 USDT）与出场时机微调（+2.30 USDT），但被入场偏移（-1.21 USDT）与错失交易（-1.81 USDT）大幅对冲；
+    - **极端单点行情依赖**：36 个月中，仅 **2023 年 11 月单月** 超额 PnL 就达到 **+3.72 USDT（占总超额收益的 304.8%）**，主要为 SOL 顺势大涨；Top 3 月份超额收益占比高达 **394.9%**；若剔除 2023 年 11 月，其余月份累计跑输基准 -2.50 USDT；单笔交易层面，Top 3 笔单笔交易贡献了 **369.7%** 的超额收益；
+  - **成本压力测试**：在 1.5x (45 bps) 和 2.0x (60 bps) 双边成本下，年化收益严重衰退（2.0x 下年化降至 +2.94%，2025 年亏损翻倍至 -9.19%，回撤升至 15.76%，手续费多消耗 +1.10 USDT）；
+  - **AUC 与收益脱节根因**：低概率不交易区增加了噪声扰动拉低了全局 AUC，高置信度切点（$p \ge 0.48$）胜率并没有提升，仅是新增的 14 笔交易偶然踩中了 2023 年底的顺势肥尾大单（极值运气溢价）；
+  - **统计显著性定论**：Block Bootstrap 95% 置信区间跨 0（$[-3.27, +5.58]\text{ bps}$），单侧 $p$-value 达 0.377~0.415，经 Bonferroni 多重检验校正后彻底不显著；
+  - **处置决议**：**严禁自动晋升 Benchmark**，保留为 `Statistical Challenger` 归档。
+  - 单测体系：`tests/test_phase5b2_context_audit.py` 6 passed，总计 24 项测试 100% PASS。
 
 ## 当前限制与长期边界
 
@@ -93,7 +95,7 @@
 
 ## 下一行动与交接
 
-1. **Phase 5B 交互特征探索圆满闭环**：完成 8 项交互特征、象限分析、三变量状态诊断与 24 候选 Walk-Forward 回测，登记 D-058。
-2. **严守停止纪律**：正式结束当前 Open Interest 与 Taker Flow 研究路线；立即停止，**不自动进入后续阶段，等待用户指令**。
+1. **Phase 5B2 深度审计圆满闭环**：完成逐笔归因、极端月份集中度分析、成本压力测试与 Bootstrap 不确定性量化，登记 D-059。
+2. **严守停止纪律**：严禁自动晋升 Benchmark，不开发新特征、不调参、不碰 2026 数据；**立即停止，等待用户指示后续研究方向**。
 
 

@@ -1,0 +1,6 @@
+attribution_category,cycle_count,ctrl_realized_pnl_usdt,chal_realized_pnl_usdt,delta_pnl_usdt,pct_of_total_delta_pnl,mean_delta_per_cycle_usdt
+ADDED_CYCLE,21,0.0,1.3822,1.3822,113.25,0.0658
+ENTRY_SHIFT,9,6.2741,5.0665,-1.2076,-98.94,-0.1342
+EXIT_SHIFT,6,2.005,4.3041,2.2991,188.38,0.3832
+IDENTICAL,186,6.544,7.0594,0.5153,42.22,0.0028
+REMOVED_CYCLE,7,1.8068,0.0,-1.8068,-148.04,-0.2581

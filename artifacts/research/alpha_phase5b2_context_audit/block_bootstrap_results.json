@@ -1,0 +1,44 @@
+{
+  "block_size_4w": {
+    "block_size_weeks": 4,
+    "num_bootstraps": 2000,
+    "observed_delta_gweek_bps": 0.82,
+    "bootstrap_mean_delta_bps": 0.83,
+    "bootstrap_se_bps": 2.25,
+    "ci_95_lower_bps": -3.27,
+    "ci_95_upper_bps": 5.58,
+    "ci_contains_zero": true,
+    "p_value_one_sided_le_zero": 0.377,
+    "statistically_significant_at_005": false
+  },
+  "block_size_8w": {
+    "block_size_weeks": 8,
+    "num_bootstraps": 2000,
+    "observed_delta_gweek_bps": 0.82,
+    "bootstrap_mean_delta_bps": 0.74,
+    "bootstrap_se_bps": 2.31,
+    "ci_95_lower_bps": -3.24,
+    "ci_95_upper_bps": 5.71,
+    "ci_contains_zero": true,
+    "p_value_one_sided_le_zero": 0.415,
+    "statistically_significant_at_005": false
+  },
+  "block_size_12w": {
+    "block_size_weeks": 12,
+    "num_bootstraps": 2000,
+    "observed_delta_gweek_bps": 0.82,
+    "bootstrap_mean_delta_bps": 0.77,
+    "bootstrap_se_bps": 2.33,
+    "ci_95_lower_bps": -3.18,
+    "ci_95_upper_bps": 5.85,
+    "ci_contains_zero": true,
+    "p_value_one_sided_le_zero": 0.4045,
+    "statistically_significant_at_005": false
+  },
+  "multiple_testing_adjustment": {
+    "num_interaction_candidates_screened": 20,
+    "bonferroni_adjusted_alpha": 0.0025,
+    "bonferroni_significant": false,
+    "snooping_warning": "Evaluation performed on multi-round examined 2023-2025 data; not a fresh independent OOS dataset."
+  }
+}
