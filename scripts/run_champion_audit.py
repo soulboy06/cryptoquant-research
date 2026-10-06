@@ -44,6 +44,7 @@ def run_champion_selection_audit():
     top_gweek = df.sort_values(by='g_week', ascending=False).head(10).copy()
     top_gweek_csv = top_gweek[['candidate_id', 'model_name', 'threshold', 'sizing_name', 'g_week', 'fitness', 'ret_w1', 'ret_w2', 'ret_2025', 'worst_mdd', 'min_cycles', 'floor_triggers']].copy()
     top_gweek_csv['g_week_pct'] = top_gweek_csv['g_week'] * 100.0
+    top_gweek_csv['annual_compound_pct'] = ((1.0 + top_gweek_csv['g_week']) ** 52.0 - 1.0) * 100.0
     top_gweek_csv['ret_2023_pct'] = top_gweek_csv['ret_w1'] * 100.0
     top_gweek_csv['ret_2024_pct'] = top_gweek_csv['ret_w2'] * 100.0
     top_gweek_csv['ret_2025_pct'] = top_gweek_csv['ret_2025'] * 100.0
@@ -54,6 +55,7 @@ def run_champion_selection_audit():
     top_fitness = df.sort_values(by='fitness', ascending=False).head(10).copy()
     top_fitness_csv = top_fitness[['candidate_id', 'model_name', 'threshold', 'sizing_name', 'g_week', 'fitness', 'ret_w1', 'ret_w2', 'ret_2025', 'worst_mdd', 'min_cycles', 'floor_triggers']].copy()
     top_fitness_csv['g_week_pct'] = top_fitness_csv['g_week'] * 100.0
+    top_fitness_csv['annual_compound_pct'] = ((1.0 + top_fitness_csv['g_week']) ** 52.0 - 1.0) * 100.0
     top_fitness_csv['ret_2023_pct'] = top_fitness_csv['ret_w1'] * 100.0
     top_fitness_csv['ret_2024_pct'] = top_fitness_csv['ret_w2'] * 100.0
     top_fitness_csv['ret_2025_pct'] = top_fitness_csv['ret_2025'] * 100.0
@@ -70,6 +72,7 @@ def run_champion_selection_audit():
     pareto_valid = compute_pareto_front(df[df['g_week'] > 0], min_cycles_threshold=30)
     pareto_valid_csv = pareto_valid[['candidate_id', 'model_name', 'threshold', 'sizing_name', 'g_week', 'fitness', 'ret_w1', 'ret_w2', 'ret_2025', 'worst_mdd', 'min_cycles']].copy()
     pareto_valid_csv['g_week_pct'] = pareto_valid_csv['g_week'] * 100.0
+    pareto_valid_csv['annual_compound_pct'] = ((1.0 + pareto_valid_csv['g_week']) ** 52.0 - 1.0) * 100.0
     pareto_valid_csv['ret_2023_pct'] = pareto_valid_csv['ret_w1'] * 100.0
     pareto_valid_csv['ret_2024_pct'] = pareto_valid_csv['ret_w2'] * 100.0
     pareto_valid_csv['ret_2025_pct'] = pareto_valid_csv['ret_2025'] * 100.0
@@ -95,11 +98,12 @@ def run_champion_selection_audit():
         'OPT-0031_LR_C0.10_th0.50_R6_default': 'R6 Manual Baseline (Dominated by OPT-0056)',
     })
     sub_key['g_week_pct'] = sub_key['g_week'] * 100.0
+    sub_key['annual_compound_pct'] = ((1.0 + sub_key['g_week']) ** 52.0 - 1.0) * 100.0
     sub_key['ret_2023_pct'] = sub_key['ret_w1'] * 100.0
     sub_key['ret_2024_pct'] = sub_key['ret_w2'] * 100.0
     sub_key['ret_2025_pct'] = sub_key['ret_2025'] * 100.0
     sub_key['worst_mdd_pct'] = sub_key['worst_mdd'] * 100.0
-    sub_key_csv = sub_key[['candidate_id', 'role', 'model_name', 'threshold', 'sizing_name', 'g_week_pct', 'fitness', 'ret_2023_pct', 'ret_2024_pct', 'ret_2025_pct', 'worst_mdd_pct', 'min_cycles']].sort_values(by='g_week_pct', ascending=False)
+    sub_key_csv = sub_key[['candidate_id', 'role', 'model_name', 'threshold', 'sizing_name', 'g_week_pct', 'annual_compound_pct', 'fitness', 'ret_2023_pct', 'ret_2024_pct', 'ret_2025_pct', 'worst_mdd_pct', 'min_cycles']].sort_values(by='g_week_pct', ascending=False)
     sub_key_csv.to_csv(OUT_DIR / 'benchmark_comparison.csv', index=False)
     
     # 7. Audit Summary Collection
@@ -113,6 +117,7 @@ def run_champion_selection_audit():
     
     audit_df = df[df['candidate_id'].isin(audit_ids)].copy()
     audit_df['g_week_pct'] = audit_df['g_week'] * 100.0
+    audit_df['annual_compound_pct'] = ((1.0 + audit_df['g_week']) ** 52.0 - 1.0) * 100.0
     audit_df['ret_2023_pct'] = audit_df['ret_w1'] * 100.0
     audit_df['ret_2024_pct'] = audit_df['ret_w2'] * 100.0
     audit_df['ret_2025_pct'] = audit_df['ret_2025'] * 100.0
@@ -137,7 +142,7 @@ def run_champion_selection_audit():
         tags_map[cid] = '; '.join(t)
         
     audit_df['audit_tags'] = audit_df['candidate_id'].map(tags_map)
-    audit_summary_csv = audit_df[['candidate_id', 'model_name', 'threshold', 'sizing_name', 'g_week_pct', 'fitness', 'ret_2023_pct', 'ret_2024_pct', 'ret_2025_pct', 'worst_mdd_pct', 'min_cycles', 'floor_triggers', 'on_valid_pareto_front', 'audit_tags']].sort_values(by='g_week_pct', ascending=False)
+    audit_summary_csv = audit_df[['candidate_id', 'model_name', 'threshold', 'sizing_name', 'g_week_pct', 'annual_compound_pct', 'fitness', 'ret_2023_pct', 'ret_2024_pct', 'ret_2025_pct', 'worst_mdd_pct', 'min_cycles', 'floor_triggers', 'on_valid_pareto_front', 'audit_tags']].sort_values(by='g_week_pct', ascending=False)
     audit_summary_csv.to_csv(OUT_DIR / 'audit_summary.csv', index=False)
     
     print(f"Audit completed: {len(audit_summary_csv)} candidates audited in total.")

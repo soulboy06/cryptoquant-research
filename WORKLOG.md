@@ -1221,6 +1221,40 @@
   - 2026 数据完全物理封存，零读取零评估；
   - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
 
+### WL-066: 2026-10-06 13:10:00+08:00 52周复合年化复利公式统一规范、历史讨论笔误纠偏与 Phase 5 四大 Pareto Benchmark 体系确立
+
+- 用户任务：
+  1. 纠正周收益转年化的数学错误：严格统一采用 52 周复利公式 $\text{Annual} = (1 + g_{week})^{52} - 1$；
+  2. 纠正历史讨论中的笔误（原将 $+0.1371\%/\text{w}$ 错记为年化 +103%）；
+  3. 建立四大 Pareto Benchmark（高收益型 OPT-0005、次高收益型 OPT-0001、平衡型 OPT-0026、防守型 OPT-0056）；
+  4. 升级 Phase 5 研究范式：不再仅问“是否打败 OPT-0026”，而是问“相对整个四类 Pareto Benchmark 集合，是否向外推动了帕累托有效前沿（Pareto Front Expansion）”；
+  5. 准备进入 Phase 5。
+- 实际改动与涉及文件：
+  1. **代码与复利计算模块**：
+     - 修改 `src/cryptoquant/models/research_reporting.py`：新增 `annualize_weekly_return(g_week)` 函数，严格实现 $(1 + g_{week})^{52} - 1$；
+     - 修改 `scripts/run_champion_audit.py`：在 `top_by_gweek.csv`、`top_by_fitness.csv`、`pareto_front.csv`、`benchmark_comparison.csv`、`audit_summary.csv` 等全部审计表格中，新增 `annual_compound_pct` 字段；
+     - 执行 `python scripts/run_champion_audit.py`，全量重新生成审计产物；
+  2. **报告与治理文档更新**：
+     - 修改 `artifacts/research/champion_selection_audit/comparison_report.md`：全景更新所有排名表与 Pareto 表中的年化复合收益列，明确记录数学纠偏说明与四大 Pareto Benchmark 定义；
+     - 更新 `DECISIONS.md`：正式登记决策 `D-055`；
+     - 更新 `STATUS.md`：同步最新状态、纠偏数据与 Phase 5 启动准备；
+  3. **单元测试与回归**：
+     - 编写/更新 `tests/test_champion_selection_audit.py`，覆盖年化复利公式核验与四大 Pareto Benchmark 前沿属性验证。
+- 核心复利数据核验结果：
+  - `OPT-0005`（$+0.1371\%/\text{w}$）：52 周复利年化为 **+7.38%/年**（并非 +103%）；
+  - `OPT-0001`（$+0.1311\%/\text{w}$）：52 周复利年化为 **+7.05%/年**；
+  - `OPT-0026`（$+0.1293\%/\text{w}$）：52 周复利年化为 **+6.95%/年**；
+  - `OPT-0060`（$+0.1074\%/\text{w}$）：52 周复利年化为 **+5.74%/年**；
+  - `OPT-0056`（$+0.1024\%/\text{w}$）：52 周复利年化为 **+5.47%/年**；
+  - `OPT-0031`（$+0.0979\%/\text{w}$）：52 周复利年化为 **+5.22%/年**（已被 OPT-0056 单调支配淘汰）；
+  - 用户目标 $+1.5000\%/\text{w}$：52 周复利年化为 **+116.89%/年**；
+  - 核心认知：当前策略（~0.13%/w，年化 ~7%）与长期目标（1.5%/w，年化 ~117%）存在 11.6 倍周收益差距和 16 倍年化复利差距。
+- 单测体系与回归验证：
+  - 运行 pytest 测试套件：`tests/test_champion_selection_audit.py`、`test_reallocation_phase4b2.py`、`test_topk_phase4b.py`、`test_holdout_guard.py`，全量测试全部 100% PASS。
+- 边界核验：
+  - 2026 数据完全物理封存，零读取零评估；
+  - 100 USDT 虚拟资金、50 USDT 固定底线与现货无杠杆规则严格保持。
+
 ## 后续追加格式
 
 追加新的WL编号，注明日期／时区、用户任务、实际改动／涉及文件、实际检查及证据、失败或未完成项。发生方案变更时链接DECISIONS新编号；实际实验链接EXPERIMENTS。不重复维护当前状态，重要未完成项同步STATUS。

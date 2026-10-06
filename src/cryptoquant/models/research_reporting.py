@@ -165,6 +165,13 @@ def compute_combined_weekly_return(w1_return, w1_hours, w2_return, w2_hours):
     return float(growth ** (WEEK_HOURS / total_hours) - 1.0)
 
 
+def annualize_weekly_return(g_week: float | None) -> float | None:
+    """统一使用 (1 + g_week)^52 - 1 计算 52 周复合年化收益率。"""
+    if g_week is None or not math.isfinite(g_week) or g_week <= -1.0:
+        return None
+    return float((1.0 + float(g_week)) ** 52.0 - 1.0)
+
+
 def evaluate_research_candidates(base_summaries, research_cfg):
     """对两政策×两窗×四阈值共 16 组 base 模拟进行硬指标初筛与排序选择。
     

@@ -69,3 +69,36 @@ def test_benchmark_comparison_metrics_integrity():
     assert opt0026['min_cycles'] == 53
     assert abs(opt0026['ret_2024_pct'] - 17.41) < 0.05
     assert abs(opt0026['ret_2025_pct'] - (-2.70)) < 0.05
+
+
+def test_annual_compounding_calculation():
+    """Verify strictly that 52-week compound annual return is (1 + g_week)^52 - 1."""
+    import sys
+    sys.path.insert(0, str(PROJECT / 'src'))
+    from cryptoquant.models.research_reporting import annualize_weekly_return
+
+    # User Target 1.5%/week -> +116.89%/year
+    target_annual = annualize_weekly_return(0.015)
+    assert target_annual is not None
+    assert abs(target_annual - 1.1689) < 0.001
+
+    # OPT-0005: ~0.13708%/week -> ~+7.38%/year (NEVER +103%)
+    opt0005_g = 0.00137078
+    opt0005_annual = annualize_weekly_return(opt0005_g)
+    assert opt0005_annual is not None
+    assert 0.073 < opt0005_annual < 0.075
+
+    # OPT-0026: ~0.12929%/week -> ~+6.95%/year
+    opt0026_g = 0.00129293
+    opt0026_annual = annualize_weekly_return(opt0026_g)
+    assert opt0026_annual is not None
+    assert 0.069 < opt0026_annual < 0.070
+
+    # Verify column in benchmark_comparison.csv
+    df = pd.read_csv(AUDIT_DIR / 'benchmark_comparison.csv')
+    assert 'annual_compound_pct' in df.columns
+    row0005 = df[df['candidate_id'].str.contains('OPT-0005')].iloc[0]
+    assert abs(row0005['annual_compound_pct'] - 7.38) < 0.05
+    row0026 = df[df['candidate_id'].str.contains('OPT-0026')].iloc[0]
+    assert abs(row0026['annual_compound_pct'] - 6.95) < 0.05
+
